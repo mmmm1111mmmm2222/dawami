@@ -8,7 +8,21 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
+
+// Service-worker must never be stale-cached by the browser
+app.get("/sw.js", (req, res, next) => {
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  next();
+});
+
+app.use(express.static(path.join(__dirname, "public"), {
+  setHeaders(res, filePath) {
+    // Manifest may be cached briefly; SW is handled above
+    if (filePath.endsWith("manifest.json")) {
+      res.setHeader("Cache-Control", "public, max-age=0");
+    }
+  },
+}));
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
