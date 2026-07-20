@@ -17,7 +17,6 @@ app.get("/sw.js", (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, "public"), {
   setHeaders(res, filePath) {
-    // Manifest may be cached briefly; SW is handled above
     if (filePath.endsWith("manifest.json")) {
       res.setHeader("Cache-Control", "public, max-age=0");
     }
@@ -29,8 +28,10 @@ mongoose.connect(process.env.MONGO_URI)
   .catch((err) => console.log("MongoDB error:", err.message));
 
 // Routes
-app.use("/auth",     require("./routes/auth"));
-app.use("/workdays", require("./routes/workdays"));
+app.use("/auth",      require("./routes/auth"));
+app.use("/workdays",  require("./routes/workdays"));
+app.use("/employers", require("./routes/employers"));
+app.use("/payments",  require("./routes/payments"));
 
 // Catch-all → SPA
 app.get("/{*splat}", (req, res) => {

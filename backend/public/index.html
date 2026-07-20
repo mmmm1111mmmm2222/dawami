@@ -26,8 +26,13 @@
       --border:        #d6e4dc;
       --danger:        #c0392b;
       --danger-light:  #fdecea;
+      --warn:          #d4860b;
+      --warn-light:    #fff3cd;
+      --info:          #1565c0;
+      --info-light:    #e3f2fd;
       --radius:        14px;
       --shadow:        0 2px 12px rgba(0,0,0,0.08);
+      --nav-h:         62px;
     }
 
     body {
@@ -54,14 +59,9 @@
       padding: 24px 16px;
       background: linear-gradient(160deg, var(--primary-dark) 0%, var(--primary) 100%);
     }
-    .auth-logo {
-      text-align: center;
-      margin-bottom: 28px;
-      color: #fff;
-    }
+    .auth-logo { text-align: center; margin-bottom: 28px; color: #fff; }
     .auth-logo h1 { font-size: 2rem; font-weight: 800; letter-spacing: 1px; }
     .auth-logo p  { font-size: 0.85rem; opacity: 0.8; margin-top: 4px; }
-
     .auth-card {
       background: #fff;
       border-radius: 18px;
@@ -70,322 +70,250 @@
       width: 100%;
       max-width: 400px;
     }
-    .auth-card h2 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
+    .auth-card h2 { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 20px; text-align: center; }
     .auth-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
     .auth-field label { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
     .auth-field input {
-      border: 1.5px solid var(--border);
-      border-radius: 9px;
-      padding: 11px 13px;
-      font-size: 0.95rem;
-      font-family: inherit;
-      color: var(--text);
-      background: #fafafa;
-      width: 100%;
-      direction: rtl;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      border: 1.5px solid var(--border); border-radius: 9px; padding: 11px 13px;
+      font-size: 0.95rem; font-family: inherit; color: var(--text); background: #fafafa;
+      width: 100%; direction: rtl; transition: border-color .2s, box-shadow .2s;
     }
-    .auth-field input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(26,107,74,0.12);
-      background: #fff;
-    }
-
-    .auth-error {
-      background: var(--danger-light);
-      color: var(--danger);
-      border-radius: 8px;
-      padding: 9px 12px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      margin-bottom: 14px;
-      display: none;
-    }
+    .auth-field input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,107,74,.12); background: #fff; }
+    .auth-error { background: var(--danger-light); color: var(--danger); border-radius: 8px; padding: 9px 12px; font-size: .82rem; font-weight: 600; margin-bottom: 14px; display: none; }
     .auth-error.show { display: block; }
-
-    .btn-auth {
-      width: 100%;
-      padding: 13px;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      transition: background 0.15s;
-      margin-top: 4px;
-    }
+    .btn-auth { width: 100%; padding: 13px; background: var(--primary); color: #fff; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; font-family: inherit; cursor: pointer; transition: background .15s; margin-top: 4px; }
     .btn-auth:hover:not(:disabled) { background: var(--primary-dark); }
     .btn-auth:disabled { background: var(--muted); cursor: not-allowed; }
-
-    .auth-switch {
-      text-align: center;
-      margin-top: 18px;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-    .auth-switch a {
-      color: var(--primary);
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
-    }
+    .auth-switch { text-align: center; margin-top: 18px; font-size: .85rem; color: var(--muted); }
+    .auth-switch a { color: var(--primary); font-weight: 700; cursor: pointer; text-decoration: none; }
     .auth-switch a:hover { text-decoration: underline; }
 
     /* ════════════════════════
-       APP SCREEN
+       APP SHELL
     ════════════════════════ */
-    /* ── Header ── */
+    #screen-app { padding-bottom: var(--nav-h); min-height: 100vh; }
+
     header {
-      background: var(--primary);
-      color: #fff;
-      padding: 14px 16px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      background: var(--primary); color: #fff; padding: 12px 16px;
+      position: sticky; top: 0; z-index: 100;
       box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
-    .header-inner {
-      max-width: 480px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .header-brand h1  { font-size: 1.25rem; font-weight: 800; }
-    .header-brand p   { font-size: 0.72rem; opacity: 0.75; margin-top: 1px; }
-    .header-user      { display: flex; align-items: center; gap: 8px; }
-    .header-user span { font-size: 0.78rem; opacity: 0.85; }
-    .btn-logout {
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.35);
-      color: #fff;
-      padding: 5px 11px;
-      border-radius: 7px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .btn-logout:hover { background: rgba(255,255,255,0.28); }
+    .header-inner { max-width: 520px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .header-brand h1 { font-size: 1.2rem; font-weight: 800; }
+    .header-brand p  { font-size: .68rem; opacity: .75; margin-top: 1px; }
+    .header-user     { display: flex; align-items: center; gap: 8px; }
+    .header-user span { font-size: .76rem; opacity: .85; }
+    .btn-logout { background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.35); color: #fff; padding: 5px 11px; border-radius: 7px; font-size: .76rem; font-weight: 600; font-family: inherit; cursor: pointer; transition: background .15s; }
+    .btn-logout:hover { background: rgba(255,255,255,.28); }
 
-    /* ── Main layout ── */
-    main {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+    /* ── Bottom navigation ── */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+      background: #fff; border-top: 1px solid var(--border);
+      display: flex; height: var(--nav-h);
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+      padding-bottom: env(safe-area-inset-bottom, 0);
     }
+    .nav-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; cursor: pointer; padding: 6px 2px; transition: color .15s;
+      color: var(--muted); font-family: inherit; background: none; border: none; font-size: .58rem; font-weight: 600;
+    }
+    .nav-item .nav-icon { font-size: 1.25rem; line-height: 1; }
+    .nav-item.active { color: var(--primary); }
+    .nav-item.active .nav-icon { transform: scale(1.1); }
+
+    /* ── Tab panels ── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Generic section layout ── */
+    .section { max-width: 520px; margin: 0 auto; padding: 14px 14px 0; }
+    .section + .section { padding-top: 0; }
 
     /* ── Card ── */
-    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-    .card-header {
-      background: var(--primary-light); padding: 12px 16px;
-      display: flex; align-items: center; gap: 8px;
-      border-bottom: 1px solid var(--border);
-    }
-    .card-header .icon { font-size: 1.1rem; }
-    .card-header h2   { font-size: 1rem; font-weight: 600; color: var(--primary-dark); flex: 1; }
-    .card-body        { padding: 16px; }
+    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 14px; }
+    .card-header { background: var(--primary-light); padding: 11px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+    .card-header .icon { font-size: 1.05rem; }
+    .card-header h2   { font-size: .95rem; font-weight: 700; color: var(--primary-dark); flex: 1; }
+    .card-body        { padding: 14px; }
 
-    /* ── Form ── */
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    /* ── Forms inside cards ── */
+    .form-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
     .form-group.full { grid-column: 1 / -1; }
-    label { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+    label { font-size: .78rem; font-weight: 600; color: var(--muted); }
+    input[type=date], input[type=number], input[type=text], input[type=tel], textarea, select {
+      border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 11px;
+      font-size: .9rem; font-family: inherit; color: var(--text); background: #fafafa;
+      width: 100%; direction: rtl; transition: border-color .2s, box-shadow .2s;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,107,74,.12); background: #fff;
+    }
+    textarea { resize: none; height: 64px; }
+    .btn-primary { background: var(--primary); color: #fff; border: none; border-radius: 9px; padding: 11px 20px; font-size: .9rem; font-weight: 700; font-family: inherit; cursor: pointer; transition: background .15s; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { background: var(--primary-light); color: var(--primary-dark); border: 1.5px solid var(--border); border-radius: 9px; padding: 9px 16px; font-size: .85rem; font-weight: 600; font-family: inherit; cursor: pointer; }
+    .btn-danger { background: var(--danger-light); color: var(--danger); border: 1.5px solid #f5c6c2; border-radius: 9px; padding: 9px 16px; font-size: .85rem; font-weight: 600; font-family: inherit; cursor: pointer; }
 
-    input[type=date], input[type=number], textarea, select {
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 0.95rem;
-      font-family: inherit;
-      color: var(--text);
-      background: #fafafa;
-      width: 100%;
-      direction: rtl;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    input[type=date]:focus, input[type=number]:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(26,107,74,0.12);
-      background: #fff;
-    }
-    textarea { resize: none; height: 72px; }
-    select   { appearance: none; cursor: pointer; }
+    /* ── Wage calc preview box ── */
+    .calc-box { background: var(--primary-light); border: 1.5px solid var(--border); border-radius: 9px; padding: 10px 13px; margin: 4px 0; }
+    .calc-box .calc-row { display: flex; justify-content: space-between; font-size: .82rem; margin-bottom: 3px; }
+    .calc-box .calc-total { font-size: 1rem; font-weight: 700; color: var(--primary-dark); border-top: 1px solid var(--border); padding-top: 6px; margin-top: 4px; }
+    .calc-hint { font-size: .75rem; color: var(--muted); margin-top: 4px; }
 
-    /* ── Buttons ── */
-    .btn {
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-      padding: 11px 16px; border: none; border-radius: 9px;
-      font-size: 0.9rem; font-weight: 700; font-family: inherit;
-      cursor: pointer; transition: background 0.15s, transform 0.1s;
-    }
-    .btn:active   { transform: scale(0.97); }
-    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    /* ── Override toggle ── */
+    .override-row { display: flex; align-items: center; gap: 8px; margin: 4px 0 8px; }
+    .override-row input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer; }
+    .override-row label { font-size: .8rem; color: var(--muted); cursor: pointer; margin: 0; }
 
-    .btn-primary  { background: var(--primary); color: #fff; width: 100%; margin-top: 4px; font-size: 1rem; padding: 13px; }
-    .btn-primary:hover:not(:disabled) { background: var(--primary-dark); }
-    .btn-edit     { background: var(--primary-light); color: var(--primary-dark); flex: 1; }
-    .btn-edit:hover   { background: #d0ead9; }
-    .btn-delete   { background: var(--danger-light); color: var(--danger); flex: 1; }
-    .btn-delete:hover { background: #f9d6d2; }
-    .btn-cancel   { background: var(--border); color: var(--text); flex: 1; }
-    .btn-cancel:hover { background: #c8d9ce; }
-    .btn-danger   { background: var(--danger); color: #fff; flex: 1; }
-    .btn-danger:hover { background: #a93226; }
-    .btn-ghost {
-      background: transparent; color: var(--muted);
-      border: 1.5px solid var(--border); padding: 8px 14px; font-size: 0.82rem;
+    /* ── Payment progress ── */
+    .pay-progress { background: #e0e0e0; border-radius: 6px; height: 6px; overflow: hidden; margin-top: 4px; }
+    .pay-bar { height: 100%; border-radius: 6px; background: var(--primary); transition: width .3s; }
+    .pay-bar.partial { background: var(--warn); }
+    .pay-bar.paid    { background: var(--primary); }
+
+    /* ── Status badge ── */
+    .badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: .72rem; font-weight: 700; }
+    .badge-unpaid  { background: var(--danger-light); color: var(--danger); }
+    .badge-partial { background: var(--warn-light);   color: var(--warn); }
+    .badge-paid    { background: var(--primary-light); color: var(--primary-dark); }
+
+    /* ── Wage type badge ── */
+    .wage-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: .7rem; font-weight: 700; background: var(--info-light); color: var(--info); }
+
+    /* ── List items ── */
+    .item-list { display: flex; flex-direction: column; gap: 10px; }
+    .item-card {
+      background: var(--card); border-radius: 12px; box-shadow: var(--shadow);
+      padding: 12px 14px; display: flex; flex-direction: column; gap: 6px;
+      border-right: 4px solid var(--primary);
     }
-    .btn-ghost:hover { background: var(--primary-light); color: var(--primary-dark); border-color: var(--primary); }
-    .btn-pdf  { background: #b91c1c; color: #fff; padding: 8px 14px; font-size: 0.82rem; border-radius: 8px; }
-    .btn-pdf:hover { background: #991b1b; }
+    .item-card.status-unpaid  { border-right-color: var(--danger); }
+    .item-card.status-partial { border-right-color: var(--warn); }
+    .item-card.status-paid    { border-right-color: var(--primary); }
+    .item-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .item-date { font-weight: 700; font-size: .9rem; }
+    .item-employer { font-size: .8rem; color: var(--muted); }
+    .item-wage  { font-size: 1rem; font-weight: 800; color: var(--primary-dark); }
+    .item-meta  { font-size: .78rem; color: var(--muted); }
+    .item-note  { font-size: .78rem; color: var(--muted); font-style: italic; }
+    .item-actions { display: flex; gap: 7px; }
+    .btn-edit   { background: var(--primary-light); border: none; border-radius: 7px; padding: 5px 12px; font-size: .78rem; font-weight: 600; color: var(--primary-dark); cursor: pointer; font-family: inherit; }
+    .btn-del    { background: var(--danger-light);  border: none; border-radius: 7px; padding: 5px 10px; font-size: .78rem; font-weight: 600; color: var(--danger); cursor: pointer; font-family: inherit; }
+
+    /* ── Employer card ── */
+    .emp-card { background: var(--card); border-radius: 12px; box-shadow: var(--shadow); padding: 13px 14px; border-right: 4px solid var(--primary); display: flex; flex-direction: column; gap: 5px; }
+    .emp-name { font-weight: 800; font-size: .95rem; }
+    .emp-detail { font-size: .78rem; color: var(--muted); }
+
+    /* ── Dashboard stat cards ── */
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .stat-card { background: var(--card); border-radius: 12px; box-shadow: var(--shadow); padding: 14px 12px; text-align: center; }
+    .stat-card.full { grid-column: 1 / -1; }
+    .stat-label { font-size: .72rem; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+    .stat-value { font-size: 1.2rem; font-weight: 800; color: var(--primary-dark); }
+    .stat-value.danger { color: var(--danger); }
+    .stat-value.warn   { color: var(--warn); }
+
+    /* ── Table ── */
+    .tbl-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+    th { background: var(--primary-light); color: var(--primary-dark); padding: 8px 10px; text-align: right; font-weight: 700; }
+    td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f9fdf9; }
+
+    /* ── Filter bar ── */
+    .filter-bar { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; margin-bottom: 12px; }
+    .filter-bar select { font-size: .82rem; padding: 7px 9px; }
+
+    /* ── Section title ── */
+    .sec-title { font-size: .8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; margin-top: 4px; }
+
+    /* ── Add button ── */
+    .fab { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 10px; font-size: .9rem; font-weight: 700; font-family: inherit; cursor: pointer; transition: background .15s; margin-bottom: 12px; }
+    .fab:hover { background: var(--primary-dark); }
+
+    /* ── Empty state ── */
+    .empty { text-align: center; padding: 36px 16px; color: var(--muted); }
+    .empty .empty-icon { font-size: 3rem; margin-bottom: 10px; }
+    .empty p { font-size: .88rem; }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: var(--border); margin: 12px 0; }
+
+    /* ── Modal overlay ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,.45); align-items: flex-end; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-sheet {
+      background: #fff; border-radius: 20px 20px 0 0; width: 100%; max-width: 520px;
+      max-height: 92vh; overflow-y: auto; padding: 20px 18px 32px;
+      box-shadow: 0 -4px 30px rgba(0,0,0,.2);
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .modal-header h3 { font-size: 1.05rem; font-weight: 800; color: var(--primary-dark); }
+    .modal-close { background: var(--border); border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); }
+    .modal-actions { display: flex; gap: 10px; margin-top: 16px; }
+    .modal-actions .btn-primary { flex: 1; }
+    .modal-actions .btn-secondary { flex: 0 0 auto; }
+
+    /* ── Section sub-heading inside modal ── */
+    .form-section-title { font-size: .78rem; font-weight: 700; color: var(--primary-dark); background: var(--primary-light); border-radius: 7px; padding: 5px 10px; margin: 12px 0 8px; }
+
+    /* ── Totals by currency ── */
+    .currency-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: .88rem; }
+    .currency-row:last-child { border-bottom: none; }
+    .currency-row .c-name { font-weight: 700; }
+    .currency-row .c-val  { color: var(--primary-dark); font-weight: 700; }
+    .currency-row .c-recv { color: var(--primary); }
+    .currency-row .c-rem  { color: var(--danger); }
 
     /* ── Toast ── */
     #toast {
-      position: fixed; bottom: 24px; left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--primary-dark); color: #fff;
-      padding: 10px 20px; border-radius: 24px;
-      font-size: 0.9rem; font-weight: 600;
-      box-shadow: var(--shadow); transition: transform 0.3s ease;
-      z-index: 200; white-space: nowrap;
+      position: fixed; bottom: calc(var(--nav-h) + 12px); left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--primary-dark); color: #fff; padding: 10px 20px; border-radius: 10px;
+      font-size: .88rem; font-weight: 600; opacity: 0; transition: opacity .25s, transform .25s;
+      z-index: 9999; pointer-events: none; white-space: nowrap;
     }
-    #toast.show  { transform: translateX(-50%) translateY(0); }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     #toast.error { background: var(--danger); }
 
-    /* ── Filters ── */
-    .filter-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-    .filter-actions { display: flex; gap: 8px; align-items: center; }
-    .filter-active-bar {
-      background: var(--primary-light); border: 1.5px solid var(--primary);
-      border-radius: 8px; padding: 7px 12px;
-      font-size: 0.82rem; font-weight: 600; color: var(--primary-dark);
-      display: flex; align-items: center; justify-content: space-between;
-    }
+    /* ── Coming soon ── */
+    .coming-soon { text-align: center; padding: 60px 24px; color: var(--muted); }
+    .coming-soon .cs-icon { font-size: 4rem; margin-bottom: 14px; }
+    .coming-soon h3 { font-size: 1.1rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px; }
+    .coming-soon p { font-size: .88rem; }
 
-    /* ── Totals ── */
-    #totalsSection { display: flex; flex-direction: column; gap: 8px; }
-    .currency-total {
-      background: var(--primary-light); border-radius: 10px;
-      padding: 11px 14px;
-      display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    }
-    .cur-label { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; color: var(--muted); }
-    .cur-flag  { font-size: 1.1rem; }
-    .cur-nums  { display: flex; gap: 14px; align-items: center; }
-    .cur-stat-val { font-size: 1rem; font-weight: 700; color: var(--primary-dark); }
-    .cur-stat-lbl { font-size: 0.68rem; color: var(--muted); text-align: center; }
-
-    /* ── List ── */
-    #list { display: flex; flex-direction: column; gap: 10px; }
-    .workday-item {
-      border: 1.5px solid var(--border); border-radius: 10px;
-      padding: 13px 14px; animation: slideIn 0.22s ease;
-    }
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(-6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .workday-top  { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; }
-    .workday-date {
-      background: var(--primary); color: #fff;
-      border-radius: 8px; padding: 6px 10px;
-      font-size: 0.78rem; font-weight: 700;
-      text-align: center; min-width: 60px; line-height: 1.4;
-    }
-    .workday-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-    .badge { background: var(--primary-light); color: var(--primary-dark); border-radius: 20px; padding: 2px 10px; font-size: 0.78rem; font-weight: 600; }
-    .badge-currency { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
-    .workday-note   { font-size: 0.82rem; color: var(--muted); line-height: 1.4; margin-top: 4px; }
-    .workday-actions { display: flex; gap: 8px; margin-top: 8px; }
-
-    /* ── Empty / loading ── */
-    .empty { text-align: center; padding: 32px 16px; color: var(--muted); font-size: 0.9rem; }
-    .empty .empty-icon { font-size: 2.5rem; margin-bottom: 8px; }
-    .loading { display: flex; justify-content: center; padding: 24px; }
-    .spinner {
-      width: 28px; height: 28px;
-      border: 3px solid var(--border); border-top-color: var(--primary);
-      border-radius: 50%; animation: spin 0.7s linear infinite;
-    }
-    .spinner-sm { width: 18px; height: 18px; border-width: 2px; margin: 0 auto; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── Modals ── */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.45); z-index: 50;
-      align-items: center; justify-content: center; padding: 16px;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal {
-      background: var(--card); border-radius: var(--radius);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-      width: 100%; max-width: 420px;
-      animation: modalIn 0.2s ease; overflow: hidden;
-    }
-    @keyframes modalIn {
-      from { opacity: 0; transform: scale(0.96) translateY(10px); }
-      to   { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    .modal-header {
-      background: var(--primary-light); padding: 14px 16px;
-      display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid var(--border);
-    }
-    .modal-header h3 { font-size: 1rem; font-weight: 700; color: var(--primary-dark); }
-    .modal-close { background: none; border: none; cursor: pointer; font-size: 1.3rem; color: var(--muted); padding: 2px 6px; border-radius: 6px; }
-    .modal-close:hover { background: var(--border); }
-    .modal-body   { padding: 16px; }
-    .modal-footer { padding: 0 16px 16px; display: flex; gap: 10px; }
-    .confirm-icon { font-size: 2.5rem; text-align: center; margin-bottom: 8px; }
-    .confirm-msg  { text-align: center; font-size: 0.95rem; line-height: 1.6; }
-    .confirm-msg strong { color: var(--danger); }
-
-    /* ══════════════════════════════
+    /* ════════════════════════
        PRINT / PDF
-    ══════════════════════════════ */
-    #printArea { display: none; }
+    ════════════════════════ */
+    #print-area { display: none; }
+
     @media print {
-      body > *:not(#printArea) { display: none !important; }
-      #printArea {
-        display: block !important; direction: rtl;
-        font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-        color: #111; padding: 24px;
+      body > *:not(#print-area) { display: none !important; }
+      #print-area {
+        display: block !important; font-family: 'Segoe UI', Tahoma, sans-serif;
+        direction: rtl; padding: 20px; color: #000;
       }
       .print-header { text-align: center; border-bottom: 2px solid #1a6b4a; padding-bottom: 12px; margin-bottom: 20px; }
-      .print-header h1 { font-size: 1.5rem; color: #1a6b4a; margin-bottom: 4px; }
-      .print-header p  { font-size: 0.85rem; color: #555; }
-      .print-section-title { font-size: 1rem; font-weight: 700; color: #1a6b4a; margin: 18px 0 8px; padding-bottom: 4px; border-bottom: 1px solid #d6e4dc; }
-      .print-totals-table, .print-days-table { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
-      .print-totals-table th, .print-totals-table td,
-      .print-days-table   th, .print-days-table   td { border: 1px solid #d6e4dc; padding: 7px 10px; font-size: 0.85rem; text-align: right; }
-      .print-totals-table th, .print-days-table th { background: #e8f5ef; font-weight: 700; color: #134f37; }
-      .print-days-table tr:nth-child(even) td { background: #f9fcfb; }
-      .print-footer { margin-top: 24px; text-align: center; font-size: 0.75rem; color: #888; border-top: 1px solid #d6e4dc; padding-top: 10px; }
+      .print-header h1 { font-size: 1.5rem; color: #1a6b4a; }
+      .print-header p  { font-size: .85rem; color: #555; }
+      .print-section-title { font-size: 1rem; font-weight: 700; color: #1a6b4a; margin: 16px 0 8px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+      .print-summary-table, .print-days-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: .82rem; }
+      .print-summary-table th, .print-days-table th { background: #e8f5ef; color: #134f37; padding: 6px 8px; text-align: right; }
+      .print-summary-table td, .print-days-table td { padding: 5px 8px; border-bottom: 1px solid #ddd; }
+      .print-footer { text-align: center; font-size: .75rem; color: #888; margin-top: 24px; border-top: 1px solid #ddd; padding-top: 10px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ══════════ LOGIN SCREEN ══════════ -->
+<!-- ══════════════════════════ LOGIN ══════════════════════════ -->
 <div id="screen-login" class="screen active">
   <div class="auth-wrap">
     <div class="auth-logo">
@@ -394,26 +322,18 @@
     </div>
     <div class="auth-card">
       <h2>تسجيل الدخول</h2>
-      <div class="auth-error" id="login-error"></div>
-      <form id="loginForm" novalidate>
-        <div class="auth-field">
-          <label for="loginEmail">البريد الإلكتروني</label>
-          <input type="email" id="loginEmail" placeholder="example@email.com" autocomplete="email" required />
-        </div>
-        <div class="auth-field">
-          <label for="loginPassword">كلمة المرور</label>
-          <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" required />
-        </div>
-        <button class="btn-auth" type="submit" id="loginBtn">دخول</button>
+      <div id="login-error" class="auth-error"></div>
+      <form id="login-form">
+        <div class="auth-field"><label>البريد الإلكتروني</label><input type="email" id="login-email" placeholder="example@email.com" required /></div>
+        <div class="auth-field"><label>كلمة المرور</label><input type="password" id="login-pw" placeholder="••••••••" required /></div>
+        <button class="btn-auth" type="submit" id="login-btn">دخول</button>
       </form>
-      <div class="auth-switch">
-        ليس لديك حساب؟ <a onclick="showScreen('register')">أنشئ حساباً</a>
-      </div>
+      <div class="auth-switch">ليس لديك حساب؟ <a onclick="showScreen('register')">أنشئ حساباً</a></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════ REGISTER SCREEN ══════════ -->
+<!-- ══════════════════════════ REGISTER ══════════════════════════ -->
 <div id="screen-register" class="screen">
   <div class="auth-wrap">
     <div class="auth-logo">
@@ -421,634 +341,1246 @@
       <p>سجّل أيام عملك وتابع دخلك</p>
     </div>
     <div class="auth-card">
-      <h2>إنشاء حساب جديد</h2>
-      <div class="auth-error" id="reg-error"></div>
-      <form id="registerForm" novalidate>
-        <div class="auth-field">
-          <label for="regName">الاسم الكامل</label>
-          <input type="text" id="regName" placeholder="محمد أحمد" autocomplete="name" required />
-        </div>
-        <div class="auth-field">
-          <label for="regEmail">البريد الإلكتروني</label>
-          <input type="email" id="regEmail" placeholder="example@email.com" autocomplete="email" required />
-        </div>
-        <div class="auth-field">
-          <label for="regPassword">كلمة المرور</label>
-          <input type="password" id="regPassword" placeholder="6 أحرف على الأقل" autocomplete="new-password" required />
-        </div>
-        <div class="auth-field">
-          <label for="regConfirm">تأكيد كلمة المرور</label>
-          <input type="password" id="regConfirm" placeholder="••••••••" autocomplete="new-password" required />
-        </div>
-        <button class="btn-auth" type="submit" id="registerBtn">إنشاء الحساب</button>
+      <h2>إنشاء حساب</h2>
+      <div id="reg-error" class="auth-error"></div>
+      <form id="reg-form">
+        <div class="auth-field"><label>الاسم الكامل</label><input type="text" id="reg-name" placeholder="اسمك الكامل" required /></div>
+        <div class="auth-field"><label>البريد الإلكتروني</label><input type="email" id="reg-email" placeholder="example@email.com" required /></div>
+        <div class="auth-field"><label>كلمة المرور</label><input type="password" id="reg-pw" placeholder="8 أحرف على الأقل" required /></div>
+        <div class="auth-field"><label>تأكيد كلمة المرور</label><input type="password" id="reg-pw2" placeholder="أعد الكتابة" required /></div>
+        <button class="btn-auth" type="submit" id="reg-btn">إنشاء الحساب</button>
       </form>
-      <div class="auth-switch">
-        لديك حساب بالفعل؟ <a onclick="showScreen('login')">سجّل الدخول</a>
-      </div>
+      <div class="auth-switch">لديك حساب؟ <a onclick="showScreen('login')">تسجيل الدخول</a></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════ APP SCREEN ══════════ -->
+<!-- ══════════════════════════ APP ══════════════════════════ -->
 <div id="screen-app" class="screen">
 
   <header>
     <div class="header-inner">
       <div class="header-brand">
         <h1>🗓️ داوامي</h1>
-        <p>سجّل أيام عملك وتابع دخلك</p>
+        <p id="header-subtitle">لوحة التحكم</p>
       </div>
       <div class="header-user">
-        <span id="headerName"></span>
+        <span id="header-name"></span>
         <button class="btn-logout" onclick="logout()">خروج</button>
       </div>
     </div>
   </header>
 
-  <main>
-
-    <!-- Add form -->
-    <div class="card">
-      <div class="card-header"><span class="icon">➕</span><h2>إضافة يوم عمل</h2></div>
-      <div class="card-body">
-        <form id="addForm">
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="date">التاريخ</label>
-              <input type="date" id="date" required />
-            </div>
-            <div class="form-group">
-              <label for="hours">الساعات</label>
-              <input type="number" id="hours" min="0" step="0.5" placeholder="٨" required />
-            </div>
-            <div class="form-group">
-              <label for="wage">الأجر</label>
-              <input type="number" id="wage" min="0" step="0.01" placeholder="٠.٠٠" required />
-            </div>
-            <div class="form-group">
-              <label for="currency">العملة</label>
-              <select id="currency">
-                <option value="TRY">🇹🇷 ليرة تركية</option>
-                <option value="USD">🇺🇸 دولار أمريكي</option>
-                <option value="EUR">🇪🇺 يورو</option>
-                <option value="SAR">🇸🇦 ريال سعودي</option>
-                <option value="SYP">🇸🇾 ليرة سورية</option>
-              </select>
-            </div>
-            <div class="form-group full">
-              <label for="note">ملاحظة (اختياري)</label>
-              <textarea id="note" placeholder="أي ملاحظات عن هذا اليوم..."></textarea>
-            </div>
-          </div>
-          <button class="btn btn-primary" type="submit" id="submitBtn">
-            <span>💾</span> حفظ يوم العمل
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Filters -->
-    <div class="card">
-      <div class="card-header"><span class="icon">🔍</span><h2>تصفية حسب الشهر</h2></div>
-      <div class="card-body">
-        <div class="filter-row">
-          <div class="form-group">
-            <label for="filterMonth">الشهر</label>
-            <select id="filterMonth">
-              <option value="">— كل الشهور —</option>
-              <option value="01">يناير</option><option value="02">فبراير</option>
-              <option value="03">مارس</option><option value="04">أبريل</option>
-              <option value="05">مايو</option><option value="06">يونيو</option>
-              <option value="07">يوليو</option><option value="08">أغسطس</option>
-              <option value="09">سبتمبر</option><option value="10">أكتوبر</option>
-              <option value="11">نوفمبر</option><option value="12">ديسمبر</option>
+  <!-- ── HOME / DASHBOARD ── -->
+  <div id="tab-home" class="tab-panel active">
+    <div class="section">
+      <div class="card" style="margin-top:14px">
+        <div class="card-header"><span class="icon">🔍</span><h2>تصفية</h2></div>
+        <div class="card-body">
+          <div class="filter-bar">
+            <select id="dash-emp"><option value="">كل جهات العمل</option></select>
+            <select id="dash-month">
+              <option value="">كل الأشهر</option>
+              <option value="1">يناير</option><option value="2">فبراير</option><option value="3">مارس</option>
+              <option value="4">أبريل</option><option value="5">مايو</option><option value="6">يونيو</option>
+              <option value="7">يوليو</option><option value="8">أغسطس</option><option value="9">سبتمبر</option>
+              <option value="10">أكتوبر</option><option value="11">نوفمبر</option><option value="12">ديسمبر</option>
             </select>
+            <select id="dash-year"><option value="">كل السنوات</option></select>
+            <select id="dash-status">
+              <option value="">كل الحالات</option>
+              <option value="unpaid">غير مدفوع</option>
+              <option value="partial">مدفوع جزئيًا</option>
+              <option value="paid">مدفوع بالكامل</option>
+            </select>
+            <select id="dash-currency"><option value="">كل العملات</option></select>
           </div>
-          <div class="form-group">
-            <label for="filterYear">السنة</label>
-            <select id="filterYear"><option value="">— كل السنوات —</option></select>
+          <button class="btn-secondary" style="width:100%" onclick="renderDashboard()">تحديث</button>
+        </div>
+      </div>
+
+      <div class="stat-grid" id="dash-stats"></div>
+
+      <div class="card">
+        <div class="card-header"><span class="icon">💱</span><h2>الإجماليات حسب العملة</h2></div>
+        <div class="card-body" id="dash-by-currency"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="icon">🏢</span><h2>المتبقي لكل جهة عمل</h2></div>
+        <div class="card-body" id="dash-by-employer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── WORKDAYS ── -->
+  <div id="tab-workdays" class="tab-panel">
+    <div class="section" style="padding-top:14px">
+      <button class="fab" onclick="openWorkdayModal(null)">＋ إضافة يوم عمل</button>
+
+      <div class="filter-bar" style="margin-bottom:12px">
+        <select id="wd-filter-emp"><option value="">كل جهات العمل</option></select>
+        <select id="wd-filter-month">
+          <option value="">كل الأشهر</option>
+          <option value="1">يناير</option><option value="2">فبراير</option><option value="3">مارس</option>
+          <option value="4">أبريل</option><option value="5">مايو</option><option value="6">يونيو</option>
+          <option value="7">يوليو</option><option value="8">أغسطس</option><option value="9">سبتمبر</option>
+          <option value="10">أكتوبر</option><option value="11">نوفمبر</option><option value="12">ديسمبر</option>
+        </select>
+        <select id="wd-filter-year"><option value="">كل السنوات</option></select>
+        <select id="wd-filter-status">
+          <option value="">كل الحالات</option>
+          <option value="unpaid">غير مدفوع</option>
+          <option value="partial">مدفوع جزئيًا</option>
+          <option value="paid">مدفوع بالكامل</option>
+        </select>
+      </div>
+
+      <div id="wd-list"></div>
+    </div>
+  </div>
+
+  <!-- ── EXPENSES (coming soon) ── -->
+  <div id="tab-expenses" class="tab-panel">
+    <div class="section">
+      <div class="coming-soon">
+        <div class="cs-icon">💸</div>
+        <h3>المصاريف</h3>
+        <p>هذه الميزة قادمة قريباً — ستتمكن من تسجيل مصاريفك اليومية ومقارنتها بدخلك.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PAYMENTS ── -->
+  <div id="tab-payments" class="tab-panel">
+    <div class="section" style="padding-top:14px">
+      <button class="fab" onclick="openPaymentModal(null)">＋ تسجيل دفعة</button>
+
+      <div class="filter-bar" style="margin-bottom:12px">
+        <select id="pay-filter-emp"><option value="">كل جهات العمل</option></select>
+        <select id="pay-filter-month">
+          <option value="">كل الأشهر</option>
+          <option value="1">يناير</option><option value="2">فبراير</option><option value="3">مارس</option>
+          <option value="4">أبريل</option><option value="5">مايو</option><option value="6">يونيو</option>
+          <option value="7">يوليو</option><option value="8">أغسطس</option><option value="9">سبتمبر</option>
+          <option value="10">أكتوبر</option><option value="11">نوفمبر</option><option value="12">ديسمبر</option>
+        </select>
+        <select id="pay-filter-year"><option value="">كل السنوات</option></select>
+      </div>
+
+      <div id="pay-list"></div>
+    </div>
+  </div>
+
+  <!-- ── EMPLOYERS ── -->
+  <div id="tab-employers" class="tab-panel">
+    <div class="section" style="padding-top:14px">
+      <button class="fab" onclick="openEmployerModal(null)">＋ إضافة جهة عمل</button>
+      <div id="emp-list"></div>
+    </div>
+  </div>
+
+  <!-- ── REPORTS ── -->
+  <div id="tab-reports" class="tab-panel">
+    <div class="section" style="padding-top:14px">
+      <div class="card">
+        <div class="card-header"><span class="icon">📊</span><h2>التقارير الشهرية</h2></div>
+        <div class="card-body">
+          <div class="filter-bar">
+            <select id="rep-emp"><option value="">كل جهات العمل</option></select>
+            <select id="rep-month">
+              <option value="1">يناير</option><option value="2">فبراير</option><option value="3">مارس</option>
+              <option value="4">أبريل</option><option value="5">مايو</option><option value="6">يونيو</option>
+              <option value="7">يوليو</option><option value="8">أغسطس</option><option value="9">سبتمبر</option>
+              <option value="10">أكتوبر</option><option value="11">نوفمبر</option><option value="12">ديسمبر</option>
+            </select>
+            <select id="rep-year"></select>
           </div>
-        </div>
-        <div class="filter-actions">
-          <button class="btn btn-ghost" onclick="clearFilters()" style="flex:1">✕ مسح التصفية</button>
-          <button class="btn btn-pdf"   onclick="exportPDF()">📄 تصدير PDF</button>
-        </div>
-        <div id="filterActiveBadge" style="display:none; margin-top:10px">
-          <div class="filter-active-bar">
-            <span id="filterLabel">—</span>
-            <span style="color:var(--primary)">✓ فعّال</span>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn-primary" style="flex:1" onclick="renderReports()">عرض التقرير</button>
+            <button class="btn-secondary" onclick="exportPDF()">تصدير PDF</button>
           </div>
         </div>
       </div>
+      <div id="report-area"></div>
     </div>
+  </div>
 
-    <!-- Totals -->
-    <div class="card" id="totalsCard" style="display:none">
-      <div class="card-header"><span class="icon">📊</span><h2 id="totalsTitle">الإجماليات حسب العملة</h2></div>
-      <div class="card-body" style="padding:12px"><div id="totalsSection"></div></div>
-    </div>
-
-    <!-- List -->
-    <div class="card">
-      <div class="card-header"><span class="icon">📋</span><h2 id="listTitle">سجل أيام العمل</h2></div>
-      <div class="card-body" style="padding:12px">
-        <div id="list"><div class="loading"><div class="spinner"></div></div></div>
+  <!-- ── SETTINGS ── -->
+  <div id="tab-settings" class="tab-panel">
+    <div class="section">
+      <div class="card" style="margin-top:14px">
+        <div class="card-header"><span class="icon">⚙️</span><h2>الإعدادات</h2></div>
+        <div class="card-body">
+          <div style="margin-bottom:16px">
+            <div class="sec-title">معلومات الحساب</div>
+            <div style="font-size:.9rem;padding:10px 0" id="settings-user-info"></div>
+          </div>
+          <button class="btn-danger" onclick="logout()" style="width:100%">تسجيل الخروج</button>
+        </div>
       </div>
     </div>
+  </div>
 
-  </main>
-</div><!-- /screen-app -->
+  <!-- ── BOTTOM NAV ── -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-tab="home"      onclick="switchTab('home')">      <span class="nav-icon">🏠</span>الرئيسية</button>
+    <button class="nav-item"        data-tab="workdays"  onclick="switchTab('workdays')">  <span class="nav-icon">📅</span>العمل</button>
+    <button class="nav-item"        data-tab="expenses"  onclick="switchTab('expenses')">  <span class="nav-icon">💸</span>المصاريف</button>
+    <button class="nav-item"        data-tab="payments"  onclick="switchTab('payments')">  <span class="nav-icon">💰</span>الدفعات</button>
+    <button class="nav-item"        data-tab="employers" onclick="switchTab('employers')"> <span class="nav-icon">🏢</span>جهات</button>
+    <button class="nav-item"        data-tab="reports"   onclick="switchTab('reports')">   <span class="nav-icon">📊</span>التقارير</button>
+    <button class="nav-item"        data-tab="settings"  onclick="switchTab('settings')">  <span class="nav-icon">⚙️</span>الإعدادات</button>
+  </nav>
+</div>
 
-<!-- Edit modal -->
-<div class="modal-overlay" id="editOverlay">
-  <div class="modal">
+<!-- ══════════════════════════ MODAL: WORKDAY ══════════════════════════ -->
+<div class="modal-overlay" id="modal-workday">
+  <div class="modal-sheet">
     <div class="modal-header">
-      <h3>✏️ تعديل يوم العمل</h3>
-      <button class="modal-close" onclick="closeEdit()">✕</button>
+      <h3 id="wd-modal-title">إضافة يوم عمل</h3>
+      <button class="modal-close" onclick="closeModal('modal-workday')">✕</button>
     </div>
-    <div class="modal-body">
+    <form id="wd-form">
       <div class="form-grid">
-        <div class="form-group">
-          <label for="eDate">التاريخ</label>
-          <input type="date" id="eDate" required />
+        <div class="form-group"><label>التاريخ *</label><input type="date" id="wd-date" required /></div>
+        <div class="form-group"><label>جهة العمل</label>
+          <select id="wd-employer" onchange="onEmployerChange()"><option value="">— بدون —</option></select>
         </div>
-        <div class="form-group">
-          <label for="eHours">الساعات</label>
-          <input type="number" id="eHours" min="0" step="0.5" required />
-        </div>
-        <div class="form-group">
-          <label for="eWage">الأجر</label>
-          <input type="number" id="eWage" min="0" step="0.01" required />
-        </div>
-        <div class="form-group">
-          <label for="eCurrency">العملة</label>
-          <select id="eCurrency">
-            <option value="TRY">🇹🇷 ليرة تركية</option>
-            <option value="USD">🇺🇸 دولار أمريكي</option>
-            <option value="EUR">🇪🇺 يورو</option>
-            <option value="SAR">🇸🇦 ريال سعودي</option>
-            <option value="SYP">🇸🇾 ليرة سورية</option>
+        <div class="form-group"><label>العملة</label>
+          <select id="wd-currency">
+            <option value="TRY">🇹🇷 TRY</option><option value="USD">🇺🇸 USD</option>
+            <option value="EUR">🇪🇺 EUR</option><option value="SAR">🇸🇦 SAR</option><option value="SYP">🇸🇾 SYP</option>
           </select>
         </div>
-        <div class="form-group full">
-          <label for="eNote">ملاحظة (اختياري)</label>
-          <textarea id="eNote" placeholder="أي ملاحظات..."></textarea>
+        <div class="form-group"><label>نوع الأجر</label>
+          <select id="wd-wage-type" onchange="onWageTypeChange()">
+            <option value="hourly">أجر بالساعة</option>
+            <option value="daily" selected>أجر يومي</option>
+            <option value="monthly">راتب شهري</option>
+            <option value="piecework">عمل بالقطعة</option>
+          </select>
+        </div>
+        <div class="form-group" id="wd-reg-hours-grp"><label>ساعات عادية</label><input type="number" id="wd-reg-hours" min="0" step="0.5" value="8" oninput="recalcWage()" /></div>
+        <div class="form-group" id="wd-ot-hours-grp"><label>ساعات إضافية</label><input type="number" id="wd-ot-hours" min="0" step="0.5" value="0" oninput="recalcWage()" /></div>
+        <div class="form-group" id="wd-ot-mult-grp"><label>معامل الوقت الإضافي</label><input type="number" id="wd-ot-mult" min="1" step="0.1" value="1.5" oninput="recalcWage()" /></div>
+        <div class="form-group"><label id="wd-rate-label">معدل الأجر اليومي</label><input type="number" id="wd-wage-rate" min="0" step="any" value="0" oninput="recalcWage()" /></div>
+      </div>
+
+      <div id="wd-calc-box" class="calc-box" style="display:none"></div>
+
+      <div class="override-row">
+        <input type="checkbox" id="wd-override" onchange="onOverrideChange()" />
+        <label for="wd-override">تجاوز يدوي — أدخل الأجر مباشرةً</label>
+      </div>
+      <div class="form-group" id="wd-manual-wage-grp" style="display:none;margin-bottom:10px">
+        <label>الأجر الإجمالي (يدوي)</label>
+        <input type="number" id="wd-wage" min="0" step="any" value="0" />
+      </div>
+
+      <div class="form-section-title">💳 تتبع الدفع</div>
+      <div class="form-grid">
+        <div class="form-group"><label>المبلغ المستحق</label><input type="number" id="wd-total-due" min="0" step="any" value="0" oninput="onTotalDueChange()" /></div>
+        <div class="form-group"><label>المبلغ المستلم</label><input type="number" id="wd-received" min="0" step="any" value="0" oninput="onReceivedChange()" /></div>
+        <div class="form-group"><label>المتبقي</label><input type="number" id="wd-remaining" readonly style="background:#f0f0f0" /></div>
+        <div class="form-group"><label>تاريخ الدفع</label><input type="date" id="wd-pay-date" /></div>
+        <div class="form-group full"><label>حالة الدفع</label>
+          <select id="wd-pay-status">
+            <option value="unpaid">غير مدفوع</option>
+            <option value="partial">مدفوع جزئيًا</option>
+            <option value="paid">مدفوع بالكامل</option>
+          </select>
         </div>
       </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-cancel" onclick="closeEdit()">إلغاء</button>
-      <button class="btn btn-primary" id="saveEditBtn" style="margin-top:0" onclick="submitEdit()">
-        <span>💾</span> حفظ التعديلات
-      </button>
-    </div>
+
+      <div class="form-section-title">📝 ملاحظة</div>
+      <div class="form-group"><textarea id="wd-note" placeholder="ملاحظة اختيارية..."></textarea></div>
+
+      <div class="modal-actions">
+        <button type="submit" class="btn-primary">حفظ</button>
+        <button type="button" class="btn-secondary" onclick="closeModal('modal-workday')">إلغاء</button>
+      </div>
+    </form>
   </div>
 </div>
 
-<!-- Delete confirm modal -->
-<div class="modal-overlay" id="deleteOverlay">
-  <div class="modal">
+<!-- ══════════════════════════ MODAL: EMPLOYER ══════════════════════════ -->
+<div class="modal-overlay" id="modal-employer">
+  <div class="modal-sheet">
     <div class="modal-header">
-      <h3>🗑️ حذف يوم العمل</h3>
-      <button class="modal-close" onclick="closeDelete()">✕</button>
+      <h3 id="emp-modal-title">إضافة جهة عمل</h3>
+      <button class="modal-close" onclick="closeModal('modal-employer')">✕</button>
     </div>
-    <div class="modal-body">
-      <div class="confirm-icon">⚠️</div>
-      <p class="confirm-msg">
-        هل أنت متأكد أنك تريد حذف هذا اليوم؟<br/>
-        <strong>لا يمكن التراجع عن هذا الإجراء.</strong>
-      </p>
+    <form id="emp-form">
+      <div class="form-grid">
+        <div class="form-group full"><label>اسم جهة العمل / الشركة *</label><input type="text" id="emp-name" required placeholder="مثال: شركة النجاح" /></div>
+        <div class="form-group"><label>الشخص المسؤول</label><input type="text" id="emp-contact" placeholder="اسم المسؤول" /></div>
+        <div class="form-group"><label>رقم الهاتف</label><input type="tel" id="emp-phone" placeholder="+9XX XXX XXXX" /></div>
+        <div class="form-group full"><label>العنوان</label><input type="text" id="emp-address" placeholder="العنوان الكامل" /></div>
+        <div class="form-group"><label>العملة الافتراضية</label>
+          <select id="emp-currency">
+            <option value="TRY">🇹🇷 TRY</option><option value="USD">🇺🇸 USD</option>
+            <option value="EUR">🇪🇺 EUR</option><option value="SAR">🇸🇦 SAR</option><option value="SYP">🇸🇾 SYP</option>
+          </select>
+        </div>
+        <div class="form-group"><label>نوع الأجر الافتراضي</label>
+          <select id="emp-wage-type">
+            <option value="hourly">بالساعة</option>
+            <option value="daily" selected>يومي</option>
+            <option value="monthly">شهري</option>
+            <option value="piecework">بالقطعة</option>
+          </select>
+        </div>
+        <div class="form-group full"><label>معدل الأجر الافتراضي</label><input type="number" id="emp-wage-rate" min="0" step="any" value="0" placeholder="0" /></div>
+        <div class="form-group full"><label>ملاحظة</label><textarea id="emp-note" placeholder="ملاحظة اختيارية..."></textarea></div>
+      </div>
+      <div class="modal-actions">
+        <button type="submit" class="btn-primary">حفظ</button>
+        <button type="button" class="btn-secondary" onclick="closeModal('modal-employer')">إلغاء</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════════════════════ MODAL: PAYMENT ══════════════════════════ -->
+<div class="modal-overlay" id="modal-payment">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <h3 id="pay-modal-title">تسجيل دفعة</h3>
+      <button class="modal-close" onclick="closeModal('modal-payment')">✕</button>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-cancel" onclick="closeDelete()">إلغاء</button>
-      <button class="btn btn-danger" id="confirmDeleteBtn" onclick="submitDelete()">🗑️ نعم، احذف</button>
+    <form id="pay-form">
+      <div class="form-grid">
+        <div class="form-group full"><label>جهة العمل *</label>
+          <select id="pay-employer" required onchange="onPayEmployerChange()"><option value="">— اختر —</option></select>
+        </div>
+        <div class="form-group full"><label>يوم العمل المرتبط (اختياري)</label>
+          <select id="pay-workday"><option value="">— بدون ربط —</option></select>
+        </div>
+        <div class="form-group"><label>المبلغ *</label><input type="number" id="pay-amount" min="0.01" step="any" required /></div>
+        <div class="form-group"><label>العملة *</label>
+          <select id="pay-currency">
+            <option value="TRY">🇹🇷 TRY</option><option value="USD">🇺🇸 USD</option>
+            <option value="EUR">🇪🇺 EUR</option><option value="SAR">🇸🇦 SAR</option><option value="SYP">🇸🇾 SYP</option>
+          </select>
+        </div>
+        <div class="form-group"><label>التاريخ *</label><input type="date" id="pay-date" required /></div>
+        <div class="form-group"><label>طريقة الدفع</label>
+          <select id="pay-method">
+            <option value="cash">نقدي</option>
+            <option value="bank">تحويل بنكي</option>
+            <option value="card">بطاقة</option>
+            <option value="other">أخرى</option>
+          </select>
+        </div>
+        <div class="form-group full"><label>ملاحظة</label><textarea id="pay-note" placeholder="ملاحظة اختيارية..."></textarea></div>
+      </div>
+      <div class="modal-actions">
+        <button type="submit" class="btn-primary">حفظ</button>
+        <button type="button" class="btn-secondary" onclick="closeModal('modal-payment')">إلغاء</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════════════════════ MODAL: DELETE CONFIRM ══════════════════════════ -->
+<div class="modal-overlay" id="modal-delete">
+  <div class="modal-sheet" style="max-height:auto">
+    <div class="modal-header">
+      <h3>تأكيد الحذف</h3>
+      <button class="modal-close" onclick="closeModal('modal-delete')">✕</button>
+    </div>
+    <p style="font-size:.9rem;color:var(--muted);margin-bottom:20px" id="delete-msg">هل أنت متأكد من الحذف؟ لا يمكن التراجع.</p>
+    <div class="modal-actions">
+      <button class="btn-danger" style="flex:1" onclick="executeDelete()">حذف نهائياً</button>
+      <button class="btn-secondary" onclick="closeModal('modal-delete')">إلغاء</button>
     </div>
   </div>
 </div>
 
-<!-- Hidden print area -->
-<div id="printArea"></div>
+<!-- ══════════════════════════ TOAST ══════════════════════════ -->
 <div id="toast"></div>
 
+<!-- ══════════════════════════ PRINT AREA ══════════════════════════ -->
+<div id="print-area"></div>
+
+<!-- ══════════════════════════ SCRIPTS ══════════════════════════ -->
 <script>
-/* ═══════════════════════════════════════
-   CONSTANTS
-═══════════════════════════════════════ */
-const API = '/workdays';
-const AUTH_API = '/auth';
-
-const CURRENCIES = {
-  TRY: { label: 'ليرة تركية',   flag: '🇹🇷', symbol: 'TRY' },
-  USD: { label: 'دولار أمريكي', flag: '🇺🇸', symbol: '$'   },
-  EUR: { label: 'يورو',          flag: '🇪🇺', symbol: '€'   },
-  SAR: { label: 'ريال سعودي',   flag: '🇸🇦', symbol: 'ر.س' },
-  SYP: { label: 'ليرة سورية',   flag: '🇸🇾', symbol: 'ل.س' },
-};
-
-const MONTHS_AR = ['','يناير','فبراير','مارس','أبريل','مايو','يونيو',
-                    'يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-
 /* ═══════════════════════════════════════
    STATE
 ═══════════════════════════════════════ */
-let allDays    = [];
-let editingId  = null;
-let deletingId = null;
+let token       = localStorage.getItem('dawami_token');
+let currentUser = JSON.parse(localStorage.getItem('dawami_user') || 'null');
+let workdays    = [];
+let employers   = [];
+let payments    = [];
+let activeTab   = 'home';
+let deleteTarget = null;   // { type:'workday'|'employer'|'payment', id }
+let editingId    = null;   // id being edited, null = new
 
 /* ═══════════════════════════════════════
-   AUTH HELPERS
+   API HELPER
 ═══════════════════════════════════════ */
-function getToken()   { return localStorage.getItem('dawami_token'); }
-function getUser()    { try { return JSON.parse(localStorage.getItem('dawami_user')); } catch { return null; } }
-function saveSession(token, user) {
-  localStorage.setItem('dawami_token', token);
-  localStorage.setItem('dawami_user', JSON.stringify(user));
+async function api(method, path, body) {
+  const opts = {
+    method,
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(path, opts);
+  if (res.status === 401) { logout(); return null; }
+  return res.json();
 }
-function clearSession() {
+
+/* ═══════════════════════════════════════
+   AUTH
+═══════════════════════════════════════ */
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-error');
+  err.classList.remove('show');
+  btn.disabled = true; btn.textContent = '...';
+  const data = await fetch('/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: document.getElementById('login-email').value, password: document.getElementById('login-pw').value }),
+  }).then(r => r.json());
+  btn.disabled = false; btn.textContent = 'دخول';
+  if (data.error) { err.textContent = data.error; err.classList.add('show'); return; }
+  token = data.token; currentUser = data.user;
+  localStorage.setItem('dawami_token', token);
+  localStorage.setItem('dawami_user', JSON.stringify(currentUser));
+  await initApp();
+});
+
+document.getElementById('reg-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('reg-btn');
+  const err = document.getElementById('reg-error');
+  err.classList.remove('show');
+  const pw = document.getElementById('reg-pw').value;
+  const pw2 = document.getElementById('reg-pw2').value;
+  if (pw !== pw2) { err.textContent = 'كلمتا المرور غير متطابقتين'; err.classList.add('show'); return; }
+  if (pw.length < 8) { err.textContent = 'كلمة المرور قصيرة جداً (8 أحرف على الأقل)'; err.classList.add('show'); return; }
+  btn.disabled = true; btn.textContent = '...';
+  const data = await fetch('/auth/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: document.getElementById('reg-name').value, email: document.getElementById('reg-email').value, password: pw }),
+  }).then(r => r.json());
+  btn.disabled = false; btn.textContent = 'إنشاء الحساب';
+  if (data.error) { err.textContent = data.error; err.classList.add('show'); return; }
+  token = data.token; currentUser = data.user;
+  localStorage.setItem('dawami_token', token);
+  localStorage.setItem('dawami_user', JSON.stringify(currentUser));
+  await initApp();
+});
+
+function logout() {
+  token = null; currentUser = null; workdays = []; employers = []; payments = [];
   localStorage.removeItem('dawami_token');
   localStorage.removeItem('dawami_user');
-}
-
-function authHeaders() {
-  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() };
+  showScreen('login');
 }
 
 /* ═══════════════════════════════════════
-   SCREEN ROUTING
+   SCREEN / TAB NAVIGATION
 ═══════════════════════════════════════ */
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + name).classList.add('active');
+  const s = document.getElementById('screen-' + name);
+  if (s) s.classList.add('active');
 }
 
-function initApp() {
-  const token = getToken();
-  const user  = getUser();
-  if (!token || !user) { showScreen('login'); return; }
-  document.getElementById('headerName').textContent = user.name;
+const TAB_TITLES = { home:'لوحة التحكم', workdays:'أيام العمل', expenses:'المصاريف', payments:'الدفعات', employers:'جهات العمل', reports:'التقارير', settings:'الإعدادات' };
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    n.classList.toggle('active', n.dataset.tab === tab);
+  });
+  document.getElementById('header-subtitle').textContent = TAB_TITLES[tab] || '';
+
+  if (tab === 'home')      renderDashboard();
+  if (tab === 'workdays')  renderWorkdays();
+  if (tab === 'payments')  renderPayments();
+  if (tab === 'employers') renderEmployers();
+  if (tab === 'reports')   renderReports();
+}
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+async function initApp() {
+  if (!token) { showScreen('login'); return; }
   showScreen('app');
-  initFilters();
-  loadWorkdays();
+  document.getElementById('header-name').textContent = currentUser?.name || '';
+  document.getElementById('settings-user-info').innerHTML = `
+    <b>${esc(currentUser?.name||'')}</b><br>
+    <span style="color:var(--muted)">${esc(currentUser?.email||'')}</span>
+  `;
+  await loadAll();
+  populateYears();
+  populateEmployerFilters();
+  renderDashboard();
 }
 
-function logout() {
-  clearSession();
-  allDays = [];
-  showScreen('login');
-  document.getElementById('loginEmail').value    = '';
-  document.getElementById('loginPassword').value = '';
+async function loadAll() {
+  const [wd, emp, pay] = await Promise.all([
+    api('GET', '/workdays'),
+    api('GET', '/employers'),
+    api('GET', '/payments'),
+  ]);
+  workdays  = wd  || [];
+  employers = emp || [];
+  payments  = pay || [];
+}
+
+async function loadWorkdays()  { const d = await api('GET','/workdays');  workdays  = d || []; }
+async function loadEmployers() { const d = await api('GET','/employers'); employers = d || []; }
+async function loadPayments()  { const d = await api('GET','/payments');  payments  = d || []; }
+
+/* ═══════════════════════════════════════
+   POPULATE YEAR DROPDOWNS & EMPLOYER FILTERS
+═══════════════════════════════════════ */
+function populateYears() {
+  const now = new Date();
+  const years = new Set([now.getFullYear(), now.getFullYear()-1]);
+  workdays.forEach(w => { if (w.date) years.add(parseInt(w.date.slice(0,4))); });
+  payments.forEach(p => { if (p.date) years.add(parseInt(p.date.slice(0,4))); });
+  const sorted = [...years].filter(Boolean).sort((a,b)=>b-a);
+
+  ['dash-year','wd-filter-year','pay-filter-year','rep-year'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const cur = el.value;
+    el.innerHTML = id === 'rep-year' ? '' : '<option value="">كل السنوات</option>';
+    sorted.forEach(y => {
+      const opt = document.createElement('option');
+      opt.value = y; opt.textContent = y;
+      if (id==='rep-year' && y===now.getFullYear()) opt.selected = true;
+      el.appendChild(opt);
+    });
+    if (cur) el.value = cur;
+  });
+
+  // Set default month for reports
+  const rm = document.getElementById('rep-month');
+  if (rm) rm.value = now.getMonth()+1;
+}
+
+function populateEmployerFilters() {
+  const ids = ['dash-emp','wd-filter-emp','pay-filter-emp','rep-emp','wd-employer','pay-employer'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const isRequired = (id === 'pay-employer');
+    const placeholder = isRequired ? '— اختر —' : 'كل جهات العمل';
+    el.innerHTML = `<option value="">${placeholder}</option>`;
+    employers.forEach(emp => {
+      const opt = document.createElement('option');
+      opt.value = emp._id; opt.textContent = emp.name;
+      el.appendChild(opt);
+    });
+  });
+  // Also populate workday employer selector (different placeholder)
+  const wdEl = document.getElementById('wd-employer');
+  if (wdEl) {
+    wdEl.innerHTML = '<option value="">— بدون —</option>';
+    employers.forEach(emp => {
+      const opt = document.createElement('option');
+      opt.value = emp._id; opt.textContent = emp.name;
+      wdEl.appendChild(opt);
+    });
+  }
 }
 
 /* ═══════════════════════════════════════
-   TOAST
+   MODAL HELPERS
 ═══════════════════════════════════════ */
-function showToast(msg, isError = false) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = isError ? 'error show' : 'show';
-  setTimeout(() => { t.className = ''; }, 2800);
-}
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-/* ═══════════════════════════════════════
-   AUTH FORMS
-═══════════════════════════════════════ */
-function showAuthError(id, msg) {
-  const el = document.getElementById(id);
-  el.textContent = msg;
-  el.classList.add('show');
-}
-function clearAuthError(id) {
-  const el = document.getElementById(id);
-  el.textContent = '';
-  el.classList.remove('show');
-}
-
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  clearAuthError('login-error');
-  const btn = document.getElementById('loginBtn');
-  btn.disabled = true; btn.textContent = '...جارٍ الدخول';
-  const email    = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  try {
-    const res  = await fetch(AUTH_API + '/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await res.json();
-    if (!res.ok) { showAuthError('login-error', data.error || 'خطأ في تسجيل الدخول'); return; }
-    saveSession(data.token, data.user);
-    document.getElementById('loginPassword').value = '';
-    initApp();
-  } catch {
-    showAuthError('login-error', 'تعذّر الاتصال بالخادم');
-  } finally {
-    btn.disabled = false; btn.textContent = 'دخول';
-  }
-});
-
-document.getElementById('registerForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  clearAuthError('reg-error');
-  const name     = document.getElementById('regName').value.trim();
-  const email    = document.getElementById('regEmail').value.trim();
-  const password = document.getElementById('regPassword').value;
-  const confirm  = document.getElementById('regConfirm').value;
-
-  if (!name)            { showAuthError('reg-error', 'الاسم الكامل مطلوب'); return; }
-  if (!email)           { showAuthError('reg-error', 'البريد الإلكتروني مطلوب'); return; }
-  if (password.length < 6) { showAuthError('reg-error', 'كلمة المرور يجب أن تكون 6 أحرف على الأقل'); return; }
-  if (password !== confirm) { showAuthError('reg-error', 'كلمتا المرور غير متطابقتين'); return; }
-
-  const btn = document.getElementById('registerBtn');
-  btn.disabled = true; btn.textContent = '...جارٍ الإنشاء';
-  try {
-    const res  = await fetch(AUTH_API + '/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password }),
-    });
-    const data = await res.json();
-    if (!res.ok) { showAuthError('reg-error', data.error || 'خطأ في إنشاء الحساب'); return; }
-    saveSession(data.token, data.user);
-    document.getElementById('registerForm').reset();
-    initApp();
-  } catch {
-    showAuthError('reg-error', 'تعذّر الاتصال بالخادم');
-  } finally {
-    btn.disabled = false; btn.textContent = 'إنشاء الحساب';
-  }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('open'); });
 });
 
 /* ═══════════════════════════════════════
-   FILTERS
+   EMPLOYERS
 ═══════════════════════════════════════ */
-function initFilters() {
-  const sel  = document.getElementById('filterYear');
-  // Clear old options except the first
-  while (sel.options.length > 1) sel.remove(1);
-  const year = new Date().getFullYear();
-  for (let y = year; y >= year - 5; y--) {
-    const opt = document.createElement('option');
-    opt.value = String(y); opt.textContent = String(y);
-    sel.appendChild(opt);
+function renderEmployers() {
+  const list = document.getElementById('emp-list');
+  if (!employers.length) {
+    list.innerHTML = `<div class="empty"><div class="empty-icon">🏢</div><p>لم تُضف أي جهة عمل بعد.</p></div>`;
+    return;
   }
-  sel.value = String(year);
-  document.getElementById('filterMonth').value =
-    String(new Date().getMonth() + 1).padStart(2, '0');
-  updateFilterBadge();
+  list.innerHTML = employers.map(emp => `
+    <div class="emp-card" style="margin-bottom:10px">
+      <div class="item-row">
+        <div>
+          <div class="emp-name">${esc(emp.name)}</div>
+          ${emp.contactPerson ? `<div class="emp-detail">👤 ${esc(emp.contactPerson)}</div>` : ''}
+          ${emp.phone ? `<div class="emp-detail">📞 ${esc(emp.phone)}</div>` : ''}
+          ${emp.address ? `<div class="emp-detail">📍 ${esc(emp.address)}</div>` : ''}
+        </div>
+        <div class="item-actions">
+          <button class="btn-edit" onclick="openEmployerModal('${emp._id}')">تعديل</button>
+          <button class="btn-del"  onclick="askDelete('employer','${emp._id}','جهة العمل: ${esc(emp.name)}')">حذف</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+        <span class="wage-badge">${wageTypeLabel(emp.wageType)}</span>
+        <span class="badge" style="background:var(--primary-light);color:var(--primary-dark)">${emp.defaultWageRate} ${emp.defaultCurrency}</span>
+      </div>
+      ${emp.note ? `<div class="item-note">${esc(emp.note)}</div>` : ''}
+    </div>
+  `).join('');
 }
 
-function getFilter() {
-  return { month: document.getElementById('filterMonth').value, year: document.getElementById('filterYear').value };
+function openEmployerModal(id) {
+  editingId = id || null;
+  const emp = id ? employers.find(e => e._id === id) : null;
+  document.getElementById('emp-modal-title').textContent = emp ? 'تعديل جهة عمل' : 'إضافة جهة عمل';
+  document.getElementById('emp-name').value      = emp?.name || '';
+  document.getElementById('emp-contact').value   = emp?.contactPerson || '';
+  document.getElementById('emp-phone').value     = emp?.phone || '';
+  document.getElementById('emp-address').value   = emp?.address || '';
+  document.getElementById('emp-currency').value  = emp?.defaultCurrency || 'USD';
+  document.getElementById('emp-wage-type').value = emp?.wageType || 'daily';
+  document.getElementById('emp-wage-rate').value = emp?.defaultWageRate || 0;
+  document.getElementById('emp-note').value      = emp?.note || '';
+  openModal('modal-employer');
 }
-function applyFilter(days) {
-  const { month, year } = getFilter();
-  if (!month && !year) return days;
-  return days.filter(d => {
-    if (!d.date) return false;
-    const [y, m] = d.date.split('-');
-    if (year  && y !== year)  return false;
-    if (month && m !== month) return false;
+
+document.getElementById('emp-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const body = {
+    name:           document.getElementById('emp-name').value.trim(),
+    contactPerson:  document.getElementById('emp-contact').value,
+    phone:          document.getElementById('emp-phone').value,
+    address:        document.getElementById('emp-address').value,
+    defaultCurrency:document.getElementById('emp-currency').value,
+    wageType:       document.getElementById('emp-wage-type').value,
+    defaultWageRate:parseFloat(document.getElementById('emp-wage-rate').value)||0,
+    note:           document.getElementById('emp-note').value,
+  };
+  const res = editingId
+    ? await api('PUT', `/employers/${editingId}`, body)
+    : await api('POST', '/employers', body);
+  if (!res || res.error) { toast(res?.error || 'خطأ', 'error'); return; }
+  await loadEmployers();
+  populateEmployerFilters();
+  closeModal('modal-employer');
+  renderEmployers();
+  renderDashboard();
+  toast(editingId ? 'تم تحديث جهة العمل' : 'تمت إضافة جهة العمل');
+  editingId = null;
+});
+
+/* ═══════════════════════════════════════
+   WORKDAYS
+═══════════════════════════════════════ */
+function getFilteredWorkdays() {
+  const emp    = document.getElementById('wd-filter-emp')?.value || '';
+  const month  = document.getElementById('wd-filter-month')?.value || '';
+  const year   = document.getElementById('wd-filter-year')?.value || '';
+  const status = document.getElementById('wd-filter-status')?.value || '';
+  return workdays.filter(w => {
+    if (emp    && (w.employer?._id || w.employer) !== emp) return false;
+    if (month  && w.date && parseInt(w.date.slice(5,7)) !== parseInt(month)) return false;
+    if (year   && w.date && w.date.slice(0,4) !== year) return false;
+    if (status && w.paymentStatus !== status) return false;
     return true;
   });
 }
-function filterLabel() {
-  const { month, year } = getFilter();
-  if (!month && !year) return null;
-  const parts = [];
-  if (month) parts.push(MONTHS_AR[parseInt(month, 10)]);
-  if (year)  parts.push(year);
-  return parts.join(' ');
-}
-function clearFilters() {
-  document.getElementById('filterMonth').value = '';
-  document.getElementById('filterYear').value  = '';
-  updateFilterBadge(); render(allDays);
-}
-function updateFilterBadge() {
-  const label = filterLabel();
-  const badge = document.getElementById('filterActiveBadge');
-  document.getElementById('filterLabel').textContent = label ? 'الفترة: ' + label : '';
-  badge.style.display = label ? 'block' : 'none';
-}
 
-['filterMonth','filterYear'].forEach(id =>
-  document.getElementById(id).addEventListener('change', () => { updateFilterBadge(); render(allDays); })
-);
-
-/* ═══════════════════════════════════════
-   LOAD & RENDER
-═══════════════════════════════════════ */
-async function loadWorkdays() {
-  document.getElementById('list').innerHTML =
-    '<div class="loading"><div class="spinner"></div></div>';
-  try {
-    const res = await fetch(API, { headers: authHeaders() });
-    if (res.status === 401) { logout(); return; }
-    allDays = await res.json();
-    render(allDays);
-  } catch {
-    document.getElementById('list').innerHTML =
-      '<div class="empty"><div class="empty-icon">⚠️</div>تعذّر تحميل البيانات</div>';
-  }
-}
-
-function render(days) {
-  const filtered = applyFilter(days);
-  const label    = filterLabel();
-  document.getElementById('listTitle').textContent   = label ? `أيام العمل — ${label}` : 'سجل أيام العمل';
-  document.getElementById('totalsTitle').textContent = label ? `إجماليات ${label}` : 'الإجماليات حسب العملة';
-  renderTotals(filtered);
-  renderList(filtered);
-}
-
-function buildGroups(days) {
-  const groups = {};
-  days.forEach(d => {
-    const cur = d.currency || 'USD';
-    if (!groups[cur]) groups[cur] = { hours: 0, wage: 0 };
-    groups[cur].hours += d.hours || 0;
-    groups[cur].wage  += d.wage  || 0;
-  });
-  return groups;
-}
-
-function renderTotals(days) {
-  const section = document.getElementById('totalsSection');
-  const card    = document.getElementById('totalsCard');
-  if (!days.length) { card.style.display = 'none'; return; }
-  const groups = buildGroups(days);
-  section.innerHTML = Object.entries(groups).map(([cur, t]) => {
-    const info = CURRENCIES[cur] || { label: cur, flag: '💱', symbol: cur };
-    return `<div class="currency-total">
-      <div class="cur-label"><span class="cur-flag">${info.flag}</span>${info.label}</div>
-      <div class="cur-nums">
-        <div class="cur-stat"><div class="cur-stat-val">${fmt(t.hours)}</div><div class="cur-stat-lbl">ساعة</div></div>
-        <div class="cur-stat"><div class="cur-stat-val">${fmt(t.wage)} <small>${info.symbol}</small></div><div class="cur-stat-lbl">إجمالي الأجر</div></div>
-      </div>
-    </div>`;
-  }).join('');
-  card.style.display = 'block';
-}
-
-function renderList(days) {
-  const list = document.getElementById('list');
-  if (!days.length) {
-    const msg = filterLabel() ? 'لا توجد أيام عمل في هذه الفترة' : 'لا توجد أيام عمل مسجّلة بعد';
-    list.innerHTML = `<div class="empty"><div class="empty-icon">📭</div>${msg}</div>`;
+function renderWorkdays() {
+  const filtered = getFilteredWorkdays();
+  const list = document.getElementById('wd-list');
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty"><div class="empty-icon">📅</div><p>لا توجد أيام عمل بهذه الفلاتر.</p></div>`;
     return;
   }
-  list.innerHTML = days.map(d => {
-    const [y, m, day] = (d.date || '').split('-');
-    const dateLabel   = d.date ? `${day || ''}<br/>${m || ''}/${y || ''}` : '';
-    const cur         = d.currency || 'USD';
-    const info        = CURRENCIES[cur] || { flag: '💱', symbol: cur, label: cur };
-    return `<div class="workday-item" id="item-${d._id}">
-      <div class="workday-top">
-        <div class="workday-date">${dateLabel}</div>
-        <div>
-          <div class="workday-meta">
-            <span class="badge">⏱ ${fmt(d.hours)} ساعة</span>
-            <span class="badge">💰 ${fmt(d.wage)} ${info.symbol}</span>
-            <span class="badge badge-currency">${info.flag} ${info.label}</span>
-          </div>
-          ${d.note ? `<div class="workday-note">${esc(d.note)}</div>` : ''}
-        </div>
-      </div>
-      <div class="workday-actions">
-        <button class="btn btn-edit"   onclick='openEdit(${JSON.stringify(d)})'>✏️ تعديل</button>
-        <button class="btn btn-delete" onclick="openDelete('${d._id}')">🗑️ حذف</button>
-      </div>
-    </div>`;
-  }).join('');
+  list.innerHTML = `<div class="item-list">${filtered.map(w => wdCard(w)).join('')}</div>`;
 }
 
-/* ═══════════════════════════════════════
-   ADD FORM
-═══════════════════════════════════════ */
-document.getElementById('addForm').addEventListener('submit', async (e) => {
+function wdCard(w) {
+  const empName  = w.employer?.name || '';
+  const totalWage = w.totalDue || w.wage || w.calculatedWage || 0;
+  const received  = w.amountReceived || 0;
+  const remaining = Math.max(0, totalWage - received);
+  const pct = totalWage > 0 ? Math.min(100, Math.round((received/totalWage)*100)) : 0;
+  const status = w.paymentStatus || 'unpaid';
+  return `
+    <div class="item-card status-${status}">
+      <div class="item-row">
+        <div>
+          <span class="item-date">${formatDate(w.date)}</span>
+          ${empName ? `<span class="item-employer"> — ${esc(empName)}</span>` : ''}
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span class="badge badge-${status}">${statusLabel(status)}</span>
+        </div>
+      </div>
+      <div class="item-row">
+        <div>
+          <span class="item-wage">${fmt(totalWage)} ${w.currency||'USD'}</span>
+          <span class="item-meta"> · ${wageTypeLabel(w.wageType||'daily')}</span>
+          ${(w.regularHours||0) > 0 || (w.overtimeHours||0) > 0
+            ? `<span class="item-meta"> · ${w.regularHours||0}س عادي${(w.overtimeHours||0)>0?` + ${w.overtimeHours}س إضافي`:''}</span>`
+            : ''}
+        </div>
+        <div class="item-actions">
+          <button class="btn-edit" onclick="openWorkdayModal('${w._id}')">تعديل</button>
+          <button class="btn-del"  onclick="askDelete('workday','${w._id}','يوم ${esc(w.date||'')}')">حذف</button>
+        </div>
+      </div>
+      ${totalWage > 0 ? `
+        <div style="font-size:.75rem;color:var(--muted)">مستلم: <b style="color:var(--primary)">${fmt(received)}</b> · متبقي: <b style="color:var(--danger)">${fmt(remaining)}</b></div>
+        <div class="pay-progress"><div class="pay-bar ${status}" style="width:${pct}%"></div></div>
+      ` : ''}
+      ${w.note ? `<div class="item-note">"${esc(w.note)}"</div>` : ''}
+    </div>
+  `;
+}
+
+function openWorkdayModal(id) {
+  editingId = id || null;
+  const w = id ? workdays.find(x => x._id === id) : null;
+
+  document.getElementById('wd-modal-title').textContent = w ? 'تعديل يوم عمل' : 'إضافة يوم عمل';
+  document.getElementById('wd-date').value      = w?.date || todayStr();
+  document.getElementById('wd-currency').value  = w?.currency || 'USD';
+  document.getElementById('wd-wage-type').value = w?.wageType || 'daily';
+  document.getElementById('wd-reg-hours').value = w?.regularHours ?? (w?.hours ?? 8);
+  document.getElementById('wd-ot-hours').value  = w?.overtimeHours || 0;
+  document.getElementById('wd-ot-mult').value   = w?.overtimeMultiplier || 1.5;
+  document.getElementById('wd-wage-rate').value = w?.wageRate || w?.wage || 0;
+  document.getElementById('wd-override').checked = !!(w?.manualWageOverride);
+  document.getElementById('wd-wage').value      = w?.wage || 0;
+  document.getElementById('wd-total-due').value = w?.totalDue || 0;
+  document.getElementById('wd-received').value  = w?.amountReceived || 0;
+  document.getElementById('wd-pay-date').value  = w?.paymentDate || '';
+  document.getElementById('wd-pay-status').value= w?.paymentStatus || 'unpaid';
+  document.getElementById('wd-note').value      = w?.note || '';
+
+  // Set employer
+  const empSel = document.getElementById('wd-employer');
+  empSel.innerHTML = '<option value="">— بدون —</option>';
+  employers.forEach(emp => {
+    const opt = document.createElement('option');
+    opt.value = emp._id; opt.textContent = emp.name;
+    if (emp._id === (w?.employer?._id || w?.employer)) opt.selected = true;
+    empSel.appendChild(opt);
+  });
+
+  onOverrideChange();
+  onWageTypeChange();
+  updateRemaining();
+  recalcWage();
+  openModal('modal-workday');
+}
+
+function onEmployerChange() {
+  const empId = document.getElementById('wd-employer').value;
+  if (!empId) return;
+  const emp = employers.find(e => e._id === empId);
+  if (!emp) return;
+  document.getElementById('wd-currency').value  = emp.defaultCurrency || 'USD';
+  document.getElementById('wd-wage-type').value = emp.wageType || 'daily';
+  document.getElementById('wd-wage-rate').value = emp.defaultWageRate || 0;
+  onWageTypeChange();
+  recalcWage();
+}
+
+function onWageTypeChange() {
+  const type = document.getElementById('wd-wage-type').value;
+  const isHourly = type === 'hourly';
+  document.getElementById('wd-reg-hours-grp').style.display = isHourly ? '' : 'none';
+  document.getElementById('wd-ot-hours-grp').style.display  = isHourly ? '' : 'none';
+  document.getElementById('wd-ot-mult-grp').style.display   = isHourly ? '' : 'none';
+  const labels = { hourly:'معدل الأجر بالساعة', daily:'معدل الأجر اليومي', monthly:'الراتب الشهري', piecework:'أجر القطعة' };
+  document.getElementById('wd-rate-label').textContent = labels[type] || 'معدل الأجر';
+  recalcWage();
+}
+
+function onOverrideChange() {
+  const checked = document.getElementById('wd-override').checked;
+  document.getElementById('wd-manual-wage-grp').style.display = checked ? '' : 'none';
+  document.getElementById('wd-calc-box').style.display = checked ? 'none' : '';
+  if (!checked) recalcWage();
+}
+
+function recalcWage() {
+  if (document.getElementById('wd-override').checked) return;
+  const type  = document.getElementById('wd-wage-type').value;
+  const rate  = parseFloat(document.getElementById('wd-wage-rate').value) || 0;
+  const rh    = parseFloat(document.getElementById('wd-reg-hours').value) || 0;
+  const oh    = parseFloat(document.getElementById('wd-ot-hours').value) || 0;
+  const mult  = parseFloat(document.getElementById('wd-ot-mult').value)  || 1.5;
+
+  let calc = 0;
+  let breakdown = '';
+  if (type === 'hourly' && rate > 0) {
+    const regular  = rh * rate;
+    const overtime = oh * rate * mult;
+    calc = regular + overtime;
+    breakdown = `
+      <div class="calc-row"><span>عادي: ${fmt(rh)}س × ${fmt(rate)}</span><span>${fmt(regular)}</span></div>
+      ${oh>0?`<div class="calc-row"><span>إضافي: ${fmt(oh)}س × ${fmt(rate)} × ${fmt(mult)}</span><span>${fmt(overtime)}</span></div>`:''}
+    `;
+  } else if (rate > 0) {
+    calc = rate;
+    breakdown = `<div class="calc-row"><span>${document.getElementById('wd-rate-label').textContent}</span><span>${fmt(rate)}</span></div>`;
+  }
+
+  const box = document.getElementById('wd-calc-box');
+  if (calc > 0) {
+    box.style.display = '';
+    box.innerHTML = `
+      ${breakdown}
+      <div class="calc-row calc-total"><span>الإجمالي المحسوب</span><span>${fmt(calc)} ${document.getElementById('wd-currency').value}</span></div>
+    `;
+    // Auto-fill totalDue if it hasn't been manually touched
+    const tdEl = document.getElementById('wd-total-due');
+    if (!tdEl.dataset.touched) tdEl.value = fmt(calc);
+    updateRemaining();
+  } else {
+    box.style.display = 'none';
+  }
+}
+
+function onTotalDueChange() {
+  document.getElementById('wd-total-due').dataset.touched = '1';
+  updateRemaining();
+  derivePaymentStatus();
+}
+
+function onReceivedChange() {
+  const due      = parseFloat(document.getElementById('wd-total-due').value) || 0;
+  const received = parseFloat(document.getElementById('wd-received').value) || 0;
+  if (received > due && due > 0) {
+    const ok = confirm(`المبلغ المستلم (${received}) يتجاوز المستحق (${due}). هل هذا دفعة مسبقة؟`);
+    if (!ok) { document.getElementById('wd-received').value = due; }
+  }
+  updateRemaining();
+  derivePaymentStatus();
+}
+
+function updateRemaining() {
+  const due  = parseFloat(document.getElementById('wd-total-due').value) || 0;
+  const recv = parseFloat(document.getElementById('wd-received').value) || 0;
+  document.getElementById('wd-remaining').value = fmt(Math.max(0, due - recv));
+}
+
+function derivePaymentStatus() {
+  const due  = parseFloat(document.getElementById('wd-total-due').value) || 0;
+  const recv = parseFloat(document.getElementById('wd-received').value) || 0;
+  let status = 'unpaid';
+  if (recv > 0 && recv < due) status = 'partial';
+  if (due > 0 && recv >= due) status = 'paid';
+  document.getElementById('wd-pay-status').value = status;
+}
+
+document.getElementById('wd-form').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner spinner-sm"></div>';
+  const isOverride = document.getElementById('wd-override').checked;
+  const type  = document.getElementById('wd-wage-type').value;
+  const rate  = parseFloat(document.getElementById('wd-wage-rate').value) || 0;
+  const rh    = parseFloat(document.getElementById('wd-reg-hours').value) || 0;
+  const oh    = parseFloat(document.getElementById('wd-ot-hours').value) || 0;
+  const mult  = parseFloat(document.getElementById('wd-ot-mult').value)  || 1.5;
+  const manualWage = parseFloat(document.getElementById('wd-wage').value) || 0;
+  const due  = parseFloat(document.getElementById('wd-total-due').value) || 0;
+  const recv = parseFloat(document.getElementById('wd-received').value) || 0;
+  const empId = document.getElementById('wd-employer').value;
+
   const body = {
-    date:     document.getElementById('date').value,
-    hours:    parseFloat(document.getElementById('hours').value) || 0,
-    wage:     parseFloat(document.getElementById('wage').value)  || 0,
-    currency: document.getElementById('currency').value,
-    note:     document.getElementById('note').value.trim(),
+    date:               document.getElementById('wd-date').value,
+    currency:           document.getElementById('wd-currency').value,
+    wageType:           type,
+    regularHours:       rh,
+    overtimeHours:      oh,
+    overtimeMultiplier: mult,
+    wageRate:           rate,
+    wage:               isOverride ? manualWage : undefined,
+    manualWageOverride: isOverride,
+    employer:           empId || null,
+    totalDue:           due,
+    amountReceived:     recv,
+    paymentStatus:      document.getElementById('wd-pay-status').value,
+    paymentDate:        document.getElementById('wd-pay-date').value,
+    note:               document.getElementById('wd-note').value,
+    hours:              rh + oh,
   };
-  try {
-    const res = await fetch(API, { method: 'POST', headers: authHeaders(), body: JSON.stringify(body) });
-    if (res.status === 401) { logout(); return; }
-    if (!res.ok) throw new Error();
-    showToast('✅ تم حفظ يوم العمل بنجاح');
-    document.getElementById('hours').value = '';
-    document.getElementById('wage').value  = '';
-    document.getElementById('note').value  = '';
-    document.getElementById('date').valueAsDate = new Date();
-    await loadWorkdays();
-  } catch { showToast('❌ حدث خطأ، يرجى المحاولة مجدداً', true); }
-  finally { btn.disabled = false; btn.innerHTML = '<span>💾</span> حفظ يوم العمل'; }
+
+  const res = editingId
+    ? await api('PUT', `/workdays/${editingId}`, body)
+    : await api('POST', '/workdays', body);
+  if (!res || res.error) { toast(res?.error || 'خطأ', 'error'); return; }
+  await loadWorkdays();
+  // Reset totalDue touched flag
+  delete document.getElementById('wd-total-due').dataset.touched;
+  closeModal('modal-workday');
+  renderWorkdays();
+  renderDashboard();
+  toast(editingId ? 'تم تحديث يوم العمل' : 'تمت إضافة يوم العمل');
+  editingId = null;
 });
 
 /* ═══════════════════════════════════════
-   EDIT MODAL
+   PAYMENTS
 ═══════════════════════════════════════ */
-function openEdit(d) {
-  editingId = d._id;
-  document.getElementById('eDate').value     = d.date     || '';
-  document.getElementById('eHours').value    = d.hours    ?? '';
-  document.getElementById('eWage').value     = d.wage     ?? '';
-  document.getElementById('eCurrency').value = d.currency || 'USD';
-  document.getElementById('eNote').value     = d.note     || '';
-  document.getElementById('editOverlay').classList.add('open');
-}
-function closeEdit() { document.getElementById('editOverlay').classList.remove('open'); editingId = null; }
-
-async function submitEdit() {
-  if (!editingId) return;
-  const btn = document.getElementById('saveEditBtn');
-  btn.disabled = true; btn.innerHTML = '<div class="spinner spinner-sm"></div>';
-  const body = {
-    date:     document.getElementById('eDate').value,
-    hours:    parseFloat(document.getElementById('eHours').value)    || 0,
-    wage:     parseFloat(document.getElementById('eWage').value)     || 0,
-    currency: document.getElementById('eCurrency').value,
-    note:     document.getElementById('eNote').value.trim(),
-  };
-  try {
-    const res = await fetch(`${API}/${editingId}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify(body) });
-    if (res.status === 401) { logout(); return; }
-    if (!res.ok) throw new Error();
-    closeEdit(); showToast('✅ تم تعديل يوم العمل بنجاح');
-    await loadWorkdays();
-  } catch { showToast('❌ حدث خطأ أثناء التعديل', true); }
-  finally { btn.disabled = false; btn.innerHTML = '<span>💾</span> حفظ التعديلات'; }
+function getFilteredPayments() {
+  const emp   = document.getElementById('pay-filter-emp')?.value || '';
+  const month = document.getElementById('pay-filter-month')?.value || '';
+  const year  = document.getElementById('pay-filter-year')?.value || '';
+  return payments.filter(p => {
+    const empId = p.employer?._id || p.employer || '';
+    if (emp   && empId !== emp) return false;
+    if (month && p.date && parseInt(p.date.slice(5,7)) !== parseInt(month)) return false;
+    if (year  && p.date && p.date.slice(0,4) !== year) return false;
+    return true;
+  });
 }
 
-/* ═══════════════════════════════════════
-   DELETE MODAL
-═══════════════════════════════════════ */
-function openDelete(id) { deletingId = id; document.getElementById('deleteOverlay').classList.add('open'); }
-function closeDelete()  { document.getElementById('deleteOverlay').classList.remove('open'); deletingId = null; }
-
-async function submitDelete() {
-  if (!deletingId) return;
-  const btn = document.getElementById('confirmDeleteBtn');
-  btn.disabled = true; btn.textContent = '...جارٍ الحذف';
-  try {
-    const res = await fetch(`${API}/${deletingId}`, { method: 'DELETE', headers: authHeaders() });
-    if (res.status === 401) { logout(); return; }
-    if (!res.ok) throw new Error();
-    closeDelete(); showToast('🗑️ تم حذف يوم العمل');
-    await loadWorkdays();
-  } catch { showToast('❌ حدث خطأ أثناء الحذف', true); }
-  finally { btn.disabled = false; btn.innerHTML = '🗑️ نعم، احذف'; }
-}
-
-// Close modals on overlay click
-document.getElementById('editOverlay').addEventListener('click',   e => { if (e.target === e.currentTarget) closeEdit(); });
-document.getElementById('deleteOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeDelete(); });
-
-/* ═══════════════════════════════════════
-   PDF EXPORT
-═══════════════════════════════════════ */
-function exportPDF() {
-  const filtered = applyFilter(allDays);
-  const label    = filterLabel() || 'كل الأيام';
-  const groups   = buildGroups(filtered);
-  const user     = getUser();
-  const today    = new Date().toLocaleDateString('ar-SA', { year:'numeric', month:'long', day:'numeric' });
-
-  if (!filtered.length) { showToast('لا توجد بيانات للتصدير في هذه الفترة', true); return; }
-
-  const totalsRows = Object.entries(groups).map(([cur, t]) => {
-    const info = CURRENCIES[cur] || { label: cur, symbol: cur };
-    return `<tr><td>${info.label}</td><td>${info.symbol}</td><td>${fmt(t.hours)} ساعة</td><td>${fmt(t.wage)}</td></tr>`;
-  }).join('');
-
-  const dayRows = filtered.map(d => {
-    const cur  = d.currency || 'USD';
-    const info = CURRENCIES[cur] || { label: cur, symbol: cur };
-    return `<tr><td>${esc(d.date||'')}</td><td>${fmt(d.hours)}</td><td>${fmt(d.wage)}</td><td>${info.label}</td><td>${esc(d.note||'—')}</td></tr>`;
-  }).join('');
-
-  document.getElementById('printArea').innerHTML = `
-    <div class="print-header">
-      <h1>داوامي — تقرير أيام العمل</h1>
-      <p>الموظف: ${esc(user?.name||'')} &nbsp;|&nbsp; الفترة: ${esc(label)} &nbsp;|&nbsp; تاريخ الطباعة: ${today}</p>
+function renderPayments() {
+  const filtered = getFilteredPayments();
+  const list = document.getElementById('pay-list');
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty"><div class="empty-icon">💰</div><p>لا توجد دفعات مسجّلة.</p></div>`;
+    return;
+  }
+  list.innerHTML = `<div class="item-list">${filtered.map(p => `
+    <div class="item-card">
+      <div class="item-row">
+        <div>
+          <span class="item-date">${formatDate(p.date)}</span>
+          <span class="item-employer"> — ${esc(p.employer?.name||'')}</span>
+        </div>
+        <span class="item-wage">${fmt(p.amount)} ${p.currency}</span>
+      </div>
+      <div class="item-row">
+        <div class="item-meta">
+          ${methodLabel(p.method)}
+          ${p.workday ? ` · مرتبط بـ ${formatDate(p.workday?.date||'')}` : ''}
+          ${p.note ? ` · ${esc(p.note)}` : ''}
+        </div>
+        <div class="item-actions">
+          <button class="btn-edit" onclick="openPaymentModal('${p._id}')">تعديل</button>
+          <button class="btn-del"  onclick="askDelete('payment','${p._id}','دفعة ${fmt(p.amount)} ${p.currency}')">حذف</button>
+        </div>
+      </div>
     </div>
-    <div class="print-section-title">الإجماليات حسب العملة</div>
-    <table class="print-totals-table">
-      <thead><tr><th>العملة</th><th>الرمز</th><th>إجمالي الساعات</th><th>إجمالي الأجر</th></tr></thead>
-      <tbody>${totalsRows}</tbody>
+  `).join('')}</div>`;
+}
+
+function onPayEmployerChange() {
+  const empId = document.getElementById('pay-employer').value;
+  const wdSel = document.getElementById('pay-workday');
+  wdSel.innerHTML = '<option value="">— بدون ربط —</option>';
+  if (!empId) return;
+  // Filter workdays for this employer
+  workdays.filter(w => (w.employer?._id || w.employer) === empId)
+    .forEach(w => {
+      const opt = document.createElement('option');
+      opt.value = w._id;
+      opt.textContent = `${formatDate(w.date)} — ${fmt(w.totalDue||w.wage||0)} ${w.currency} (${statusLabel(w.paymentStatus||'unpaid')})`;
+      wdSel.appendChild(opt);
+    });
+  // Set currency from employer default
+  const emp = employers.find(e => e._id === empId);
+  if (emp) document.getElementById('pay-currency').value = emp.defaultCurrency || 'USD';
+}
+
+function openPaymentModal(id) {
+  editingId = id || null;
+  const p = id ? payments.find(x => x._id === id) : null;
+  document.getElementById('pay-modal-title').textContent = p ? 'تعديل دفعة' : 'تسجيل دفعة';
+
+  // Rebuild employer dropdown
+  const empSel = document.getElementById('pay-employer');
+  empSel.innerHTML = '<option value="">— اختر —</option>';
+  employers.forEach(emp => {
+    const opt = document.createElement('option');
+    opt.value = emp._id; opt.textContent = emp.name;
+    if (emp._id === (p?.employer?._id || p?.employer)) opt.selected = true;
+    empSel.appendChild(opt);
+  });
+
+  document.getElementById('pay-amount').value   = p?.amount || '';
+  document.getElementById('pay-currency').value = p?.currency || 'USD';
+  document.getElementById('pay-date').value     = p?.date || todayStr();
+  document.getElementById('pay-method').value   = p?.method || 'cash';
+  document.getElementById('pay-note').value     = p?.note || '';
+
+  // Populate workday dropdown
+  const wdSel = document.getElementById('pay-workday');
+  wdSel.innerHTML = '<option value="">— بدون ربط —</option>';
+  const empId = p?.employer?._id || p?.employer || '';
+  if (empId) {
+    workdays.filter(w => (w.employer?._id || w.employer) === empId)
+      .forEach(w => {
+        const opt = document.createElement('option');
+        opt.value = w._id;
+        opt.textContent = `${formatDate(w.date)} — ${fmt(w.totalDue||w.wage||0)} ${w.currency}`;
+        if (w._id === (p?.workday?._id || p?.workday)) opt.selected = true;
+        wdSel.appendChild(opt);
+      });
+  }
+
+  openModal('modal-payment');
+}
+
+document.getElementById('pay-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const body = {
+    employer: document.getElementById('pay-employer').value,
+    workday:  document.getElementById('pay-workday').value || null,
+    amount:   parseFloat(document.getElementById('pay-amount').value),
+    currency: document.getElementById('pay-currency').value,
+    date:     document.getElementById('pay-date').value,
+    method:   document.getElementById('pay-method').value,
+    note:     document.getElementById('pay-note').value,
+  };
+  const res = editingId
+    ? await api('PUT', `/payments/${editingId}`, body)
+    : await api('POST', '/payments', body);
+  if (!res || res.error) { toast(res?.error || 'خطأ', 'error'); return; }
+  await Promise.all([loadPayments(), loadWorkdays()]);
+  closeModal('modal-payment');
+  renderPayments();
+  renderDashboard();
+  toast(editingId ? 'تم تحديث الدفعة' : 'تمت إضافة الدفعة');
+  editingId = null;
+});
+
+/* ═══════════════════════════════════════
+   DASHBOARD
+═══════════════════════════════════════ */
+function getDashFilters() {
+  return {
+    emp:      document.getElementById('dash-emp')?.value || '',
+    month:    document.getElementById('dash-month')?.value || '',
+    year:     document.getElementById('dash-year')?.value || '',
+    status:   document.getElementById('dash-status')?.value || '',
+    currency: document.getElementById('dash-currency')?.value || '',
+  };
+}
+
+function renderDashboard() {
+  const f = getDashFilters();
+
+  // Filter workdays
+  const fwd = workdays.filter(w => {
+    if (f.emp      && (w.employer?._id || w.employer) !== f.emp) return false;
+    if (f.month    && w.date && parseInt(w.date.slice(5,7)) !== parseInt(f.month)) return false;
+    if (f.year     && w.date && w.date.slice(0,4) !== f.year) return false;
+    if (f.status   && w.paymentStatus !== f.status) return false;
+    if (f.currency && w.currency !== f.currency) return false;
+    return true;
+  });
+
+  // Filter payments
+  const fp = payments.filter(p => {
+    const pEmp = p.employer?._id || p.employer || '';
+    if (f.emp   && pEmp !== f.emp) return false;
+    if (f.month && p.date && parseInt(p.date.slice(5,7)) !== parseInt(f.month)) return false;
+    if (f.year  && p.date && p.date.slice(0,4) !== f.year) return false;
+    if (f.currency && p.currency !== f.currency) return false;
+    return true;
+  });
+
+  // Populate currency filter options
+  const curs = new Set([...workdays.map(w=>w.currency), ...payments.map(p=>p.currency)].filter(Boolean));
+  const dashCur = document.getElementById('dash-currency');
+  const prevCur = dashCur.value;
+  dashCur.innerHTML = '<option value="">كل العملات</option>';
+  [...curs].forEach(c => { const o = document.createElement('option'); o.value=c; o.textContent=c; dashCur.appendChild(o); });
+  dashCur.value = prevCur;
+
+  // Totals
+  let totalEarned = 0, totalReceived = 0;
+  fwd.forEach(w => {
+    totalEarned   += w.totalDue || w.wage || 0;
+    totalReceived += w.amountReceived || 0;
+  });
+  // Also sum payments
+  const payReceived = fp.reduce((s,p) => s + (p.amount||0), 0);
+  const totalRemaining = Math.max(0, totalEarned - totalReceived);
+
+  document.getElementById('dash-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">إجمالي المكتسب</div><div class="stat-value">${fmt(totalEarned)}</div></div>
+    <div class="stat-card"><div class="stat-label">إجمالي المستلم</div><div class="stat-value">${fmt(totalReceived)}</div></div>
+    <div class="stat-card"><div class="stat-label">إجمالي الدفعات</div><div class="stat-value">${fmt(payReceived)}</div></div>
+    <div class="stat-card"><div class="stat-label">إجمالي المتبقي</div><div class="stat-value danger">${fmt(totalRemaining)}</div></div>
+  `;
+
+  // By currency
+  const byCur = {};
+  fwd.forEach(w => {
+    const c = w.currency || 'USD';
+    if (!byCur[c]) byCur[c] = { earned:0, received:0 };
+    byCur[c].earned   += w.totalDue || w.wage || 0;
+    byCur[c].received += w.amountReceived || 0;
+  });
+  const curHTML = Object.entries(byCur).map(([c,v]) => `
+    <div class="currency-row">
+      <span class="c-name">${c}</span>
+      <span>مكتسب: <b class="c-val">${fmt(v.earned)}</b></span>
+      <span>مستلم: <b class="c-recv">${fmt(v.received)}</b></span>
+      <span>متبقي: <b class="c-rem">${fmt(Math.max(0,v.earned-v.received))}</b></span>
+    </div>
+  `).join('');
+  document.getElementById('dash-by-currency').innerHTML = curHTML || '<div style="color:var(--muted);font-size:.85rem;text-align:center;padding:12px">لا توجد بيانات</div>';
+
+  // By employer
+  const byEmp = {};
+  fwd.forEach(w => {
+    const eid  = w.employer?._id || w.employer || '_none';
+    const name = w.employer?.name || 'بدون جهة عمل';
+    if (!byEmp[eid]) byEmp[eid] = { name, earned:0, received:0, cur: w.currency || 'USD' };
+    byEmp[eid].earned   += w.totalDue || w.wage || 0;
+    byEmp[eid].received += w.amountReceived || 0;
+  });
+  const empHTML = Object.values(byEmp).map(v => `
+    <div class="currency-row">
+      <span class="c-name">${esc(v.name)}</span>
+      <span>مستحق: <b class="c-val">${fmt(v.earned)}</b></span>
+      <span>متبقي: <b class="c-rem">${fmt(Math.max(0,v.earned-v.received))}</b></span>
+    </div>
+  `).join('');
+  document.getElementById('dash-by-employer').innerHTML = empHTML || '<div style="color:var(--muted);font-size:.85rem;text-align:center;padding:12px">لا توجد بيانات</div>';
+}
+
+/* ═══════════════════════════════════════
+   REPORTS
+═══════════════════════════════════════ */
+function getReportFiltered() {
+  const month = parseInt(document.getElementById('rep-month')?.value) || 0;
+  const year  = document.getElementById('rep-year')?.value || '';
+  const emp   = document.getElementById('rep-emp')?.value || '';
+  return workdays.filter(w => {
+    if (month && w.date && parseInt(w.date.slice(5,7)) !== month) return false;
+    if (year  && w.date && w.date.slice(0,4) !== year) return false;
+    if (emp   && (w.employer?._id || w.employer) !== emp) return false;
+    return true;
+  });
+}
+
+function renderReports() {
+  const filtered = getReportFiltered();
+  const area = document.getElementById('report-area');
+  if (!filtered.length) {
+    area.innerHTML = `<div class="empty"><div class="empty-icon">📊</div><p>لا توجد أيام عمل في هذه الفترة.</p></div>`;
+    return;
+  }
+
+  // Group by currency
+  const byCur = {};
+  filtered.forEach(w => {
+    const c = w.currency || 'USD';
+    if (!byCur[c]) byCur[c] = { earned:0, received:0, days:0 };
+    byCur[c].earned   += w.totalDue || w.wage || 0;
+    byCur[c].received += w.amountReceived || 0;
+    byCur[c].days++;
+  });
+
+  const summaryRows = Object.entries(byCur).map(([c,v]) => `
+    <tr>
+      <td>${c}</td><td>${v.days}</td>
+      <td>${fmt(v.earned)}</td><td>${fmt(v.received)}</td>
+      <td>${fmt(Math.max(0,v.earned-v.received))}</td>
+    </tr>
+  `).join('');
+
+  const dayRows = filtered.map(w => `
+    <tr>
+      <td>${formatDate(w.date)}</td>
+      <td>${esc(w.employer?.name||'—')}</td>
+      <td>${fmt(w.regularHours||w.hours||0)}</td>
+      <td>${fmt(w.overtimeHours||0)}</td>
+      <td>${fmt(w.totalDue||w.wage||0)} ${w.currency}</td>
+      <td>${fmt(w.amountReceived||0)}</td>
+      <td><span class="badge badge-${w.paymentStatus||'unpaid'}">${statusLabel(w.paymentStatus||'unpaid')}</span></td>
+      <td>${esc(w.note||'')}</td>
+    </tr>
+  `).join('');
+
+  area.innerHTML = `
+    <div class="card">
+      <div class="card-header"><span class="icon">💱</span><h2>ملخص حسب العملة</h2></div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>العملة</th><th>الأيام</th><th>المكتسب</th><th>المستلم</th><th>المتبقي</th></tr></thead>
+          <tbody>${summaryRows}</tbody>
+        </table></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="icon">📅</span><h2>تفاصيل الأيام (${filtered.length})</h2></div>
+      <div class="card-body">
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>التاريخ</th><th>جهة العمل</th><th>ساعات عادية</th><th>إضافي</th><th>المستحق</th><th>المستلم</th><th>الحالة</th><th>ملاحظة</th></tr></thead>
+          <tbody>${dayRows}</tbody>
+        </table></div>
+      </div>
+    </div>
+  `;
+}
+
+function exportPDF() {
+  const filtered = getReportFiltered();
+  if (!filtered.length) { toast('لا توجد بيانات للتصدير', 'error'); return; }
+
+  const month  = document.getElementById('rep-month')?.value || '';
+  const year   = document.getElementById('rep-year')?.value  || '';
+  const MONTHS = ['','يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  const periodLabel = `${MONTHS[parseInt(month)] || ''} ${year}`;
+  const today = new Date().toLocaleDateString('ar-SA');
+
+  // Summary
+  const byCur = {};
+  filtered.forEach(w => {
+    const c = w.currency || 'USD';
+    if (!byCur[c]) byCur[c] = { earned:0, received:0, days:0 };
+    byCur[c].earned   += w.totalDue || w.wage || 0;
+    byCur[c].received += w.amountReceived || 0;
+    byCur[c].days++;
+  });
+  const sumRows = Object.entries(byCur).map(([c,v]) =>
+    `<tr><td>${c}</td><td>${v.days}</td><td>${fmt(v.earned)}</td><td>${fmt(v.received)}</td><td>${fmt(Math.max(0,v.earned-v.received))}</td></tr>`
+  ).join('');
+
+  const dayRows = filtered.map(w =>
+    `<tr>
+      <td>${w.date||''}</td>
+      <td>${esc(w.employer?.name||'—')}</td>
+      <td>${fmt(w.regularHours||w.hours||0)}</td>
+      <td>${fmt(w.overtimeHours||0)}</td>
+      <td>${fmt(w.totalDue||w.wage||0)} ${w.currency}</td>
+      <td>${fmt(w.amountReceived||0)}</td>
+      <td>${statusLabel(w.paymentStatus||'unpaid')}</td>
+      <td>${esc(w.note||'')}</td>
+    </tr>`
+  ).join('');
+
+  document.getElementById('print-area').innerHTML = `
+    <div class="print-header">
+      <h1>🗓️ داوامي — تقرير العمل</h1>
+      <p>الفترة: ${periodLabel} · الموظف: ${esc(currentUser?.name||'')} · تاريخ الإصدار: ${today}</p>
+    </div>
+    <div class="print-section-title">ملخص حسب العملة</div>
+    <table class="print-summary-table">
+      <thead><tr><th>العملة</th><th>الأيام</th><th>المكتسب</th><th>المستلم</th><th>المتبقي</th></tr></thead>
+      <tbody>${sumRows}</tbody>
     </table>
     <div class="print-section-title">تفاصيل أيام العمل (${filtered.length} يوم)</div>
     <table class="print-days-table">
-      <thead><tr><th>التاريخ</th><th>الساعات</th><th>الأجر</th><th>العملة</th><th>ملاحظة</th></tr></thead>
+      <thead><tr><th>التاريخ</th><th>جهة العمل</th><th>ساعات عادية</th><th>إضافي</th><th>المستحق</th><th>المستلم</th><th>الحالة</th><th>ملاحظة</th></tr></thead>
       <tbody>${dayRows}</tbody>
     </table>
     <div class="print-footer">تم إنشاء هذا التقرير بواسطة تطبيق داوامي — ${today}</div>
@@ -1057,15 +1589,69 @@ function exportPDF() {
 }
 
 /* ═══════════════════════════════════════
+   DELETE CONFIRM
+═══════════════════════════════════════ */
+function askDelete(type, id, label) {
+  deleteTarget = { type, id };
+  document.getElementById('delete-msg').textContent = `هل أنت متأكد من حذف "${label}"؟ لا يمكن التراجع.`;
+  openModal('modal-delete');
+}
+
+async function executeDelete() {
+  if (!deleteTarget) return;
+  const { type, id } = deleteTarget;
+  const paths = { workday:'/workdays/', employer:'/employers/', payment:'/payments/' };
+  const res = await api('DELETE', paths[type] + id);
+  if (!res) return;
+  if (type === 'workday')  await loadWorkdays();
+  if (type === 'employer') await loadEmployers();
+  if (type === 'payment')  await Promise.all([loadPayments(), loadWorkdays()]);
+  closeModal('modal-delete');
+  renderWorkdays();
+  renderEmployers();
+  renderPayments();
+  renderDashboard();
+  populateEmployerFilters();
+  toast('تم الحذف بنجاح');
+  deleteTarget = null;
+}
+
+/* ═══════════════════════════════════════
    UTILS
 ═══════════════════════════════════════ */
 function fmt(n) { const x = parseFloat(n)||0; return x%1===0 ? String(x) : x.toFixed(2); }
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function todayStr() { return new Date().toISOString().slice(0,10); }
+function formatDate(d) {
+  if (!d) return '—';
+  try { return new Date(d + 'T00:00:00').toLocaleDateString('ar-SA', { year:'numeric', month:'short', day:'numeric' }); }
+  catch { return d; }
+}
+function statusLabel(s) {
+  const m = { unpaid:'غير مدفوع', partial:'مدفوع جزئيًا', paid:'مدفوع بالكامل' };
+  return m[s] || s;
+}
+function wageTypeLabel(t) {
+  const m = { hourly:'بالساعة', daily:'يومي', monthly:'شهري', piecework:'بالقطعة' };
+  return m[t] || t;
+}
+function methodLabel(m) {
+  const map = { cash:'نقدي', bank:'تحويل بنكي', card:'بطاقة', other:'أخرى' };
+  return map[m] || m;
+}
+
+let toastTimer = null;
+function toast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className   = 'show' + (type === 'error' ? ' error' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.className = '', 3000);
+}
 
 /* ═══════════════════════════════════════
    BOOT
 ═══════════════════════════════════════ */
-document.getElementById('date').valueAsDate = new Date();
 initApp();
 </script>
 
