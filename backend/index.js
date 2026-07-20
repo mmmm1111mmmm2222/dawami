@@ -19,7 +19,7 @@ app.use("/auth",     require("./routes/auth"));
 app.use("/workdays", require("./routes/workdays"));
 
 // Catch-all → SPA
-app.get("*", (req, res) => {
+app.get("/{*splat}", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
