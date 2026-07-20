@@ -20,6 +20,11 @@ const workDaySchema = new mongoose.Schema({
   currency: {
     type: String,
     default: "USD"
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    index: true,
   }
 }, {
   timestamps: true

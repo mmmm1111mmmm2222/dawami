@@ -1,8 +1,7 @@
-const express = require("express");
-const cors = require("cors");
+const express  = require("express");
+const cors     = require("cors");
 const mongoose = require("mongoose");
-const path = require("path");
-const WorkDay = require("./models/WorkDay");
+const path     = require("path");
 require("dotenv").config();
 
 const app = express();
@@ -13,57 +12,16 @@ app.use(express.static(path.join(__dirname, "public")));
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log(err));
+  .catch((err) => console.log("MongoDB error:", err.message));
 
-app.get("/", (req, res) => {
-  res.send("Dawami API 🚀");
-});
+// Routes
+app.use("/auth",     require("./routes/auth"));
+app.use("/workdays", require("./routes/workdays"));
 
-app.post("/workdays", async (req, res) => {
-  try {
-    const workDay = new WorkDay(req.body);
-    await workDay.save();
-    res.json(workDay);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.get("/workdays", async (req, res) => {
-  try {
-    const workDays = await WorkDay.find().sort({ date: -1 });
-    res.json(workDays);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.put("/workdays/:id", async (req, res) => {
-  try {
-    const workDay = await WorkDay.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
-    if (!workDay) return res.status(404).json({ error: "غير موجود" });
-    res.json(workDay);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.delete("/workdays/:id", async (req, res) => {
-  try {
-    const workDay = await WorkDay.findByIdAndDelete(req.params.id);
-    if (!workDay) return res.status(404).json({ error: "غير موجود" });
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+// Catch-all → SPA
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

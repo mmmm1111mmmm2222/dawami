@@ -30,21 +30,150 @@
       direction: rtl;
     }
 
+    /* ── Screens ── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ════════════════════════
+       AUTH SCREENS
+    ════════════════════════ */
+    .auth-wrap {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      background: linear-gradient(160deg, var(--primary-dark) 0%, var(--primary) 100%);
+    }
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 28px;
+      color: #fff;
+    }
+    .auth-logo h1 { font-size: 2rem; font-weight: 800; letter-spacing: 1px; }
+    .auth-logo p  { font-size: 0.85rem; opacity: 0.8; margin-top: 4px; }
+
+    .auth-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+      padding: 28px 24px;
+      width: 100%;
+      max-width: 400px;
+    }
+    .auth-card h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .auth-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .auth-field label { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+    .auth-field input {
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 11px 13px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text);
+      background: #fafafa;
+      width: 100%;
+      direction: rtl;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .auth-field input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26,107,74,0.12);
+      background: #fff;
+    }
+
+    .auth-error {
+      background: var(--danger-light);
+      color: var(--danger);
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .auth-error.show { display: block; }
+
+    .btn-auth {
+      width: 100%;
+      padding: 13px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 4px;
+    }
+    .btn-auth:hover:not(:disabled) { background: var(--primary-dark); }
+    .btn-auth:disabled { background: var(--muted); cursor: not-allowed; }
+
+    .auth-switch {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .auth-switch a {
+      color: var(--primary);
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .auth-switch a:hover { text-decoration: underline; }
+
+    /* ════════════════════════
+       APP SCREEN
+    ════════════════════════ */
     /* ── Header ── */
     header {
       background: var(--primary);
       color: #fff;
-      padding: 20px 16px 16px;
-      text-align: center;
+      padding: 14px 16px;
       position: sticky;
       top: 0;
       z-index: 10;
       box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
-    header h1 { font-size: 1.6rem; font-weight: 700; }
-    header p  { font-size: 0.8rem; opacity: 0.8; margin-top: 2px; }
+    .header-inner {
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .header-brand h1  { font-size: 1.25rem; font-weight: 800; }
+    .header-brand p   { font-size: 0.72rem; opacity: 0.75; margin-top: 1px; }
+    .header-user      { display: flex; align-items: center; gap: 8px; }
+    .header-user span { font-size: 0.78rem; opacity: 0.85; }
+    .btn-logout {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: #fff;
+      padding: 5px 11px;
+      border-radius: 7px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,0.28); }
 
-    /* ── Layout ── */
+    /* ── Main layout ── */
     main {
       max-width: 480px;
       margin: 0 auto;
@@ -55,18 +184,10 @@
     }
 
     /* ── Card ── */
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
+    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
     .card-header {
-      background: var(--primary-light);
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      background: var(--primary-light); padding: 12px 16px;
+      display: flex; align-items: center; gap: 8px;
       border-bottom: 1px solid var(--border);
     }
     .card-header .icon { font-size: 1.1rem; }
@@ -79,7 +200,7 @@
     .form-group.full { grid-column: 1 / -1; }
     label { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
 
-    input, textarea, select {
+    input[type=date], input[type=number], textarea, select {
       border: 1.5px solid var(--border);
       border-radius: 8px;
       padding: 10px 12px;
@@ -91,7 +212,7 @@
       direction: rtl;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
-    input:focus, textarea:focus, select:focus {
+    input[type=date]:focus, input[type=number]:focus, textarea:focus, select:focus {
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(26,107,74,0.12);
@@ -103,18 +224,15 @@
     /* ── Buttons ── */
     .btn {
       display: flex; align-items: center; justify-content: center; gap: 6px;
-      padding: 11px 16px;
-      border: none; border-radius: 9px;
+      padding: 11px 16px; border: none; border-radius: 9px;
       font-size: 0.9rem; font-weight: 700; font-family: inherit;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      cursor: pointer; transition: background 0.15s, transform 0.1s;
     }
-    .btn:active { transform: scale(0.97); }
+    .btn:active   { transform: scale(0.97); }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     .btn-primary  { background: var(--primary); color: #fff; width: 100%; margin-top: 4px; font-size: 1rem; padding: 13px; }
-    .btn-primary:hover:not(:disabled)  { background: var(--primary-dark); }
-
+    .btn-primary:hover:not(:disabled) { background: var(--primary-dark); }
     .btn-edit     { background: var(--primary-light); color: var(--primary-dark); flex: 1; }
     .btn-edit:hover   { background: #d0ead9; }
     .btn-delete   { background: var(--danger-light); color: var(--danger); flex: 1; }
@@ -123,51 +241,13 @@
     .btn-cancel:hover { background: #c8d9ce; }
     .btn-danger   { background: var(--danger); color: #fff; flex: 1; }
     .btn-danger:hover { background: #a93226; }
-
     .btn-ghost {
-      background: transparent;
-      color: var(--muted);
-      border: 1.5px solid var(--border);
-      padding: 8px 14px;
-      font-size: 0.82rem;
+      background: transparent; color: var(--muted);
+      border: 1.5px solid var(--border); padding: 8px 14px; font-size: 0.82rem;
     }
     .btn-ghost:hover { background: var(--primary-light); color: var(--primary-dark); border-color: var(--primary); }
-
-    .btn-pdf {
-      background: #b91c1c;
-      color: #fff;
-      padding: 8px 14px;
-      font-size: 0.82rem;
-      border-radius: 8px;
-    }
+    .btn-pdf  { background: #b91c1c; color: #fff; padding: 8px 14px; font-size: 0.82rem; border-radius: 8px; }
     .btn-pdf:hover { background: #991b1b; }
-
-    /* ── Filter card ── */
-    .filter-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-    .filter-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    /* ── Active filter badge ── */
-    .filter-active-bar {
-      background: var(--primary-light);
-      border: 1.5px solid var(--primary);
-      border-radius: 8px;
-      padding: 7px 12px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--primary-dark);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
 
     /* ── Toast ── */
     #toast {
@@ -181,6 +261,16 @@
     }
     #toast.show  { transform: translateX(-50%) translateY(0); }
     #toast.error { background: var(--danger); }
+
+    /* ── Filters ── */
+    .filter-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .filter-actions { display: flex; gap: 8px; align-items: center; }
+    .filter-active-bar {
+      background: var(--primary-light); border: 1.5px solid var(--primary);
+      border-radius: 8px; padding: 7px 12px;
+      font-size: 0.82rem; font-weight: 600; color: var(--primary-dark);
+      display: flex; align-items: center; justify-content: space-between;
+    }
 
     /* ── Totals ── */
     #totalsSection { display: flex; flex-direction: column; gap: 8px; }
@@ -197,11 +287,9 @@
 
     /* ── List ── */
     #list { display: flex; flex-direction: column; gap: 10px; }
-
     .workday-item {
       border: 1.5px solid var(--border); border-radius: 10px;
-      padding: 13px 14px;
-      animation: slideIn 0.22s ease;
+      padding: 13px 14px; animation: slideIn 0.22s ease;
     }
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(-6px); }
@@ -215,11 +303,7 @@
       text-align: center; min-width: 60px; line-height: 1.4;
     }
     .workday-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-    .badge {
-      background: var(--primary-light); color: var(--primary-dark);
-      border-radius: 20px; padding: 2px 10px;
-      font-size: 0.78rem; font-weight: 600;
-    }
+    .badge { background: var(--primary-light); color: var(--primary-dark); border-radius: 20px; padding: 2px 10px; font-size: 0.78rem; font-weight: 600; }
     .badge-currency { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
     .workday-note   { font-size: 0.82rem; color: var(--muted); line-height: 1.4; margin-top: 4px; }
     .workday-actions { display: flex; gap: 8px; margin-top: 8px; }
@@ -233,13 +317,14 @@
       border: 3px solid var(--border); border-top-color: var(--primary);
       border-radius: 50%; animation: spin 0.7s linear infinite;
     }
+    .spinner-sm { width: 18px; height: 18px; border-width: 2px; margin: 0 auto; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ── Modals ── */
     .modal-overlay {
       display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.45);
-      z-index: 50; align-items: center; justify-content: center; padding: 16px;
+      background: rgba(0,0,0,0.45); z-index: 50;
+      align-items: center; justify-content: center; padding: 16px;
     }
     .modal-overlay.open { display: flex; }
     .modal {
@@ -258,227 +343,213 @@
       border-bottom: 1px solid var(--border);
     }
     .modal-header h3 { font-size: 1rem; font-weight: 700; color: var(--primary-dark); }
-    .modal-close {
-      background: none; border: none; cursor: pointer;
-      font-size: 1.3rem; color: var(--muted); padding: 2px 6px; border-radius: 6px;
-    }
+    .modal-close { background: none; border: none; cursor: pointer; font-size: 1.3rem; color: var(--muted); padding: 2px 6px; border-radius: 6px; }
     .modal-close:hover { background: var(--border); }
     .modal-body   { padding: 16px; }
     .modal-footer { padding: 0 16px 16px; display: flex; gap: 10px; }
-
     .confirm-icon { font-size: 2.5rem; text-align: center; margin-bottom: 8px; }
     .confirm-msg  { text-align: center; font-size: 0.95rem; line-height: 1.6; }
     .confirm-msg strong { color: var(--danger); }
 
     /* ══════════════════════════════
-       PRINT / PDF STYLES
-       ══════════════════════════════ */
+       PRINT / PDF
+    ══════════════════════════════ */
     #printArea { display: none; }
-
     @media print {
       body > *:not(#printArea) { display: none !important; }
       #printArea {
-        display: block !important;
-        direction: rtl;
+        display: block !important; direction: rtl;
         font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-        color: #111;
-        padding: 24px;
+        color: #111; padding: 24px;
       }
-
-      .print-header {
-        text-align: center;
-        border-bottom: 2px solid #1a6b4a;
-        padding-bottom: 12px;
-        margin-bottom: 20px;
-      }
+      .print-header { text-align: center; border-bottom: 2px solid #1a6b4a; padding-bottom: 12px; margin-bottom: 20px; }
       .print-header h1 { font-size: 1.5rem; color: #1a6b4a; margin-bottom: 4px; }
       .print-header p  { font-size: 0.85rem; color: #555; }
-
-      .print-section-title {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #1a6b4a;
-        margin: 18px 0 8px;
-        padding-bottom: 4px;
-        border-bottom: 1px solid #d6e4dc;
-      }
-
-      /* Totals table */
-      .print-totals-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 6px;
-      }
-      .print-totals-table th,
-      .print-totals-table td {
-        border: 1px solid #d6e4dc;
-        padding: 7px 10px;
-        font-size: 0.85rem;
-        text-align: right;
-      }
-      .print-totals-table th {
-        background: #e8f5ef;
-        font-weight: 700;
-        color: #134f37;
-      }
-
-      /* Workdays table */
-      .print-days-table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      .print-days-table th,
-      .print-days-table td {
-        border: 1px solid #d6e4dc;
-        padding: 6px 10px;
-        font-size: 0.82rem;
-        text-align: right;
-      }
-      .print-days-table th {
-        background: #e8f5ef;
-        font-weight: 700;
-        color: #134f37;
-      }
+      .print-section-title { font-size: 1rem; font-weight: 700; color: #1a6b4a; margin: 18px 0 8px; padding-bottom: 4px; border-bottom: 1px solid #d6e4dc; }
+      .print-totals-table, .print-days-table { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
+      .print-totals-table th, .print-totals-table td,
+      .print-days-table   th, .print-days-table   td { border: 1px solid #d6e4dc; padding: 7px 10px; font-size: 0.85rem; text-align: right; }
+      .print-totals-table th, .print-days-table th { background: #e8f5ef; font-weight: 700; color: #134f37; }
       .print-days-table tr:nth-child(even) td { background: #f9fcfb; }
-
-      .print-footer {
-        margin-top: 24px;
-        text-align: center;
-        font-size: 0.75rem;
-        color: #888;
-        border-top: 1px solid #d6e4dc;
-        padding-top: 10px;
-      }
+      .print-footer { margin-top: 24px; text-align: center; font-size: 0.75rem; color: #888; border-top: 1px solid #d6e4dc; padding-top: 10px; }
     }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>🗓️ داوامي</h1>
-  <p>سجّل أيام عملك وتابع دخلك</p>
-</header>
-
-<main>
-
-  <!-- Add form -->
-  <div class="card">
-    <div class="card-header">
-      <span class="icon">➕</span>
-      <h2>إضافة يوم عمل</h2>
+<!-- ══════════ LOGIN SCREEN ══════════ -->
+<div id="screen-login" class="screen active">
+  <div class="auth-wrap">
+    <div class="auth-logo">
+      <h1>🗓️ داوامي</h1>
+      <p>سجّل أيام عملك وتابع دخلك</p>
     </div>
-    <div class="card-body">
-      <form id="addForm">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="date">التاريخ</label>
-            <input type="date" id="date" required />
+    <div class="auth-card">
+      <h2>تسجيل الدخول</h2>
+      <div class="auth-error" id="login-error"></div>
+      <form id="loginForm" novalidate>
+        <div class="auth-field">
+          <label for="loginEmail">البريد الإلكتروني</label>
+          <input type="email" id="loginEmail" placeholder="example@email.com" autocomplete="email" required />
+        </div>
+        <div class="auth-field">
+          <label for="loginPassword">كلمة المرور</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" required />
+        </div>
+        <button class="btn-auth" type="submit" id="loginBtn">دخول</button>
+      </form>
+      <div class="auth-switch">
+        ليس لديك حساب؟ <a onclick="showScreen('register')">أنشئ حساباً</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ REGISTER SCREEN ══════════ -->
+<div id="screen-register" class="screen">
+  <div class="auth-wrap">
+    <div class="auth-logo">
+      <h1>🗓️ داوامي</h1>
+      <p>سجّل أيام عملك وتابع دخلك</p>
+    </div>
+    <div class="auth-card">
+      <h2>إنشاء حساب جديد</h2>
+      <div class="auth-error" id="reg-error"></div>
+      <form id="registerForm" novalidate>
+        <div class="auth-field">
+          <label for="regName">الاسم الكامل</label>
+          <input type="text" id="regName" placeholder="محمد أحمد" autocomplete="name" required />
+        </div>
+        <div class="auth-field">
+          <label for="regEmail">البريد الإلكتروني</label>
+          <input type="email" id="regEmail" placeholder="example@email.com" autocomplete="email" required />
+        </div>
+        <div class="auth-field">
+          <label for="regPassword">كلمة المرور</label>
+          <input type="password" id="regPassword" placeholder="6 أحرف على الأقل" autocomplete="new-password" required />
+        </div>
+        <div class="auth-field">
+          <label for="regConfirm">تأكيد كلمة المرور</label>
+          <input type="password" id="regConfirm" placeholder="••••••••" autocomplete="new-password" required />
+        </div>
+        <button class="btn-auth" type="submit" id="registerBtn">إنشاء الحساب</button>
+      </form>
+      <div class="auth-switch">
+        لديك حساب بالفعل؟ <a onclick="showScreen('login')">سجّل الدخول</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ APP SCREEN ══════════ -->
+<div id="screen-app" class="screen">
+
+  <header>
+    <div class="header-inner">
+      <div class="header-brand">
+        <h1>🗓️ داوامي</h1>
+        <p>سجّل أيام عملك وتابع دخلك</p>
+      </div>
+      <div class="header-user">
+        <span id="headerName"></span>
+        <button class="btn-logout" onclick="logout()">خروج</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Add form -->
+    <div class="card">
+      <div class="card-header"><span class="icon">➕</span><h2>إضافة يوم عمل</h2></div>
+      <div class="card-body">
+        <form id="addForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="date">التاريخ</label>
+              <input type="date" id="date" required />
+            </div>
+            <div class="form-group">
+              <label for="hours">الساعات</label>
+              <input type="number" id="hours" min="0" step="0.5" placeholder="٨" required />
+            </div>
+            <div class="form-group">
+              <label for="wage">الأجر</label>
+              <input type="number" id="wage" min="0" step="0.01" placeholder="٠.٠٠" required />
+            </div>
+            <div class="form-group">
+              <label for="currency">العملة</label>
+              <select id="currency">
+                <option value="TRY">🇹🇷 ليرة تركية</option>
+                <option value="USD">🇺🇸 دولار أمريكي</option>
+                <option value="EUR">🇪🇺 يورو</option>
+                <option value="SAR">🇸🇦 ريال سعودي</option>
+                <option value="SYP">🇸🇾 ليرة سورية</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label for="note">ملاحظة (اختياري)</label>
+              <textarea id="note" placeholder="أي ملاحظات عن هذا اليوم..."></textarea>
+            </div>
           </div>
+          <button class="btn btn-primary" type="submit" id="submitBtn">
+            <span>💾</span> حفظ يوم العمل
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card">
+      <div class="card-header"><span class="icon">🔍</span><h2>تصفية حسب الشهر</h2></div>
+      <div class="card-body">
+        <div class="filter-row">
           <div class="form-group">
-            <label for="hours">الساعات</label>
-            <input type="number" id="hours" min="0" step="0.5" placeholder="٨" required />
-          </div>
-          <div class="form-group">
-            <label for="wage">الأجر</label>
-            <input type="number" id="wage" min="0" step="0.01" placeholder="٠.٠٠" required />
-          </div>
-          <div class="form-group">
-            <label for="currency">العملة</label>
-            <select id="currency">
-              <option value="TRY">🇹🇷 ليرة تركية</option>
-              <option value="USD">🇺🇸 دولار أمريكي</option>
-              <option value="EUR">🇪🇺 يورو</option>
-              <option value="SAR">🇸🇦 ريال سعودي</option>
-              <option value="SYP">🇸🇾 ليرة سورية</option>
+            <label for="filterMonth">الشهر</label>
+            <select id="filterMonth">
+              <option value="">— كل الشهور —</option>
+              <option value="01">يناير</option><option value="02">فبراير</option>
+              <option value="03">مارس</option><option value="04">أبريل</option>
+              <option value="05">مايو</option><option value="06">يونيو</option>
+              <option value="07">يوليو</option><option value="08">أغسطس</option>
+              <option value="09">سبتمبر</option><option value="10">أكتوبر</option>
+              <option value="11">نوفمبر</option><option value="12">ديسمبر</option>
             </select>
           </div>
-          <div class="form-group full">
-            <label for="note">ملاحظة (اختياري)</label>
-            <textarea id="note" placeholder="أي ملاحظات عن هذا اليوم..."></textarea>
+          <div class="form-group">
+            <label for="filterYear">السنة</label>
+            <select id="filterYear"><option value="">— كل السنوات —</option></select>
           </div>
         </div>
-        <button class="btn btn-primary" type="submit" id="submitBtn">
-          <span>💾</span> حفظ يوم العمل
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Filters -->
-  <div class="card">
-    <div class="card-header">
-      <span class="icon">🔍</span>
-      <h2>تصفية حسب الشهر</h2>
-    </div>
-    <div class="card-body">
-      <div class="filter-row">
-        <div class="form-group">
-          <label for="filterMonth">الشهر</label>
-          <select id="filterMonth">
-            <option value="">— كل الشهور —</option>
-            <option value="01">يناير</option>
-            <option value="02">فبراير</option>
-            <option value="03">مارس</option>
-            <option value="04">أبريل</option>
-            <option value="05">مايو</option>
-            <option value="06">يونيو</option>
-            <option value="07">يوليو</option>
-            <option value="08">أغسطس</option>
-            <option value="09">سبتمبر</option>
-            <option value="10">أكتوبر</option>
-            <option value="11">نوفمبر</option>
-            <option value="12">ديسمبر</option>
-          </select>
+        <div class="filter-actions">
+          <button class="btn btn-ghost" onclick="clearFilters()" style="flex:1">✕ مسح التصفية</button>
+          <button class="btn btn-pdf"   onclick="exportPDF()">📄 تصدير PDF</button>
         </div>
-        <div class="form-group">
-          <label for="filterYear">السنة</label>
-          <select id="filterYear">
-            <option value="">— كل السنوات —</option>
-          </select>
-        </div>
-      </div>
-      <div class="filter-actions">
-        <button class="btn btn-ghost" id="clearFilterBtn" onclick="clearFilters()" style="flex:1">
-          ✕ مسح التصفية
-        </button>
-        <button class="btn btn-pdf" id="exportPdfBtn" onclick="exportPDF()">
-          📄 تصدير PDF
-        </button>
-      </div>
-      <div id="filterActiveBadge" style="display:none; margin-top:10px">
-        <div class="filter-active-bar">
-          <span id="filterLabel">—</span>
-          <span style="color:var(--primary)">✓ فعّال</span>
+        <div id="filterActiveBadge" style="display:none; margin-top:10px">
+          <div class="filter-active-bar">
+            <span id="filterLabel">—</span>
+            <span style="color:var(--primary)">✓ فعّال</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Totals -->
-  <div class="card" id="totalsCard" style="display:none">
-    <div class="card-header">
-      <span class="icon">📊</span>
-      <h2 id="totalsTitle">الإجماليات حسب العملة</h2>
+    <!-- Totals -->
+    <div class="card" id="totalsCard" style="display:none">
+      <div class="card-header"><span class="icon">📊</span><h2 id="totalsTitle">الإجماليات حسب العملة</h2></div>
+      <div class="card-body" style="padding:12px"><div id="totalsSection"></div></div>
     </div>
-    <div class="card-body" style="padding:12px">
-      <div id="totalsSection"></div>
-    </div>
-  </div>
 
-  <!-- List -->
-  <div class="card">
-    <div class="card-header">
-      <span class="icon">📋</span>
-      <h2 id="listTitle">سجل أيام العمل</h2>
-    </div>
-    <div class="card-body" style="padding:12px">
-      <div id="list">
-        <div class="loading"><div class="spinner"></div></div>
+    <!-- List -->
+    <div class="card">
+      <div class="card-header"><span class="icon">📋</span><h2 id="listTitle">سجل أيام العمل</h2></div>
+      <div class="card-body" style="padding:12px">
+        <div id="list"><div class="loading"><div class="spinner"></div></div></div>
       </div>
     </div>
-  </div>
 
-</main>
+  </main>
+</div><!-- /screen-app -->
 
 <!-- Edit modal -->
 <div class="modal-overlay" id="editOverlay">
@@ -488,36 +559,34 @@
       <button class="modal-close" onclick="closeEdit()">✕</button>
     </div>
     <div class="modal-body">
-      <form id="editForm">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="eDate">التاريخ</label>
-            <input type="date" id="eDate" required />
-          </div>
-          <div class="form-group">
-            <label for="eHours">الساعات</label>
-            <input type="number" id="eHours" min="0" step="0.5" required />
-          </div>
-          <div class="form-group">
-            <label for="eWage">الأجر</label>
-            <input type="number" id="eWage" min="0" step="0.01" required />
-          </div>
-          <div class="form-group">
-            <label for="eCurrency">العملة</label>
-            <select id="eCurrency">
-              <option value="TRY">🇹🇷 ليرة تركية</option>
-              <option value="USD">🇺🇸 دولار أمريكي</option>
-              <option value="EUR">🇪🇺 يورو</option>
-              <option value="SAR">🇸🇦 ريال سعودي</option>
-              <option value="SYP">🇸🇾 ليرة سورية</option>
-            </select>
-          </div>
-          <div class="form-group full">
-            <label for="eNote">ملاحظة (اختياري)</label>
-            <textarea id="eNote" placeholder="أي ملاحظات..."></textarea>
-          </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="eDate">التاريخ</label>
+          <input type="date" id="eDate" required />
         </div>
-      </form>
+        <div class="form-group">
+          <label for="eHours">الساعات</label>
+          <input type="number" id="eHours" min="0" step="0.5" required />
+        </div>
+        <div class="form-group">
+          <label for="eWage">الأجر</label>
+          <input type="number" id="eWage" min="0" step="0.01" required />
+        </div>
+        <div class="form-group">
+          <label for="eCurrency">العملة</label>
+          <select id="eCurrency">
+            <option value="TRY">🇹🇷 ليرة تركية</option>
+            <option value="USD">🇺🇸 دولار أمريكي</option>
+            <option value="EUR">🇪🇺 يورو</option>
+            <option value="SAR">🇸🇦 ريال سعودي</option>
+            <option value="SYP">🇸🇾 ليرة سورية</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label for="eNote">ملاحظة (اختياري)</label>
+          <textarea id="eNote" placeholder="أي ملاحظات..."></textarea>
+        </div>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-cancel" onclick="closeEdit()">إلغاء</button>
@@ -544,427 +613,452 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-cancel" onclick="closeDelete()">إلغاء</button>
-      <button class="btn btn-danger" id="confirmDeleteBtn" onclick="submitDelete()">
-        🗑️ نعم، احذف
-      </button>
+      <button class="btn btn-danger" id="confirmDeleteBtn" onclick="submitDelete()">🗑️ نعم، احذف</button>
     </div>
   </div>
 </div>
 
 <!-- Hidden print area -->
 <div id="printArea"></div>
-
 <div id="toast"></div>
 
 <script>
-  const API = '/workdays';
+/* ═══════════════════════════════════════
+   CONSTANTS
+═══════════════════════════════════════ */
+const API = '/workdays';
+const AUTH_API = '/auth';
 
-  const CURRENCIES = {
-    TRY: { label: 'ليرة تركية',   flag: '🇹🇷', symbol: 'TRY' },
-    USD: { label: 'دولار أمريكي', flag: '🇺🇸', symbol: '$'   },
-    EUR: { label: 'يورو',          flag: '🇪🇺', symbol: '€'   },
-    SAR: { label: 'ريال سعودي',   flag: '🇸🇦', symbol: 'ر.س' },
-    SYP: { label: 'ليرة سورية',   flag: '🇸🇾', symbol: 'ل.س' },
-  };
+const CURRENCIES = {
+  TRY: { label: 'ليرة تركية',   flag: '🇹🇷', symbol: 'TRY' },
+  USD: { label: 'دولار أمريكي', flag: '🇺🇸', symbol: '$'   },
+  EUR: { label: 'يورو',          flag: '🇪🇺', symbol: '€'   },
+  SAR: { label: 'ريال سعودي',   flag: '🇸🇦', symbol: 'ر.س' },
+  SYP: { label: 'ليرة سورية',   flag: '🇸🇾', symbol: 'ل.س' },
+};
 
-  const MONTHS_AR = ['','يناير','فبراير','مارس','أبريل','مايو','يونيو',
-                      'يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const MONTHS_AR = ['','يناير','فبراير','مارس','أبريل','مايو','يونيو',
+                    'يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
 
-  let allDays    = [];
-  let editingId  = null;
-  let deletingId = null;
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
+let allDays    = [];
+let editingId  = null;
+let deletingId = null;
 
-  // ── Init ──
-  document.getElementById('date').valueAsDate = new Date();
-  populateYears();
+/* ═══════════════════════════════════════
+   AUTH HELPERS
+═══════════════════════════════════════ */
+function getToken()   { return localStorage.getItem('dawami_token'); }
+function getUser()    { try { return JSON.parse(localStorage.getItem('dawami_user')); } catch { return null; } }
+function saveSession(token, user) {
+  localStorage.setItem('dawami_token', token);
+  localStorage.setItem('dawami_user', JSON.stringify(user));
+}
+function clearSession() {
+  localStorage.removeItem('dawami_token');
+  localStorage.removeItem('dawami_user');
+}
 
-  function populateYears() {
-    const sel  = document.getElementById('filterYear');
-    const year = new Date().getFullYear();
-    for (let y = year; y >= year - 5; y--) {
-      const opt = document.createElement('option');
-      opt.value = String(y);
-      opt.textContent = String(y);
-      sel.appendChild(opt);
-    }
-    // Default to current month/year
-    sel.value = String(year);
-    document.getElementById('filterMonth').value =
-      String(new Date().getMonth() + 1).padStart(2, '0');
-  }
+function authHeaders() {
+  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() };
+}
 
-  // ── Filter helpers ──
-  function getFilter() {
-    return {
-      month: document.getElementById('filterMonth').value,
-      year:  document.getElementById('filterYear').value,
-    };
-  }
+/* ═══════════════════════════════════════
+   SCREEN ROUTING
+═══════════════════════════════════════ */
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+}
 
-  function applyFilter(days) {
-    const { month, year } = getFilter();
-    if (!month && !year) return days;
-    return days.filter(d => {
-      if (!d.date) return false;
-      const [y, m] = d.date.split('-');
-      if (year  && y !== year)  return false;
-      if (month && m !== month) return false;
-      return true;
-    });
-  }
-
-  function filterLabel() {
-    const { month, year } = getFilter();
-    if (!month && !year) return null;
-    const parts = [];
-    if (month) parts.push(MONTHS_AR[parseInt(month, 10)]);
-    if (year)  parts.push(year);
-    return parts.join(' ');
-  }
-
-  function clearFilters() {
-    document.getElementById('filterMonth').value = '';
-    document.getElementById('filterYear').value  = '';
-    updateFilterBadge();
-    render(allDays);
-  }
-
-  function updateFilterBadge() {
-    const label   = filterLabel();
-    const badge   = document.getElementById('filterActiveBadge');
-    const labelEl = document.getElementById('filterLabel');
-    if (label) {
-      badge.style.display = 'block';
-      labelEl.textContent = 'الفترة: ' + label;
-    } else {
-      badge.style.display = 'none';
-    }
-  }
-
-  // Filter change listeners
-  ['filterMonth','filterYear'].forEach(id => {
-    document.getElementById(id).addEventListener('change', () => {
-      updateFilterBadge();
-      render(allDays);
-    });
-  });
-
-  // ── Toast ──
-  function showToast(msg, isError = false) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = isError ? 'error show' : 'show';
-    setTimeout(() => { t.className = ''; }, 2800);
-  }
-
-  // ── Helpers ──
-  function formatNum(n) {
-    const num = parseFloat(n) || 0;
-    return num % 1 === 0 ? num.toString() : num.toFixed(2);
-  }
-  function escapeHtml(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  // ── Load ──
-  async function loadWorkdays() {
-    document.getElementById('list').innerHTML =
-      '<div class="loading"><div class="spinner"></div></div>';
-    try {
-      const res  = await fetch(API);
-      allDays    = await res.json();
-      updateFilterBadge();
-      render(allDays);
-    } catch {
-      document.getElementById('list').innerHTML =
-        '<div class="empty"><div class="empty-icon">⚠️</div>تعذّر تحميل البيانات</div>';
-    }
-  }
-
-  function render(days) {
-    const filtered = applyFilter(days);
-    const label    = filterLabel();
-
-    // Update titles
-    document.getElementById('listTitle').textContent =
-      label ? `أيام العمل — ${label}` : 'سجل أيام العمل';
-    document.getElementById('totalsTitle').textContent =
-      label ? `إجماليات ${label}` : 'الإجماليات حسب العملة';
-
-    renderTotals(filtered);
-    renderList(filtered);
-  }
-
-  // ── Totals ──
-  function renderTotals(days) {
-    const section = document.getElementById('totalsSection');
-    const card    = document.getElementById('totalsCard');
-    if (!days.length) { card.style.display = 'none'; return; }
-
-    const groups = buildGroups(days);
-    section.innerHTML = Object.entries(groups).map(([cur, t]) => {
-      const info = CURRENCIES[cur] || { label: cur, flag: '💱', symbol: cur };
-      return `
-        <div class="currency-total">
-          <div class="cur-label">
-            <span class="cur-flag">${info.flag}</span>${info.label}
-          </div>
-          <div class="cur-nums">
-            <div class="cur-stat">
-              <div class="cur-stat-val">${formatNum(t.hours)}</div>
-              <div class="cur-stat-lbl">ساعة</div>
-            </div>
-            <div class="cur-stat">
-              <div class="cur-stat-val">${formatNum(t.wage)} <small>${info.symbol}</small></div>
-              <div class="cur-stat-lbl">إجمالي الأجر</div>
-            </div>
-          </div>
-        </div>`;
-    }).join('');
-    card.style.display = 'block';
-  }
-
-  function buildGroups(days) {
-    const groups = {};
-    days.forEach(d => {
-      const cur = d.currency || 'USD';
-      if (!groups[cur]) groups[cur] = { hours: 0, wage: 0 };
-      groups[cur].hours += d.hours || 0;
-      groups[cur].wage  += d.wage  || 0;
-    });
-    return groups;
-  }
-
-  // ── List ──
-  function renderList(days) {
-    const list = document.getElementById('list');
-    if (!days.length) {
-      const msg = filterLabel()
-        ? 'لا توجد أيام عمل في هذه الفترة'
-        : 'لا توجد أيام عمل مسجّلة بعد';
-      list.innerHTML = `<div class="empty"><div class="empty-icon">📭</div>${msg}</div>`;
-      return;
-    }
-    list.innerHTML = days.map(d => {
-      const [y, m, day] = (d.date || '').split('-');
-      const dateLabel   = d.date ? `${day || ''}<br/>${m || ''}/${y || ''}` : '';
-      const cur         = d.currency || 'USD';
-      const info        = CURRENCIES[cur] || { flag: '💱', symbol: cur, label: cur };
-      return `
-        <div class="workday-item" id="item-${d._id}">
-          <div class="workday-top">
-            <div class="workday-date">${dateLabel}</div>
-            <div>
-              <div class="workday-meta">
-                <span class="badge">⏱ ${formatNum(d.hours)} ساعة</span>
-                <span class="badge">💰 ${formatNum(d.wage)} ${info.symbol}</span>
-                <span class="badge badge-currency">${info.flag} ${info.label}</span>
-              </div>
-              ${d.note ? `<div class="workday-note">${escapeHtml(d.note)}</div>` : ''}
-            </div>
-          </div>
-          <div class="workday-actions">
-            <button class="btn btn-edit"   onclick='openEdit(${JSON.stringify(d)})'>✏️ تعديل</button>
-            <button class="btn btn-delete" onclick="openDelete('${d._id}')">🗑️ حذف</button>
-          </div>
-        </div>`;
-    }).join('');
-  }
-
-  // ── Add form ──
-  document.getElementById('addForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<div class="spinner" style="width:18px;height:18px;border-width:2px;margin:0 auto"></div>';
-    const body = {
-      date:     document.getElementById('date').value,
-      hours:    parseFloat(document.getElementById('hours').value) || 0,
-      wage:     parseFloat(document.getElementById('wage').value)  || 0,
-      currency: document.getElementById('currency').value,
-      note:     document.getElementById('note').value.trim(),
-    };
-    try {
-      const res = await fetch(API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      if (!res.ok) throw new Error();
-      showToast('✅ تم حفظ يوم العمل بنجاح');
-      document.getElementById('hours').value = '';
-      document.getElementById('wage').value  = '';
-      document.getElementById('note').value  = '';
-      document.getElementById('date').valueAsDate = new Date();
-      await loadWorkdays();
-    } catch {
-      showToast('❌ حدث خطأ، يرجى المحاولة مجدداً', true);
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = '<span>💾</span> حفظ يوم العمل';
-    }
-  });
-
-  // ── Edit modal ──
-  function openEdit(d) {
-    editingId = d._id;
-    document.getElementById('eDate').value     = d.date     || '';
-    document.getElementById('eHours').value    = d.hours    ?? '';
-    document.getElementById('eWage').value     = d.wage     ?? '';
-    document.getElementById('eCurrency').value = d.currency || 'USD';
-    document.getElementById('eNote').value     = d.note     || '';
-    document.getElementById('editOverlay').classList.add('open');
-  }
-  function closeEdit() {
-    document.getElementById('editOverlay').classList.remove('open');
-    editingId = null;
-  }
-  async function submitEdit() {
-    if (!editingId) return;
-    const btn = document.getElementById('saveEditBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;margin:0 auto"></div>';
-    const body = {
-      date:     document.getElementById('eDate').value,
-      hours:    parseFloat(document.getElementById('eHours').value)    || 0,
-      wage:     parseFloat(document.getElementById('eWage').value)     || 0,
-      currency: document.getElementById('eCurrency').value,
-      note:     document.getElementById('eNote').value.trim(),
-    };
-    try {
-      const res = await fetch(`${API}/${editingId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      if (!res.ok) throw new Error();
-      closeEdit();
-      showToast('✅ تم تعديل يوم العمل بنجاح');
-      await loadWorkdays();
-    } catch {
-      showToast('❌ حدث خطأ أثناء التعديل', true);
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = '<span>💾</span> حفظ التعديلات';
-    }
-  }
-
-  // ── Delete modal ──
-  function openDelete(id) {
-    deletingId = id;
-    document.getElementById('deleteOverlay').classList.add('open');
-  }
-  function closeDelete() {
-    document.getElementById('deleteOverlay').classList.remove('open');
-    deletingId = null;
-  }
-  async function submitDelete() {
-    if (!deletingId) return;
-    const btn = document.getElementById('confirmDeleteBtn');
-    btn.disabled = true;
-    btn.textContent = '...جارٍ الحذف';
-    try {
-      const res = await fetch(`${API}/${deletingId}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error();
-      closeDelete();
-      showToast('🗑️ تم حذف يوم العمل');
-      await loadWorkdays();
-    } catch {
-      showToast('❌ حدث خطأ أثناء الحذف', true);
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = '🗑️ نعم، احذف';
-    }
-  }
-
-  // Close modals on overlay click
-  document.getElementById('editOverlay').addEventListener('click', e => {
-    if (e.target === e.currentTarget) closeEdit();
-  });
-  document.getElementById('deleteOverlay').addEventListener('click', e => {
-    if (e.target === e.currentTarget) closeDelete();
-  });
-
-  // ── PDF Export ──
-  function exportPDF() {
-    const filtered = applyFilter(allDays);
-    const label    = filterLabel() || 'كل الأيام';
-    const groups   = buildGroups(filtered);
-    const today    = new Date().toLocaleDateString('ar-SA', { year:'numeric', month:'long', day:'numeric' });
-
-    if (!filtered.length) {
-      showToast('لا توجد بيانات للتصدير في هذه الفترة', true);
-      return;
-    }
-
-    // Build totals rows
-    const totalsRows = Object.entries(groups).map(([cur, t]) => {
-      const info = CURRENCIES[cur] || { label: cur, symbol: cur };
-      return `<tr>
-        <td>${info.label}</td>
-        <td>${info.symbol}</td>
-        <td>${formatNum(t.hours)} ساعة</td>
-        <td>${formatNum(t.wage)}</td>
-      </tr>`;
-    }).join('');
-
-    // Build workday rows
-    const dayRows = filtered.map(d => {
-      const cur  = d.currency || 'USD';
-      const info = CURRENCIES[cur] || { label: cur, symbol: cur };
-      return `<tr>
-        <td>${escapeHtml(d.date || '')}</td>
-        <td>${formatNum(d.hours)}</td>
-        <td>${formatNum(d.wage)}</td>
-        <td>${info.label}</td>
-        <td>${escapeHtml(d.note || '—')}</td>
-      </tr>`;
-    }).join('');
-
-    document.getElementById('printArea').innerHTML = `
-      <div class="print-header">
-        <h1>داوامي — تقرير أيام العمل</h1>
-        <p>الفترة: ${escapeHtml(label)} &nbsp;|&nbsp; تاريخ الطباعة: ${today}</p>
-      </div>
-
-      <div class="print-section-title">الإجماليات حسب العملة</div>
-      <table class="print-totals-table">
-        <thead>
-          <tr>
-            <th>العملة</th>
-            <th>الرمز</th>
-            <th>إجمالي الساعات</th>
-            <th>إجمالي الأجر</th>
-          </tr>
-        </thead>
-        <tbody>${totalsRows}</tbody>
-      </table>
-
-      <div class="print-section-title">تفاصيل أيام العمل (${filtered.length} يوم)</div>
-      <table class="print-days-table">
-        <thead>
-          <tr>
-            <th>التاريخ</th>
-            <th>الساعات</th>
-            <th>الأجر</th>
-            <th>العملة</th>
-            <th>ملاحظة</th>
-          </tr>
-        </thead>
-        <tbody>${dayRows}</tbody>
-      </table>
-
-      <div class="print-footer">
-        تم إنشاء هذا التقرير بواسطة تطبيق داوامي — ${today}
-      </div>
-    `;
-
-    window.print();
-  }
-
-  // ── Start ──
-  updateFilterBadge();
+function initApp() {
+  const token = getToken();
+  const user  = getUser();
+  if (!token || !user) { showScreen('login'); return; }
+  document.getElementById('headerName').textContent = user.name;
+  showScreen('app');
+  initFilters();
   loadWorkdays();
+}
+
+function logout() {
+  clearSession();
+  allDays = [];
+  showScreen('login');
+  document.getElementById('loginEmail').value    = '';
+  document.getElementById('loginPassword').value = '';
+}
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+function showToast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = isError ? 'error show' : 'show';
+  setTimeout(() => { t.className = ''; }, 2800);
+}
+
+/* ═══════════════════════════════════════
+   AUTH FORMS
+═══════════════════════════════════════ */
+function showAuthError(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.add('show');
+}
+function clearAuthError(id) {
+  const el = document.getElementById(id);
+  el.textContent = '';
+  el.classList.remove('show');
+}
+
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  clearAuthError('login-error');
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = '...جارٍ الدخول';
+  const email    = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  try {
+    const res  = await fetch(AUTH_API + '/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+    if (!res.ok) { showAuthError('login-error', data.error || 'خطأ في تسجيل الدخول'); return; }
+    saveSession(data.token, data.user);
+    document.getElementById('loginPassword').value = '';
+    initApp();
+  } catch {
+    showAuthError('login-error', 'تعذّر الاتصال بالخادم');
+  } finally {
+    btn.disabled = false; btn.textContent = 'دخول';
+  }
+});
+
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  clearAuthError('reg-error');
+  const name     = document.getElementById('regName').value.trim();
+  const email    = document.getElementById('regEmail').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const confirm  = document.getElementById('regConfirm').value;
+
+  if (!name)            { showAuthError('reg-error', 'الاسم الكامل مطلوب'); return; }
+  if (!email)           { showAuthError('reg-error', 'البريد الإلكتروني مطلوب'); return; }
+  if (password.length < 6) { showAuthError('reg-error', 'كلمة المرور يجب أن تكون 6 أحرف على الأقل'); return; }
+  if (password !== confirm) { showAuthError('reg-error', 'كلمتا المرور غير متطابقتين'); return; }
+
+  const btn = document.getElementById('registerBtn');
+  btn.disabled = true; btn.textContent = '...جارٍ الإنشاء';
+  try {
+    const res  = await fetch(AUTH_API + '/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password }),
+    });
+    const data = await res.json();
+    if (!res.ok) { showAuthError('reg-error', data.error || 'خطأ في إنشاء الحساب'); return; }
+    saveSession(data.token, data.user);
+    document.getElementById('registerForm').reset();
+    initApp();
+  } catch {
+    showAuthError('reg-error', 'تعذّر الاتصال بالخادم');
+  } finally {
+    btn.disabled = false; btn.textContent = 'إنشاء الحساب';
+  }
+});
+
+/* ═══════════════════════════════════════
+   FILTERS
+═══════════════════════════════════════ */
+function initFilters() {
+  const sel  = document.getElementById('filterYear');
+  // Clear old options except the first
+  while (sel.options.length > 1) sel.remove(1);
+  const year = new Date().getFullYear();
+  for (let y = year; y >= year - 5; y--) {
+    const opt = document.createElement('option');
+    opt.value = String(y); opt.textContent = String(y);
+    sel.appendChild(opt);
+  }
+  sel.value = String(year);
+  document.getElementById('filterMonth').value =
+    String(new Date().getMonth() + 1).padStart(2, '0');
+  updateFilterBadge();
+}
+
+function getFilter() {
+  return { month: document.getElementById('filterMonth').value, year: document.getElementById('filterYear').value };
+}
+function applyFilter(days) {
+  const { month, year } = getFilter();
+  if (!month && !year) return days;
+  return days.filter(d => {
+    if (!d.date) return false;
+    const [y, m] = d.date.split('-');
+    if (year  && y !== year)  return false;
+    if (month && m !== month) return false;
+    return true;
+  });
+}
+function filterLabel() {
+  const { month, year } = getFilter();
+  if (!month && !year) return null;
+  const parts = [];
+  if (month) parts.push(MONTHS_AR[parseInt(month, 10)]);
+  if (year)  parts.push(year);
+  return parts.join(' ');
+}
+function clearFilters() {
+  document.getElementById('filterMonth').value = '';
+  document.getElementById('filterYear').value  = '';
+  updateFilterBadge(); render(allDays);
+}
+function updateFilterBadge() {
+  const label = filterLabel();
+  const badge = document.getElementById('filterActiveBadge');
+  document.getElementById('filterLabel').textContent = label ? 'الفترة: ' + label : '';
+  badge.style.display = label ? 'block' : 'none';
+}
+
+['filterMonth','filterYear'].forEach(id =>
+  document.getElementById(id).addEventListener('change', () => { updateFilterBadge(); render(allDays); })
+);
+
+/* ═══════════════════════════════════════
+   LOAD & RENDER
+═══════════════════════════════════════ */
+async function loadWorkdays() {
+  document.getElementById('list').innerHTML =
+    '<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const res = await fetch(API, { headers: authHeaders() });
+    if (res.status === 401) { logout(); return; }
+    allDays = await res.json();
+    render(allDays);
+  } catch {
+    document.getElementById('list').innerHTML =
+      '<div class="empty"><div class="empty-icon">⚠️</div>تعذّر تحميل البيانات</div>';
+  }
+}
+
+function render(days) {
+  const filtered = applyFilter(days);
+  const label    = filterLabel();
+  document.getElementById('listTitle').textContent   = label ? `أيام العمل — ${label}` : 'سجل أيام العمل';
+  document.getElementById('totalsTitle').textContent = label ? `إجماليات ${label}` : 'الإجماليات حسب العملة';
+  renderTotals(filtered);
+  renderList(filtered);
+}
+
+function buildGroups(days) {
+  const groups = {};
+  days.forEach(d => {
+    const cur = d.currency || 'USD';
+    if (!groups[cur]) groups[cur] = { hours: 0, wage: 0 };
+    groups[cur].hours += d.hours || 0;
+    groups[cur].wage  += d.wage  || 0;
+  });
+  return groups;
+}
+
+function renderTotals(days) {
+  const section = document.getElementById('totalsSection');
+  const card    = document.getElementById('totalsCard');
+  if (!days.length) { card.style.display = 'none'; return; }
+  const groups = buildGroups(days);
+  section.innerHTML = Object.entries(groups).map(([cur, t]) => {
+    const info = CURRENCIES[cur] || { label: cur, flag: '💱', symbol: cur };
+    return `<div class="currency-total">
+      <div class="cur-label"><span class="cur-flag">${info.flag}</span>${info.label}</div>
+      <div class="cur-nums">
+        <div class="cur-stat"><div class="cur-stat-val">${fmt(t.hours)}</div><div class="cur-stat-lbl">ساعة</div></div>
+        <div class="cur-stat"><div class="cur-stat-val">${fmt(t.wage)} <small>${info.symbol}</small></div><div class="cur-stat-lbl">إجمالي الأجر</div></div>
+      </div>
+    </div>`;
+  }).join('');
+  card.style.display = 'block';
+}
+
+function renderList(days) {
+  const list = document.getElementById('list');
+  if (!days.length) {
+    const msg = filterLabel() ? 'لا توجد أيام عمل في هذه الفترة' : 'لا توجد أيام عمل مسجّلة بعد';
+    list.innerHTML = `<div class="empty"><div class="empty-icon">📭</div>${msg}</div>`;
+    return;
+  }
+  list.innerHTML = days.map(d => {
+    const [y, m, day] = (d.date || '').split('-');
+    const dateLabel   = d.date ? `${day || ''}<br/>${m || ''}/${y || ''}` : '';
+    const cur         = d.currency || 'USD';
+    const info        = CURRENCIES[cur] || { flag: '💱', symbol: cur, label: cur };
+    return `<div class="workday-item" id="item-${d._id}">
+      <div class="workday-top">
+        <div class="workday-date">${dateLabel}</div>
+        <div>
+          <div class="workday-meta">
+            <span class="badge">⏱ ${fmt(d.hours)} ساعة</span>
+            <span class="badge">💰 ${fmt(d.wage)} ${info.symbol}</span>
+            <span class="badge badge-currency">${info.flag} ${info.label}</span>
+          </div>
+          ${d.note ? `<div class="workday-note">${esc(d.note)}</div>` : ''}
+        </div>
+      </div>
+      <div class="workday-actions">
+        <button class="btn btn-edit"   onclick='openEdit(${JSON.stringify(d)})'>✏️ تعديل</button>
+        <button class="btn btn-delete" onclick="openDelete('${d._id}')">🗑️ حذف</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ═══════════════════════════════════════
+   ADD FORM
+═══════════════════════════════════════ */
+document.getElementById('addForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner spinner-sm"></div>';
+  const body = {
+    date:     document.getElementById('date').value,
+    hours:    parseFloat(document.getElementById('hours').value) || 0,
+    wage:     parseFloat(document.getElementById('wage').value)  || 0,
+    currency: document.getElementById('currency').value,
+    note:     document.getElementById('note').value.trim(),
+  };
+  try {
+    const res = await fetch(API, { method: 'POST', headers: authHeaders(), body: JSON.stringify(body) });
+    if (res.status === 401) { logout(); return; }
+    if (!res.ok) throw new Error();
+    showToast('✅ تم حفظ يوم العمل بنجاح');
+    document.getElementById('hours').value = '';
+    document.getElementById('wage').value  = '';
+    document.getElementById('note').value  = '';
+    document.getElementById('date').valueAsDate = new Date();
+    await loadWorkdays();
+  } catch { showToast('❌ حدث خطأ، يرجى المحاولة مجدداً', true); }
+  finally { btn.disabled = false; btn.innerHTML = '<span>💾</span> حفظ يوم العمل'; }
+});
+
+/* ═══════════════════════════════════════
+   EDIT MODAL
+═══════════════════════════════════════ */
+function openEdit(d) {
+  editingId = d._id;
+  document.getElementById('eDate').value     = d.date     || '';
+  document.getElementById('eHours').value    = d.hours    ?? '';
+  document.getElementById('eWage').value     = d.wage     ?? '';
+  document.getElementById('eCurrency').value = d.currency || 'USD';
+  document.getElementById('eNote').value     = d.note     || '';
+  document.getElementById('editOverlay').classList.add('open');
+}
+function closeEdit() { document.getElementById('editOverlay').classList.remove('open'); editingId = null; }
+
+async function submitEdit() {
+  if (!editingId) return;
+  const btn = document.getElementById('saveEditBtn');
+  btn.disabled = true; btn.innerHTML = '<div class="spinner spinner-sm"></div>';
+  const body = {
+    date:     document.getElementById('eDate').value,
+    hours:    parseFloat(document.getElementById('eHours').value)    || 0,
+    wage:     parseFloat(document.getElementById('eWage').value)     || 0,
+    currency: document.getElementById('eCurrency').value,
+    note:     document.getElementById('eNote').value.trim(),
+  };
+  try {
+    const res = await fetch(`${API}/${editingId}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify(body) });
+    if (res.status === 401) { logout(); return; }
+    if (!res.ok) throw new Error();
+    closeEdit(); showToast('✅ تم تعديل يوم العمل بنجاح');
+    await loadWorkdays();
+  } catch { showToast('❌ حدث خطأ أثناء التعديل', true); }
+  finally { btn.disabled = false; btn.innerHTML = '<span>💾</span> حفظ التعديلات'; }
+}
+
+/* ═══════════════════════════════════════
+   DELETE MODAL
+═══════════════════════════════════════ */
+function openDelete(id) { deletingId = id; document.getElementById('deleteOverlay').classList.add('open'); }
+function closeDelete()  { document.getElementById('deleteOverlay').classList.remove('open'); deletingId = null; }
+
+async function submitDelete() {
+  if (!deletingId) return;
+  const btn = document.getElementById('confirmDeleteBtn');
+  btn.disabled = true; btn.textContent = '...جارٍ الحذف';
+  try {
+    const res = await fetch(`${API}/${deletingId}`, { method: 'DELETE', headers: authHeaders() });
+    if (res.status === 401) { logout(); return; }
+    if (!res.ok) throw new Error();
+    closeDelete(); showToast('🗑️ تم حذف يوم العمل');
+    await loadWorkdays();
+  } catch { showToast('❌ حدث خطأ أثناء الحذف', true); }
+  finally { btn.disabled = false; btn.innerHTML = '🗑️ نعم، احذف'; }
+}
+
+// Close modals on overlay click
+document.getElementById('editOverlay').addEventListener('click',   e => { if (e.target === e.currentTarget) closeEdit(); });
+document.getElementById('deleteOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeDelete(); });
+
+/* ═══════════════════════════════════════
+   PDF EXPORT
+═══════════════════════════════════════ */
+function exportPDF() {
+  const filtered = applyFilter(allDays);
+  const label    = filterLabel() || 'كل الأيام';
+  const groups   = buildGroups(filtered);
+  const user     = getUser();
+  const today    = new Date().toLocaleDateString('ar-SA', { year:'numeric', month:'long', day:'numeric' });
+
+  if (!filtered.length) { showToast('لا توجد بيانات للتصدير في هذه الفترة', true); return; }
+
+  const totalsRows = Object.entries(groups).map(([cur, t]) => {
+    const info = CURRENCIES[cur] || { label: cur, symbol: cur };
+    return `<tr><td>${info.label}</td><td>${info.symbol}</td><td>${fmt(t.hours)} ساعة</td><td>${fmt(t.wage)}</td></tr>`;
+  }).join('');
+
+  const dayRows = filtered.map(d => {
+    const cur  = d.currency || 'USD';
+    const info = CURRENCIES[cur] || { label: cur, symbol: cur };
+    return `<tr><td>${esc(d.date||'')}</td><td>${fmt(d.hours)}</td><td>${fmt(d.wage)}</td><td>${info.label}</td><td>${esc(d.note||'—')}</td></tr>`;
+  }).join('');
+
+  document.getElementById('printArea').innerHTML = `
+    <div class="print-header">
+      <h1>داوامي — تقرير أيام العمل</h1>
+      <p>الموظف: ${esc(user?.name||'')} &nbsp;|&nbsp; الفترة: ${esc(label)} &nbsp;|&nbsp; تاريخ الطباعة: ${today}</p>
+    </div>
+    <div class="print-section-title">الإجماليات حسب العملة</div>
+    <table class="print-totals-table">
+      <thead><tr><th>العملة</th><th>الرمز</th><th>إجمالي الساعات</th><th>إجمالي الأجر</th></tr></thead>
+      <tbody>${totalsRows}</tbody>
+    </table>
+    <div class="print-section-title">تفاصيل أيام العمل (${filtered.length} يوم)</div>
+    <table class="print-days-table">
+      <thead><tr><th>التاريخ</th><th>الساعات</th><th>الأجر</th><th>العملة</th><th>ملاحظة</th></tr></thead>
+      <tbody>${dayRows}</tbody>
+    </table>
+    <div class="print-footer">تم إنشاء هذا التقرير بواسطة تطبيق داوامي — ${today}</div>
+  `;
+  window.print();
+}
+
+/* ═══════════════════════════════════════
+   UTILS
+═══════════════════════════════════════ */
+function fmt(n) { const x = parseFloat(n)||0; return x%1===0 ? String(x) : x.toFixed(2); }
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ═══════════════════════════════════════
+   BOOT
+═══════════════════════════════════════ */
+document.getElementById('date').valueAsDate = new Date();
+initApp();
 </script>
 </body>
 </html>
