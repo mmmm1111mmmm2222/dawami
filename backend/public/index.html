@@ -18,7 +18,6 @@
       --border:        #d6e4dc;
       --danger:        #c0392b;
       --danger-light:  #fdecea;
-      --warning:       #d97706;
       --radius:        14px;
       --shadow:        0 2px 12px rgba(0,0,0,0.08);
     }
@@ -71,7 +70,7 @@
       border-bottom: 1px solid var(--border);
     }
     .card-header .icon { font-size: 1.1rem; }
-    .card-header h2   { font-size: 1rem; font-weight: 600; color: var(--primary-dark); }
+    .card-header h2   { font-size: 1rem; font-weight: 600; color: var(--primary-dark); flex: 1; }
     .card-body        { padding: 16px; }
 
     /* ── Form ── */
@@ -111,20 +110,63 @@
       transition: background 0.15s, transform 0.1s;
     }
     .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
     .btn-primary  { background: var(--primary); color: #fff; width: 100%; margin-top: 4px; font-size: 1rem; padding: 13px; }
-    .btn-primary:hover  { background: var(--primary-dark); }
-    .btn-primary:disabled { background: var(--muted); cursor: not-allowed; }
+    .btn-primary:hover:not(:disabled)  { background: var(--primary-dark); }
 
-    .btn-edit   { background: var(--primary-light); color: var(--primary-dark); flex: 1; }
+    .btn-edit     { background: var(--primary-light); color: var(--primary-dark); flex: 1; }
     .btn-edit:hover   { background: #d0ead9; }
-    .btn-delete { background: var(--danger-light); color: var(--danger); flex: 1; }
+    .btn-delete   { background: var(--danger-light); color: var(--danger); flex: 1; }
     .btn-delete:hover { background: #f9d6d2; }
+    .btn-cancel   { background: var(--border); color: var(--text); flex: 1; }
+    .btn-cancel:hover { background: #c8d9ce; }
+    .btn-danger   { background: var(--danger); color: #fff; flex: 1; }
+    .btn-danger:hover { background: #a93226; }
 
-    /* ── Workday card actions ── */
-    .workday-actions {
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px solid var(--border);
+      padding: 8px 14px;
+      font-size: 0.82rem;
+    }
+    .btn-ghost:hover { background: var(--primary-light); color: var(--primary-dark); border-color: var(--primary); }
+
+    .btn-pdf {
+      background: #b91c1c;
+      color: #fff;
+      padding: 8px 14px;
+      font-size: 0.82rem;
+      border-radius: 8px;
+    }
+    .btn-pdf:hover { background: #991b1b; }
+
+    /* ── Filter card ── */
+    .filter-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .filter-actions {
       display: flex;
       gap: 8px;
-      margin-top: 8px;
+      align-items: center;
+    }
+
+    /* ── Active filter badge ── */
+    .filter-active-bar {
+      background: var(--primary-light);
+      border: 1.5px solid var(--primary);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     /* ── Toast ── */
@@ -143,8 +185,7 @@
     /* ── Totals ── */
     #totalsSection { display: flex; flex-direction: column; gap: 8px; }
     .currency-total {
-      background: var(--primary-light);
-      border-radius: 10px;
+      background: var(--primary-light); border-radius: 10px;
       padding: 11px 14px;
       display: flex; align-items: center; justify-content: space-between; gap: 8px;
     }
@@ -158,8 +199,7 @@
     #list { display: flex; flex-direction: column; gap: 10px; }
 
     .workday-item {
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
+      border: 1.5px solid var(--border); border-radius: 10px;
       padding: 13px 14px;
       animation: slideIn 0.22s ease;
     }
@@ -167,12 +207,7 @@
       from { opacity: 0; transform: translateY(-6px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .workday-top {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 10px;
-      align-items: start;
-    }
+    .workday-top  { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; }
     .workday-date {
       background: var(--primary); color: #fff;
       border-radius: 8px; padding: 6px 10px;
@@ -187,6 +222,7 @@
     }
     .badge-currency { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
     .workday-note   { font-size: 0.82rem; color: var(--muted); line-height: 1.4; margin-top: 4px; }
+    .workday-actions { display: flex; gap: 8px; margin-top: 8px; }
 
     /* ── Empty / loading ── */
     .empty { text-align: center; padding: 32px 16px; color: var(--muted); font-size: 0.9rem; }
@@ -199,54 +235,121 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Modal overlay ── */
+    /* ── Modals ── */
     .modal-overlay {
-      display: none;
-      position: fixed; inset: 0;
+      display: none; position: fixed; inset: 0;
       background: rgba(0,0,0,0.45);
-      z-index: 50;
-      align-items: center; justify-content: center;
-      padding: 16px;
+      z-index: 50; align-items: center; justify-content: center; padding: 16px;
     }
     .modal-overlay.open { display: flex; }
-
     .modal {
-      background: var(--card);
-      border-radius: var(--radius);
+      background: var(--card); border-radius: var(--radius);
       box-shadow: 0 8px 32px rgba(0,0,0,0.18);
       width: 100%; max-width: 420px;
-      animation: modalIn 0.2s ease;
-      overflow: hidden;
+      animation: modalIn 0.2s ease; overflow: hidden;
     }
     @keyframes modalIn {
       from { opacity: 0; transform: scale(0.96) translateY(10px); }
       to   { opacity: 1; transform: scale(1) translateY(0); }
     }
-
     .modal-header {
-      background: var(--primary-light);
-      padding: 14px 16px;
+      background: var(--primary-light); padding: 14px 16px;
       display: flex; align-items: center; justify-content: space-between;
       border-bottom: 1px solid var(--border);
     }
     .modal-header h3 { font-size: 1rem; font-weight: 700; color: var(--primary-dark); }
     .modal-close {
       background: none; border: none; cursor: pointer;
-      font-size: 1.3rem; color: var(--muted); line-height: 1;
-      padding: 2px 6px; border-radius: 6px;
+      font-size: 1.3rem; color: var(--muted); padding: 2px 6px; border-radius: 6px;
     }
     .modal-close:hover { background: var(--border); }
-    .modal-body { padding: 16px; }
+    .modal-body   { padding: 16px; }
     .modal-footer { padding: 0 16px 16px; display: flex; gap: 10px; }
 
-    /* ── Confirm dialog ── */
     .confirm-icon { font-size: 2.5rem; text-align: center; margin-bottom: 8px; }
-    .confirm-msg  { text-align: center; color: var(--text); font-size: 0.95rem; line-height: 1.6; }
+    .confirm-msg  { text-align: center; font-size: 0.95rem; line-height: 1.6; }
     .confirm-msg strong { color: var(--danger); }
-    .btn-cancel { background: var(--border); color: var(--text); flex: 1; }
-    .btn-cancel:hover { background: #c8d9ce; }
-    .btn-danger { background: var(--danger); color: #fff; flex: 1; }
-    .btn-danger:hover { background: #a93226; }
+
+    /* ══════════════════════════════
+       PRINT / PDF STYLES
+       ══════════════════════════════ */
+    #printArea { display: none; }
+
+    @media print {
+      body > *:not(#printArea) { display: none !important; }
+      #printArea {
+        display: block !important;
+        direction: rtl;
+        font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+        color: #111;
+        padding: 24px;
+      }
+
+      .print-header {
+        text-align: center;
+        border-bottom: 2px solid #1a6b4a;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+      }
+      .print-header h1 { font-size: 1.5rem; color: #1a6b4a; margin-bottom: 4px; }
+      .print-header p  { font-size: 0.85rem; color: #555; }
+
+      .print-section-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1a6b4a;
+        margin: 18px 0 8px;
+        padding-bottom: 4px;
+        border-bottom: 1px solid #d6e4dc;
+      }
+
+      /* Totals table */
+      .print-totals-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 6px;
+      }
+      .print-totals-table th,
+      .print-totals-table td {
+        border: 1px solid #d6e4dc;
+        padding: 7px 10px;
+        font-size: 0.85rem;
+        text-align: right;
+      }
+      .print-totals-table th {
+        background: #e8f5ef;
+        font-weight: 700;
+        color: #134f37;
+      }
+
+      /* Workdays table */
+      .print-days-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .print-days-table th,
+      .print-days-table td {
+        border: 1px solid #d6e4dc;
+        padding: 6px 10px;
+        font-size: 0.82rem;
+        text-align: right;
+      }
+      .print-days-table th {
+        background: #e8f5ef;
+        font-weight: 700;
+        color: #134f37;
+      }
+      .print-days-table tr:nth-child(even) td { background: #f9fcfb; }
+
+      .print-footer {
+        margin-top: 24px;
+        text-align: center;
+        font-size: 0.75rem;
+        color: #888;
+        border-top: 1px solid #d6e4dc;
+        padding-top: 10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -301,11 +404,61 @@
     </div>
   </div>
 
+  <!-- Filters -->
+  <div class="card">
+    <div class="card-header">
+      <span class="icon">🔍</span>
+      <h2>تصفية حسب الشهر</h2>
+    </div>
+    <div class="card-body">
+      <div class="filter-row">
+        <div class="form-group">
+          <label for="filterMonth">الشهر</label>
+          <select id="filterMonth">
+            <option value="">— كل الشهور —</option>
+            <option value="01">يناير</option>
+            <option value="02">فبراير</option>
+            <option value="03">مارس</option>
+            <option value="04">أبريل</option>
+            <option value="05">مايو</option>
+            <option value="06">يونيو</option>
+            <option value="07">يوليو</option>
+            <option value="08">أغسطس</option>
+            <option value="09">سبتمبر</option>
+            <option value="10">أكتوبر</option>
+            <option value="11">نوفمبر</option>
+            <option value="12">ديسمبر</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="filterYear">السنة</label>
+          <select id="filterYear">
+            <option value="">— كل السنوات —</option>
+          </select>
+        </div>
+      </div>
+      <div class="filter-actions">
+        <button class="btn btn-ghost" id="clearFilterBtn" onclick="clearFilters()" style="flex:1">
+          ✕ مسح التصفية
+        </button>
+        <button class="btn btn-pdf" id="exportPdfBtn" onclick="exportPDF()">
+          📄 تصدير PDF
+        </button>
+      </div>
+      <div id="filterActiveBadge" style="display:none; margin-top:10px">
+        <div class="filter-active-bar">
+          <span id="filterLabel">—</span>
+          <span style="color:var(--primary)">✓ فعّال</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Totals -->
   <div class="card" id="totalsCard" style="display:none">
     <div class="card-header">
       <span class="icon">📊</span>
-      <h2>الإجماليات حسب العملة</h2>
+      <h2 id="totalsTitle">الإجماليات حسب العملة</h2>
     </div>
     <div class="card-body" style="padding:12px">
       <div id="totalsSection"></div>
@@ -316,7 +469,7 @@
   <div class="card">
     <div class="card-header">
       <span class="icon">📋</span>
-      <h2>سجل أيام العمل</h2>
+      <h2 id="listTitle">سجل أيام العمل</h2>
     </div>
     <div class="card-body" style="padding:12px">
       <div id="list">
@@ -398,6 +551,9 @@
   </div>
 </div>
 
+<!-- Hidden print area -->
+<div id="printArea"></div>
+
 <div id="toast"></div>
 
 <script>
@@ -411,11 +567,87 @@
     SYP: { label: 'ليرة سورية',   flag: '🇸🇾', symbol: 'ل.س' },
   };
 
+  const MONTHS_AR = ['','يناير','فبراير','مارس','أبريل','مايو','يونيو',
+                      'يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+
+  let allDays    = [];
   let editingId  = null;
   let deletingId = null;
 
   // ── Init ──
   document.getElementById('date').valueAsDate = new Date();
+  populateYears();
+
+  function populateYears() {
+    const sel  = document.getElementById('filterYear');
+    const year = new Date().getFullYear();
+    for (let y = year; y >= year - 5; y--) {
+      const opt = document.createElement('option');
+      opt.value = String(y);
+      opt.textContent = String(y);
+      sel.appendChild(opt);
+    }
+    // Default to current month/year
+    sel.value = String(year);
+    document.getElementById('filterMonth').value =
+      String(new Date().getMonth() + 1).padStart(2, '0');
+  }
+
+  // ── Filter helpers ──
+  function getFilter() {
+    return {
+      month: document.getElementById('filterMonth').value,
+      year:  document.getElementById('filterYear').value,
+    };
+  }
+
+  function applyFilter(days) {
+    const { month, year } = getFilter();
+    if (!month && !year) return days;
+    return days.filter(d => {
+      if (!d.date) return false;
+      const [y, m] = d.date.split('-');
+      if (year  && y !== year)  return false;
+      if (month && m !== month) return false;
+      return true;
+    });
+  }
+
+  function filterLabel() {
+    const { month, year } = getFilter();
+    if (!month && !year) return null;
+    const parts = [];
+    if (month) parts.push(MONTHS_AR[parseInt(month, 10)]);
+    if (year)  parts.push(year);
+    return parts.join(' ');
+  }
+
+  function clearFilters() {
+    document.getElementById('filterMonth').value = '';
+    document.getElementById('filterYear').value  = '';
+    updateFilterBadge();
+    render(allDays);
+  }
+
+  function updateFilterBadge() {
+    const label   = filterLabel();
+    const badge   = document.getElementById('filterActiveBadge');
+    const labelEl = document.getElementById('filterLabel');
+    if (label) {
+      badge.style.display = 'block';
+      labelEl.textContent = 'الفترة: ' + label;
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  // Filter change listeners
+  ['filterMonth','filterYear'].forEach(id => {
+    document.getElementById(id).addEventListener('change', () => {
+      updateFilterBadge();
+      render(allDays);
+    });
+  });
 
   // ── Toast ──
   function showToast(msg, isError = false) {
@@ -431,21 +663,36 @@
     return num % 1 === 0 ? num.toString() : num.toFixed(2);
   }
   function escapeHtml(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
   // ── Load ──
   async function loadWorkdays() {
-    const list = document.getElementById('list');
-    list.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    document.getElementById('list').innerHTML =
+      '<div class="loading"><div class="spinner"></div></div>';
     try {
       const res  = await fetch(API);
-      const data = await res.json();
-      renderTotals(data);
-      renderList(data);
+      allDays    = await res.json();
+      updateFilterBadge();
+      render(allDays);
     } catch {
-      list.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div>تعذّر تحميل البيانات</div>';
+      document.getElementById('list').innerHTML =
+        '<div class="empty"><div class="empty-icon">⚠️</div>تعذّر تحميل البيانات</div>';
     }
+  }
+
+  function render(days) {
+    const filtered = applyFilter(days);
+    const label    = filterLabel();
+
+    // Update titles
+    document.getElementById('listTitle').textContent =
+      label ? `أيام العمل — ${label}` : 'سجل أيام العمل';
+    document.getElementById('totalsTitle').textContent =
+      label ? `إجماليات ${label}` : 'الإجماليات حسب العملة';
+
+    renderTotals(filtered);
+    renderList(filtered);
   }
 
   // ── Totals ──
@@ -454,14 +701,7 @@
     const card    = document.getElementById('totalsCard');
     if (!days.length) { card.style.display = 'none'; return; }
 
-    const groups = {};
-    days.forEach(d => {
-      const cur = d.currency || 'USD';
-      if (!groups[cur]) groups[cur] = { hours: 0, wage: 0 };
-      groups[cur].hours += d.hours || 0;
-      groups[cur].wage  += d.wage  || 0;
-    });
-
+    const groups = buildGroups(days);
     section.innerHTML = Object.entries(groups).map(([cur, t]) => {
       const info = CURRENCIES[cur] || { label: cur, flag: '💱', symbol: cur };
       return `
@@ -484,16 +724,30 @@
     card.style.display = 'block';
   }
 
+  function buildGroups(days) {
+    const groups = {};
+    days.forEach(d => {
+      const cur = d.currency || 'USD';
+      if (!groups[cur]) groups[cur] = { hours: 0, wage: 0 };
+      groups[cur].hours += d.hours || 0;
+      groups[cur].wage  += d.wage  || 0;
+    });
+    return groups;
+  }
+
   // ── List ──
   function renderList(days) {
     const list = document.getElementById('list');
     if (!days.length) {
-      list.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>لا توجد أيام عمل مسجّلة بعد</div>';
+      const msg = filterLabel()
+        ? 'لا توجد أيام عمل في هذه الفترة'
+        : 'لا توجد أيام عمل مسجّلة بعد';
+      list.innerHTML = `<div class="empty"><div class="empty-icon">📭</div>${msg}</div>`;
       return;
     }
     list.innerHTML = days.map(d => {
       const [y, m, day] = (d.date || '').split('-');
-      const dateLabel   = d.date ? `${day || ''}<br/>${m || ''}/${y || ''}` : d.date;
+      const dateLabel   = d.date ? `${day || ''}<br/>${m || ''}/${y || ''}` : '';
       const cur         = d.currency || 'USD';
       const info        = CURRENCIES[cur] || { flag: '💱', symbol: cur, label: cur };
       return `
@@ -510,7 +764,7 @@
             </div>
           </div>
           <div class="workday-actions">
-            <button class="btn btn-edit"   onclick="openEdit(${JSON.stringify(d).replace(/"/g,'&quot;')})">✏️ تعديل</button>
+            <button class="btn btn-edit"   onclick='openEdit(${JSON.stringify(d)})'>✏️ تعديل</button>
             <button class="btn btn-delete" onclick="openDelete('${d._id}')">🗑️ حذف</button>
           </div>
         </div>`;
@@ -542,7 +796,7 @@
       document.getElementById('wage').value  = '';
       document.getElementById('note').value  = '';
       document.getElementById('date').valueAsDate = new Date();
-      loadWorkdays();
+      await loadWorkdays();
     } catch {
       showToast('❌ حدث خطأ، يرجى المحاولة مجدداً', true);
     } finally {
@@ -586,7 +840,7 @@
       if (!res.ok) throw new Error();
       closeEdit();
       showToast('✅ تم تعديل يوم العمل بنجاح');
-      loadWorkdays();
+      await loadWorkdays();
     } catch {
       showToast('❌ حدث خطأ أثناء التعديل', true);
     } finally {
@@ -614,7 +868,7 @@
       if (!res.ok) throw new Error();
       closeDelete();
       showToast('🗑️ تم حذف يوم العمل');
-      loadWorkdays();
+      await loadWorkdays();
     } catch {
       showToast('❌ حدث خطأ أثناء الحذف', true);
     } finally {
@@ -631,6 +885,85 @@
     if (e.target === e.currentTarget) closeDelete();
   });
 
+  // ── PDF Export ──
+  function exportPDF() {
+    const filtered = applyFilter(allDays);
+    const label    = filterLabel() || 'كل الأيام';
+    const groups   = buildGroups(filtered);
+    const today    = new Date().toLocaleDateString('ar-SA', { year:'numeric', month:'long', day:'numeric' });
+
+    if (!filtered.length) {
+      showToast('لا توجد بيانات للتصدير في هذه الفترة', true);
+      return;
+    }
+
+    // Build totals rows
+    const totalsRows = Object.entries(groups).map(([cur, t]) => {
+      const info = CURRENCIES[cur] || { label: cur, symbol: cur };
+      return `<tr>
+        <td>${info.label}</td>
+        <td>${info.symbol}</td>
+        <td>${formatNum(t.hours)} ساعة</td>
+        <td>${formatNum(t.wage)}</td>
+      </tr>`;
+    }).join('');
+
+    // Build workday rows
+    const dayRows = filtered.map(d => {
+      const cur  = d.currency || 'USD';
+      const info = CURRENCIES[cur] || { label: cur, symbol: cur };
+      return `<tr>
+        <td>${escapeHtml(d.date || '')}</td>
+        <td>${formatNum(d.hours)}</td>
+        <td>${formatNum(d.wage)}</td>
+        <td>${info.label}</td>
+        <td>${escapeHtml(d.note || '—')}</td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('printArea').innerHTML = `
+      <div class="print-header">
+        <h1>داوامي — تقرير أيام العمل</h1>
+        <p>الفترة: ${escapeHtml(label)} &nbsp;|&nbsp; تاريخ الطباعة: ${today}</p>
+      </div>
+
+      <div class="print-section-title">الإجماليات حسب العملة</div>
+      <table class="print-totals-table">
+        <thead>
+          <tr>
+            <th>العملة</th>
+            <th>الرمز</th>
+            <th>إجمالي الساعات</th>
+            <th>إجمالي الأجر</th>
+          </tr>
+        </thead>
+        <tbody>${totalsRows}</tbody>
+      </table>
+
+      <div class="print-section-title">تفاصيل أيام العمل (${filtered.length} يوم)</div>
+      <table class="print-days-table">
+        <thead>
+          <tr>
+            <th>التاريخ</th>
+            <th>الساعات</th>
+            <th>الأجر</th>
+            <th>العملة</th>
+            <th>ملاحظة</th>
+          </tr>
+        </thead>
+        <tbody>${dayRows}</tbody>
+      </table>
+
+      <div class="print-footer">
+        تم إنشاء هذا التقرير بواسطة تطبيق داوامي — ${today}
+      </div>
+    `;
+
+    window.print();
+  }
+
+  // ── Start ──
+  updateFilterBadge();
   loadWorkdays();
 </script>
 </body>
