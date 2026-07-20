@@ -22,6 +22,8 @@
       --shadow: 0 2px 12px rgba(0,0,0,0.08);
     }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: 'Segoe UI', Tahoma, sans-serif;
       background: var(--bg);
@@ -82,7 +84,8 @@
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group.full { grid-column: 1 / -1; }
     label { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
-    input, textarea {
+
+    input, textarea, select {
       border: 1.5px solid var(--border);
       border-radius: 8px;
       padding: 10px 12px;
@@ -94,13 +97,14 @@
       width: 100%;
       direction: rtl;
     }
-    input:focus, textarea:focus {
+    input:focus, textarea:focus, select:focus {
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(26,107,74,0.12);
       background: #fff;
     }
     textarea { resize: none; height: 72px; }
+    select { appearance: none; cursor: pointer; }
 
     /* ── Button ── */
     .btn {
@@ -141,24 +145,37 @@
       z-index: 100;
       white-space: nowrap;
     }
-    #toast.show { transform: translateX(-50%) translateY(0); }
+    #toast.show  { transform: translateX(-50%) translateY(0); }
     #toast.error { background: var(--danger); }
 
-    /* ── Summary strip ── */
-    .summary {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .stat {
+    /* ── Totals by currency ── */
+    #totalsSection { display: flex; flex-direction: column; gap: 8px; }
+    .currency-total {
       background: var(--primary-light);
       border-radius: 10px;
-      padding: 12px 14px;
-      text-align: center;
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
     }
-    .stat-label { font-size: 0.72rem; color: var(--muted); font-weight: 600; }
-    .stat-value { font-size: 1.4rem; font-weight: 700; color: var(--primary-dark); margin-top: 2px; }
-    .stat-value span { font-size: 0.8rem; font-weight: 500; }
+    .currency-total .cur-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .currency-total .cur-flag { font-size: 1.1rem; }
+    .currency-total .cur-nums {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .cur-stat { text-align: center; }
+    .cur-stat-val  { font-size: 1rem; font-weight: 700; color: var(--primary-dark); }
+    .cur-stat-lbl  { font-size: 0.68rem; color: var(--muted); }
 
     /* ── List ── */
     #list { display: flex; flex-direction: column; gap: 10px; }
@@ -191,8 +208,9 @@
     .workday-details { display: flex; flex-direction: column; gap: 4px; }
     .workday-meta {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
+      align-items: center;
     }
     .badge {
       background: var(--primary-light);
@@ -202,13 +220,18 @@
       font-size: 0.78rem;
       font-weight: 600;
     }
+    .badge-currency {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffc107;
+    }
     .workday-note {
       font-size: 0.82rem;
       color: var(--muted);
       line-height: 1.4;
     }
 
-    /* ── Empty / loading state ── */
+    /* ── Empty / loading ── */
     .empty {
       text-align: center;
       padding: 32px 16px;
@@ -216,12 +239,7 @@
       font-size: 0.9rem;
     }
     .empty .empty-icon { font-size: 2.5rem; margin-bottom: 8px; }
-
-    .loading {
-      display: flex;
-      justify-content: center;
-      padding: 24px;
-    }
+    .loading { display: flex; justify-content: center; padding: 24px; }
     .spinner {
       width: 28px; height: 28px;
       border: 3px solid var(--border);
@@ -250,22 +268,38 @@
     <div class="card-body">
       <form id="workdayForm">
         <div class="form-grid">
+
           <div class="form-group">
             <label for="date">التاريخ</label>
             <input type="date" id="date" required />
           </div>
+
           <div class="form-group">
             <label for="hours">الساعات</label>
             <input type="number" id="hours" min="0" step="0.5" placeholder="٨" required />
           </div>
+
           <div class="form-group">
             <label for="wage">الأجر</label>
             <input type="number" id="wage" min="0" step="0.01" placeholder="٠.٠٠" required />
           </div>
+
+          <div class="form-group">
+            <label for="currency">العملة</label>
+            <select id="currency">
+              <option value="TRY">🇹🇷 ليرة تركية</option>
+              <option value="USD">🇺🇸 دولار أمريكي</option>
+              <option value="EUR">🇪🇺 يورو</option>
+              <option value="SAR">🇸🇦 ريال سعودي</option>
+              <option value="SYP">🇸🇾 ليرة سورية</option>
+            </select>
+          </div>
+
           <div class="form-group full">
             <label for="note">ملاحظة (اختياري)</label>
             <textarea id="note" placeholder="أي ملاحظات عن هذا اليوم..."></textarea>
           </div>
+
         </div>
         <button class="btn btn-primary" type="submit" id="submitBtn">
           <span>💾</span> حفظ يوم العمل
@@ -274,15 +308,14 @@
     </div>
   </div>
 
-  <!-- Summary -->
-  <div class="summary" id="summary" style="display:none">
-    <div class="stat">
-      <div class="stat-label">إجمالي الساعات</div>
-      <div class="stat-value" id="totalHours">0 <span>ساعة</span></div>
+  <!-- Totals by currency -->
+  <div class="card" id="totalsCard" style="display:none">
+    <div class="card-header">
+      <span class="icon">📊</span>
+      <h2>الإجماليات حسب العملة</h2>
     </div>
-    <div class="stat">
-      <div class="stat-label">إجمالي الأجور</div>
-      <div class="stat-value" id="totalWages">0 <span>ريال</span></div>
+    <div class="card-body" style="padding:12px">
+      <div id="totalsSection"></div>
     </div>
   </div>
 
@@ -306,10 +339,18 @@
 <script>
   const API = '/workdays';
 
-  // Set today's date as default
+  const CURRENCIES = {
+    TRY: { label: 'ليرة تركية',   flag: '🇹🇷', symbol: 'TRY' },
+    USD: { label: 'دولار أمريكي', flag: '🇺🇸', symbol: '$'   },
+    EUR: { label: 'يورو',          flag: '🇪🇺', symbol: '€'   },
+    SAR: { label: 'ريال سعودي',   flag: '🇸🇦', symbol: 'ر.س' },
+    SYP: { label: 'ليرة سورية',   flag: '🇸🇾', symbol: 'ل.س' },
+  };
+
+  // Default date to today
   document.getElementById('date').valueAsDate = new Date();
 
-  // ── Toast helper ──
+  // ── Toast ──
   function showToast(msg, isError = false) {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -317,46 +358,78 @@
     setTimeout(() => { t.className = ''; }, 2800);
   }
 
-  // ── Fetch & render list ──
+  // ── Load & render ──
   async function loadWorkdays() {
     const list = document.getElementById('list');
     list.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
     try {
       const res = await fetch(API);
       const data = await res.json();
+      renderTotals(data);
       renderList(data);
     } catch {
       list.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div>تعذّر تحميل البيانات</div>';
     }
   }
 
+  function renderTotals(days) {
+    const section = document.getElementById('totalsSection');
+    const card    = document.getElementById('totalsCard');
+    if (!days.length) { card.style.display = 'none'; return; }
+
+    // Group by currency
+    const groups = {};
+    days.forEach(d => {
+      const cur = d.currency || 'USD';
+      if (!groups[cur]) groups[cur] = { hours: 0, wage: 0 };
+      groups[cur].hours += d.hours || 0;
+      groups[cur].wage  += d.wage  || 0;
+    });
+
+    section.innerHTML = Object.entries(groups).map(([cur, totals]) => {
+      const info = CURRENCIES[cur] || { label: cur, flag: '💱', symbol: cur };
+      return `
+        <div class="currency-total">
+          <div class="cur-label">
+            <span class="cur-flag">${info.flag}</span>
+            ${info.label}
+          </div>
+          <div class="cur-nums">
+            <div class="cur-stat">
+              <div class="cur-stat-val">${formatNum(totals.hours)}</div>
+              <div class="cur-stat-lbl">ساعة</div>
+            </div>
+            <div class="cur-stat">
+              <div class="cur-stat-val">${formatNum(totals.wage)} <small>${info.symbol}</small></div>
+              <div class="cur-stat-lbl">إجمالي الأجر</div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    card.style.display = 'block';
+  }
+
   function renderList(days) {
     const list = document.getElementById('list');
-    const summary = document.getElementById('summary');
-
     if (!days.length) {
       list.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>لا توجد أيام عمل مسجّلة بعد</div>';
-      summary.style.display = 'none';
       return;
     }
-
-    // Totals
-    const totalH = days.reduce((s, d) => s + (d.hours || 0), 0);
-    const totalW = days.reduce((s, d) => s + (d.wage  || 0), 0);
-    document.getElementById('totalHours').innerHTML = `${formatNum(totalH)} <span>ساعة</span>`;
-    document.getElementById('totalWages').innerHTML = `${formatNum(totalW)} <span>ريال</span>`;
-    summary.style.display = 'grid';
 
     list.innerHTML = days.map(d => {
       const [y, m, day] = (d.date || '').split('-');
       const dateLabel = d.date ? `${day || ''}<br/>${m || ''}/${y || ''}` : d.date;
+      const cur  = d.currency || 'USD';
+      const info = CURRENCIES[cur] || { flag: '💱', symbol: cur, label: cur };
       return `
         <div class="workday-item">
           <div class="workday-date">${dateLabel}</div>
           <div class="workday-details">
             <div class="workday-meta">
               <span class="badge">⏱ ${formatNum(d.hours)} ساعة</span>
-              <span class="badge">💰 ${formatNum(d.wage)} ريال</span>
+              <span class="badge">💰 ${formatNum(d.wage)} ${info.symbol}</span>
+              <span class="badge badge-currency">${info.flag} ${info.label}</span>
             </div>
             ${d.note ? `<div class="workday-note">${escapeHtml(d.note)}</div>` : ''}
           </div>
@@ -368,12 +441,11 @@
     const num = parseFloat(n) || 0;
     return num % 1 === 0 ? num.toString() : num.toFixed(2);
   }
-
   function escapeHtml(s) {
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  // ── Submit form ──
+  // ── Submit ──
   document.getElementById('workdayForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
@@ -381,10 +453,11 @@
     btn.innerHTML = '<div class="spinner" style="width:18px;height:18px;border-width:2px;margin:0 auto"></div>';
 
     const body = {
-      date:  document.getElementById('date').value,
-      hours: parseFloat(document.getElementById('hours').value) || 0,
-      wage:  parseFloat(document.getElementById('wage').value)  || 0,
-      note:  document.getElementById('note').value.trim(),
+      date:     document.getElementById('date').value,
+      hours:    parseFloat(document.getElementById('hours').value) || 0,
+      wage:     parseFloat(document.getElementById('wage').value)  || 0,
+      currency: document.getElementById('currency').value,
+      note:     document.getElementById('note').value.trim(),
     };
 
     try {

@@ -16,6 +16,10 @@ const workDaySchema = new mongoose.Schema({
   note: {
     type: String,
     default: ""
+  },
+  currency: {
+    type: String,
+    default: "USD"
   }
 }, {
   timestamps: true
