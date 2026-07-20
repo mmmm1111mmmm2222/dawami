@@ -8,21 +8,20 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --primary: #1a6b4a;
+      --primary:       #1a6b4a;
       --primary-light: #e8f5ef;
-      --primary-dark: #134f37;
-      --accent: #f0a500;
-      --bg: #f5f7f6;
-      --card: #ffffff;
-      --text: #1c2b24;
-      --muted: #6b8a7a;
-      --border: #d6e4dc;
-      --danger: #c0392b;
-      --radius: 14px;
-      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+      --primary-dark:  #134f37;
+      --bg:            #f5f7f6;
+      --card:          #ffffff;
+      --text:          #1c2b24;
+      --muted:         #6b8a7a;
+      --border:        #d6e4dc;
+      --danger:        #c0392b;
+      --danger-light:  #fdecea;
+      --warning:       #d97706;
+      --radius:        14px;
+      --shadow:        0 2px 12px rgba(0,0,0,0.08);
     }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -43,10 +42,10 @@
       z-index: 10;
       box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
-    header h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: 0.5px; }
+    header h1 { font-size: 1.6rem; font-weight: 700; }
     header p  { font-size: 0.8rem; opacity: 0.8; margin-top: 2px; }
 
-    /* ── Main layout ── */
+    /* ── Layout ── */
     main {
       max-width: 480px;
       margin: 0 auto;
@@ -72,15 +71,11 @@
       border-bottom: 1px solid var(--border);
     }
     .card-header .icon { font-size: 1.1rem; }
-    .card-header h2 { font-size: 1rem; font-weight: 600; color: var(--primary-dark); }
-    .card-body { padding: 16px; }
+    .card-header h2   { font-size: 1rem; font-weight: 600; color: var(--primary-dark); }
+    .card-body        { padding: 16px; }
 
     /* ── Form ── */
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group.full { grid-column: 1 / -1; }
     label { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
@@ -93,9 +88,9 @@
       font-family: inherit;
       color: var(--text);
       background: #fafafa;
-      transition: border-color 0.2s, box-shadow 0.2s;
       width: 100%;
       direction: rtl;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
     input:focus, textarea:focus, select:focus {
       outline: none;
@@ -104,78 +99,60 @@
       background: #fff;
     }
     textarea { resize: none; height: 72px; }
-    select { appearance: none; cursor: pointer; }
+    select   { appearance: none; cursor: pointer; }
 
-    /* ── Button ── */
+    /* ── Buttons ── */
     .btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      width: 100%;
-      padding: 13px;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 700;
-      font-family: inherit;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 11px 16px;
+      border: none; border-radius: 9px;
+      font-size: 0.9rem; font-weight: 700; font-family: inherit;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      margin-top: 4px;
+      transition: background 0.15s, transform 0.1s;
     }
-    .btn-primary { background: var(--primary); color: #fff; }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary  { background: var(--primary); color: #fff; width: 100%; margin-top: 4px; font-size: 1rem; padding: 13px; }
     .btn-primary:hover  { background: var(--primary-dark); }
-    .btn-primary:active { transform: scale(0.98); }
     .btn-primary:disabled { background: var(--muted); cursor: not-allowed; }
+
+    .btn-edit   { background: var(--primary-light); color: var(--primary-dark); flex: 1; }
+    .btn-edit:hover   { background: #d0ead9; }
+    .btn-delete { background: var(--danger-light); color: var(--danger); flex: 1; }
+    .btn-delete:hover { background: #f9d6d2; }
+
+    /* ── Workday card actions ── */
+    .workday-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
 
     /* ── Toast ── */
     #toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
+      position: fixed; bottom: 24px; left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: var(--primary-dark);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 24px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      box-shadow: var(--shadow);
-      transition: transform 0.3s ease;
-      z-index: 100;
-      white-space: nowrap;
+      background: var(--primary-dark); color: #fff;
+      padding: 10px 20px; border-radius: 24px;
+      font-size: 0.9rem; font-weight: 600;
+      box-shadow: var(--shadow); transition: transform 0.3s ease;
+      z-index: 200; white-space: nowrap;
     }
     #toast.show  { transform: translateX(-50%) translateY(0); }
     #toast.error { background: var(--danger); }
 
-    /* ── Totals by currency ── */
+    /* ── Totals ── */
     #totalsSection { display: flex; flex-direction: column; gap: 8px; }
     .currency-total {
       background: var(--primary-light);
       border-radius: 10px;
       padding: 11px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
     }
-    .currency-total .cur-label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--muted);
-    }
-    .currency-total .cur-flag { font-size: 1.1rem; }
-    .currency-total .cur-nums {
-      display: flex;
-      gap: 14px;
-      align-items: center;
-    }
-    .cur-stat { text-align: center; }
-    .cur-stat-val  { font-size: 1rem; font-weight: 700; color: var(--primary-dark); }
-    .cur-stat-lbl  { font-size: 0.68rem; color: var(--muted); }
+    .cur-label { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; color: var(--muted); }
+    .cur-flag  { font-size: 1.1rem; }
+    .cur-nums  { display: flex; gap: 14px; align-items: center; }
+    .cur-stat-val { font-size: 1rem; font-weight: 700; color: var(--primary-dark); }
+    .cur-stat-lbl { font-size: 0.68rem; color: var(--muted); text-align: center; }
 
     /* ── List ── */
     #list { display: flex; flex-direction: column; gap: 10px; }
@@ -184,70 +161,92 @@
       border: 1.5px solid var(--border);
       border-radius: 10px;
       padding: 13px 14px;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 10px;
-      align-items: start;
-      animation: slideIn 0.25s ease;
+      animation: slideIn 0.22s ease;
     }
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(-6px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+    .workday-top {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: start;
+    }
     .workday-date {
-      background: var(--primary);
-      color: #fff;
-      border-radius: 8px;
-      padding: 6px 10px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-align: center;
-      min-width: 60px;
-      line-height: 1.4;
+      background: var(--primary); color: #fff;
+      border-radius: 8px; padding: 6px 10px;
+      font-size: 0.78rem; font-weight: 700;
+      text-align: center; min-width: 60px; line-height: 1.4;
     }
-    .workday-details { display: flex; flex-direction: column; gap: 4px; }
-    .workday-meta {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
+    .workday-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
     .badge {
-      background: var(--primary-light);
-      color: var(--primary-dark);
-      border-radius: 20px;
-      padding: 2px 10px;
-      font-size: 0.78rem;
-      font-weight: 600;
+      background: var(--primary-light); color: var(--primary-dark);
+      border-radius: 20px; padding: 2px 10px;
+      font-size: 0.78rem; font-weight: 600;
     }
-    .badge-currency {
-      background: #fff3cd;
-      color: #856404;
-      border: 1px solid #ffc107;
-    }
-    .workday-note {
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.4;
-    }
+    .badge-currency { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
+    .workday-note   { font-size: 0.82rem; color: var(--muted); line-height: 1.4; margin-top: 4px; }
 
     /* ── Empty / loading ── */
-    .empty {
-      text-align: center;
-      padding: 32px 16px;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
+    .empty { text-align: center; padding: 32px 16px; color: var(--muted); font-size: 0.9rem; }
     .empty .empty-icon { font-size: 2.5rem; margin-bottom: 8px; }
     .loading { display: flex; justify-content: center; padding: 24px; }
     .spinner {
       width: 28px; height: 28px;
-      border: 3px solid var(--border);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+      border: 3px solid var(--border); border-top-color: var(--primary);
+      border-radius: 50%; animation: spin 0.7s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Modal overlay ── */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 50;
+      align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      width: 100%; max-width: 420px;
+      animation: modalIn 0.2s ease;
+      overflow: hidden;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.96) translateY(10px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-header {
+      background: var(--primary-light);
+      padding: 14px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-header h3 { font-size: 1rem; font-weight: 700; color: var(--primary-dark); }
+    .modal-close {
+      background: none; border: none; cursor: pointer;
+      font-size: 1.3rem; color: var(--muted); line-height: 1;
+      padding: 2px 6px; border-radius: 6px;
+    }
+    .modal-close:hover { background: var(--border); }
+    .modal-body { padding: 16px; }
+    .modal-footer { padding: 0 16px 16px; display: flex; gap: 10px; }
+
+    /* ── Confirm dialog ── */
+    .confirm-icon { font-size: 2.5rem; text-align: center; margin-bottom: 8px; }
+    .confirm-msg  { text-align: center; color: var(--text); font-size: 0.95rem; line-height: 1.6; }
+    .confirm-msg strong { color: var(--danger); }
+    .btn-cancel { background: var(--border); color: var(--text); flex: 1; }
+    .btn-cancel:hover { background: #c8d9ce; }
+    .btn-danger { background: var(--danger); color: #fff; flex: 1; }
+    .btn-danger:hover { background: #a93226; }
   </style>
 </head>
 <body>
@@ -259,31 +258,27 @@
 
 <main>
 
-  <!-- Add workday form -->
+  <!-- Add form -->
   <div class="card">
     <div class="card-header">
       <span class="icon">➕</span>
       <h2>إضافة يوم عمل</h2>
     </div>
     <div class="card-body">
-      <form id="workdayForm">
+      <form id="addForm">
         <div class="form-grid">
-
           <div class="form-group">
             <label for="date">التاريخ</label>
             <input type="date" id="date" required />
           </div>
-
           <div class="form-group">
             <label for="hours">الساعات</label>
             <input type="number" id="hours" min="0" step="0.5" placeholder="٨" required />
           </div>
-
           <div class="form-group">
             <label for="wage">الأجر</label>
             <input type="number" id="wage" min="0" step="0.01" placeholder="٠.٠٠" required />
           </div>
-
           <div class="form-group">
             <label for="currency">العملة</label>
             <select id="currency">
@@ -294,12 +289,10 @@
               <option value="SYP">🇸🇾 ليرة سورية</option>
             </select>
           </div>
-
           <div class="form-group full">
             <label for="note">ملاحظة (اختياري)</label>
             <textarea id="note" placeholder="أي ملاحظات عن هذا اليوم..."></textarea>
           </div>
-
         </div>
         <button class="btn btn-primary" type="submit" id="submitBtn">
           <span>💾</span> حفظ يوم العمل
@@ -308,7 +301,7 @@
     </div>
   </div>
 
-  <!-- Totals by currency -->
+  <!-- Totals -->
   <div class="card" id="totalsCard" style="display:none">
     <div class="card-header">
       <span class="icon">📊</span>
@@ -319,13 +312,13 @@
     </div>
   </div>
 
-  <!-- Workdays list -->
+  <!-- List -->
   <div class="card">
     <div class="card-header">
       <span class="icon">📋</span>
       <h2>سجل أيام العمل</h2>
     </div>
-    <div class="card-body" style="padding: 12px;">
+    <div class="card-body" style="padding:12px">
       <div id="list">
         <div class="loading"><div class="spinner"></div></div>
       </div>
@@ -333,6 +326,77 @@
   </div>
 
 </main>
+
+<!-- Edit modal -->
+<div class="modal-overlay" id="editOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>✏️ تعديل يوم العمل</h3>
+      <button class="modal-close" onclick="closeEdit()">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="editForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="eDate">التاريخ</label>
+            <input type="date" id="eDate" required />
+          </div>
+          <div class="form-group">
+            <label for="eHours">الساعات</label>
+            <input type="number" id="eHours" min="0" step="0.5" required />
+          </div>
+          <div class="form-group">
+            <label for="eWage">الأجر</label>
+            <input type="number" id="eWage" min="0" step="0.01" required />
+          </div>
+          <div class="form-group">
+            <label for="eCurrency">العملة</label>
+            <select id="eCurrency">
+              <option value="TRY">🇹🇷 ليرة تركية</option>
+              <option value="USD">🇺🇸 دولار أمريكي</option>
+              <option value="EUR">🇪🇺 يورو</option>
+              <option value="SAR">🇸🇦 ريال سعودي</option>
+              <option value="SYP">🇸🇾 ليرة سورية</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label for="eNote">ملاحظة (اختياري)</label>
+            <textarea id="eNote" placeholder="أي ملاحظات..."></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeEdit()">إلغاء</button>
+      <button class="btn btn-primary" id="saveEditBtn" style="margin-top:0" onclick="submitEdit()">
+        <span>💾</span> حفظ التعديلات
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete confirm modal -->
+<div class="modal-overlay" id="deleteOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>🗑️ حذف يوم العمل</h3>
+      <button class="modal-close" onclick="closeDelete()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="confirm-icon">⚠️</div>
+      <p class="confirm-msg">
+        هل أنت متأكد أنك تريد حذف هذا اليوم؟<br/>
+        <strong>لا يمكن التراجع عن هذا الإجراء.</strong>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeDelete()">إلغاء</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn" onclick="submitDelete()">
+        🗑️ نعم، احذف
+      </button>
+    </div>
+  </div>
+</div>
 
 <div id="toast"></div>
 
@@ -347,7 +411,10 @@
     SYP: { label: 'ليرة سورية',   flag: '🇸🇾', symbol: 'ل.س' },
   };
 
-  // Default date to today
+  let editingId  = null;
+  let deletingId = null;
+
+  // ── Init ──
   document.getElementById('date').valueAsDate = new Date();
 
   // ── Toast ──
@@ -358,85 +425,7 @@
     setTimeout(() => { t.className = ''; }, 2800);
   }
 
-  // ── Load & render ──
-  async function loadWorkdays() {
-    const list = document.getElementById('list');
-    list.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-    try {
-      const res = await fetch(API);
-      const data = await res.json();
-      renderTotals(data);
-      renderList(data);
-    } catch {
-      list.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div>تعذّر تحميل البيانات</div>';
-    }
-  }
-
-  function renderTotals(days) {
-    const section = document.getElementById('totalsSection');
-    const card    = document.getElementById('totalsCard');
-    if (!days.length) { card.style.display = 'none'; return; }
-
-    // Group by currency
-    const groups = {};
-    days.forEach(d => {
-      const cur = d.currency || 'USD';
-      if (!groups[cur]) groups[cur] = { hours: 0, wage: 0 };
-      groups[cur].hours += d.hours || 0;
-      groups[cur].wage  += d.wage  || 0;
-    });
-
-    section.innerHTML = Object.entries(groups).map(([cur, totals]) => {
-      const info = CURRENCIES[cur] || { label: cur, flag: '💱', symbol: cur };
-      return `
-        <div class="currency-total">
-          <div class="cur-label">
-            <span class="cur-flag">${info.flag}</span>
-            ${info.label}
-          </div>
-          <div class="cur-nums">
-            <div class="cur-stat">
-              <div class="cur-stat-val">${formatNum(totals.hours)}</div>
-              <div class="cur-stat-lbl">ساعة</div>
-            </div>
-            <div class="cur-stat">
-              <div class="cur-stat-val">${formatNum(totals.wage)} <small>${info.symbol}</small></div>
-              <div class="cur-stat-lbl">إجمالي الأجر</div>
-            </div>
-          </div>
-        </div>`;
-    }).join('');
-
-    card.style.display = 'block';
-  }
-
-  function renderList(days) {
-    const list = document.getElementById('list');
-    if (!days.length) {
-      list.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>لا توجد أيام عمل مسجّلة بعد</div>';
-      return;
-    }
-
-    list.innerHTML = days.map(d => {
-      const [y, m, day] = (d.date || '').split('-');
-      const dateLabel = d.date ? `${day || ''}<br/>${m || ''}/${y || ''}` : d.date;
-      const cur  = d.currency || 'USD';
-      const info = CURRENCIES[cur] || { flag: '💱', symbol: cur, label: cur };
-      return `
-        <div class="workday-item">
-          <div class="workday-date">${dateLabel}</div>
-          <div class="workday-details">
-            <div class="workday-meta">
-              <span class="badge">⏱ ${formatNum(d.hours)} ساعة</span>
-              <span class="badge">💰 ${formatNum(d.wage)} ${info.symbol}</span>
-              <span class="badge badge-currency">${info.flag} ${info.label}</span>
-            </div>
-            ${d.note ? `<div class="workday-note">${escapeHtml(d.note)}</div>` : ''}
-          </div>
-        </div>`;
-    }).join('');
-  }
-
+  // ── Helpers ──
   function formatNum(n) {
     const num = parseFloat(n) || 0;
     return num % 1 === 0 ? num.toString() : num.toFixed(2);
@@ -445,13 +434,95 @@
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  // ── Submit ──
-  document.getElementById('workdayForm').addEventListener('submit', async (e) => {
+  // ── Load ──
+  async function loadWorkdays() {
+    const list = document.getElementById('list');
+    list.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    try {
+      const res  = await fetch(API);
+      const data = await res.json();
+      renderTotals(data);
+      renderList(data);
+    } catch {
+      list.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div>تعذّر تحميل البيانات</div>';
+    }
+  }
+
+  // ── Totals ──
+  function renderTotals(days) {
+    const section = document.getElementById('totalsSection');
+    const card    = document.getElementById('totalsCard');
+    if (!days.length) { card.style.display = 'none'; return; }
+
+    const groups = {};
+    days.forEach(d => {
+      const cur = d.currency || 'USD';
+      if (!groups[cur]) groups[cur] = { hours: 0, wage: 0 };
+      groups[cur].hours += d.hours || 0;
+      groups[cur].wage  += d.wage  || 0;
+    });
+
+    section.innerHTML = Object.entries(groups).map(([cur, t]) => {
+      const info = CURRENCIES[cur] || { label: cur, flag: '💱', symbol: cur };
+      return `
+        <div class="currency-total">
+          <div class="cur-label">
+            <span class="cur-flag">${info.flag}</span>${info.label}
+          </div>
+          <div class="cur-nums">
+            <div class="cur-stat">
+              <div class="cur-stat-val">${formatNum(t.hours)}</div>
+              <div class="cur-stat-lbl">ساعة</div>
+            </div>
+            <div class="cur-stat">
+              <div class="cur-stat-val">${formatNum(t.wage)} <small>${info.symbol}</small></div>
+              <div class="cur-stat-lbl">إجمالي الأجر</div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+    card.style.display = 'block';
+  }
+
+  // ── List ──
+  function renderList(days) {
+    const list = document.getElementById('list');
+    if (!days.length) {
+      list.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>لا توجد أيام عمل مسجّلة بعد</div>';
+      return;
+    }
+    list.innerHTML = days.map(d => {
+      const [y, m, day] = (d.date || '').split('-');
+      const dateLabel   = d.date ? `${day || ''}<br/>${m || ''}/${y || ''}` : d.date;
+      const cur         = d.currency || 'USD';
+      const info        = CURRENCIES[cur] || { flag: '💱', symbol: cur, label: cur };
+      return `
+        <div class="workday-item" id="item-${d._id}">
+          <div class="workday-top">
+            <div class="workday-date">${dateLabel}</div>
+            <div>
+              <div class="workday-meta">
+                <span class="badge">⏱ ${formatNum(d.hours)} ساعة</span>
+                <span class="badge">💰 ${formatNum(d.wage)} ${info.symbol}</span>
+                <span class="badge badge-currency">${info.flag} ${info.label}</span>
+              </div>
+              ${d.note ? `<div class="workday-note">${escapeHtml(d.note)}</div>` : ''}
+            </div>
+          </div>
+          <div class="workday-actions">
+            <button class="btn btn-edit"   onclick="openEdit(${JSON.stringify(d).replace(/"/g,'&quot;')})">✏️ تعديل</button>
+            <button class="btn btn-delete" onclick="openDelete('${d._id}')">🗑️ حذف</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── Add form ──
+  document.getElementById('addForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
     btn.disabled = true;
     btn.innerHTML = '<div class="spinner" style="width:18px;height:18px;border-width:2px;margin:0 auto"></div>';
-
     const body = {
       date:     document.getElementById('date').value,
       hours:    parseFloat(document.getElementById('hours').value) || 0,
@@ -459,7 +530,6 @@
       currency: document.getElementById('currency').value,
       note:     document.getElementById('note').value.trim(),
     };
-
     try {
       const res = await fetch(API, {
         method: 'POST',
@@ -479,6 +549,86 @@
       btn.disabled = false;
       btn.innerHTML = '<span>💾</span> حفظ يوم العمل';
     }
+  });
+
+  // ── Edit modal ──
+  function openEdit(d) {
+    editingId = d._id;
+    document.getElementById('eDate').value     = d.date     || '';
+    document.getElementById('eHours').value    = d.hours    ?? '';
+    document.getElementById('eWage').value     = d.wage     ?? '';
+    document.getElementById('eCurrency').value = d.currency || 'USD';
+    document.getElementById('eNote').value     = d.note     || '';
+    document.getElementById('editOverlay').classList.add('open');
+  }
+  function closeEdit() {
+    document.getElementById('editOverlay').classList.remove('open');
+    editingId = null;
+  }
+  async function submitEdit() {
+    if (!editingId) return;
+    const btn = document.getElementById('saveEditBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;margin:0 auto"></div>';
+    const body = {
+      date:     document.getElementById('eDate').value,
+      hours:    parseFloat(document.getElementById('eHours').value)    || 0,
+      wage:     parseFloat(document.getElementById('eWage').value)     || 0,
+      currency: document.getElementById('eCurrency').value,
+      note:     document.getElementById('eNote').value.trim(),
+    };
+    try {
+      const res = await fetch(`${API}/${editingId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) throw new Error();
+      closeEdit();
+      showToast('✅ تم تعديل يوم العمل بنجاح');
+      loadWorkdays();
+    } catch {
+      showToast('❌ حدث خطأ أثناء التعديل', true);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<span>💾</span> حفظ التعديلات';
+    }
+  }
+
+  // ── Delete modal ──
+  function openDelete(id) {
+    deletingId = id;
+    document.getElementById('deleteOverlay').classList.add('open');
+  }
+  function closeDelete() {
+    document.getElementById('deleteOverlay').classList.remove('open');
+    deletingId = null;
+  }
+  async function submitDelete() {
+    if (!deletingId) return;
+    const btn = document.getElementById('confirmDeleteBtn');
+    btn.disabled = true;
+    btn.textContent = '...جارٍ الحذف';
+    try {
+      const res = await fetch(`${API}/${deletingId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error();
+      closeDelete();
+      showToast('🗑️ تم حذف يوم العمل');
+      loadWorkdays();
+    } catch {
+      showToast('❌ حدث خطأ أثناء الحذف', true);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '🗑️ نعم، احذف';
+    }
+  }
+
+  // Close modals on overlay click
+  document.getElementById('editOverlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeEdit();
+  });
+  document.getElementById('deleteOverlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeDelete();
   });
 
   loadWorkdays();
