@@ -1,71 +1,84 @@
-/* ═══════════════════════════════════════════
-   داوامي — Service Worker
-   Strategy:
-     • App shell (HTML / static assets) → Cache-first, update in background
-     • API calls (/auth/* /workdays/*) → Network-only (never cache auth data)
-     • Navigation when offline → serve /offline.html
-═══════════════════════════════════════════ */
+/*
+  Dawami Service Worker
+  - API routes: network only
+  - Reset password page: network only
+  - Navigation: cache first, fallback to offline page
+  - Static files: stale while revalidate
+*/
 
-const CACHE_NAME = 'dawami-shell-v2';
+const CACHE_NAME = "dawami-shell-v3";
 
 const SHELL_URLS = [
-  '/',
-  '/offline.html',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
-  '/manifest.json',
+  "/",
+  "/offline.html",
+  "/icons/icon-192.png",
+  "/icons/icon-512.png",
+  "/manifest.json",
 ];
 
-// ── Install: pre-cache the shell ──────────────────────────
-self.addEventListener('install', (event) => {
+self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(SHELL_URLS))
   );
+
   self.skipWaiting();
 });
 
-// ── Activate: delete old caches ───────────────────────────
-self.addEventListener('activate', (event) => {
+self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys
-          .filter((k) => k !== CACHE_NAME)
-          .map((k) => caches.delete(k))
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter((key) => key !== CACHE_NAME)
+            .map((key) => caches.delete(key))
+        )
       )
-    )
   );
+
   self.clients.claim();
 });
 
-// ── Fetch ─────────────────────────────────────────────────
-self.addEventListener('fetch', (event) => {
+self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // 1. API routes → always go to network, never intercept
-  if (url.pathname.startsWith('/auth') || url.pathname.startsWith('/workdays')) {
-    return; // let the browser handle normally
+  // API routes must always go directly to the server
+  if (
+    url.pathname.startsWith("/auth") ||
+    url.pathname.startsWith("/workdays") ||
+    url.pathname.startsWith("/employers") ||
+    url.pathname.startsWith("/payments") ||
+    url.pathname.startsWith("/account")
+  ) {
+    return;
   }
 
-  // 2. Non-GET requests → pass through
-  if (request.method !== 'GET') return;
+  // Password reset page must never use the cached home page
+  if (url.pathname === "/reset.html") {
+    return;
+  }
 
-  // 3. Cross-origin requests → pass through
-  if (url.origin !== self.location.origin) return;
+  // Ignore non-GET requests
+  if (request.method !== "GET") {
+    return;
+  }
 
-  // 4. Navigation requests → cache-first, fallback to offline page
-  if (request.mode === 'navigate') {
+  // Ignore requests from other websites
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+
+  // Page navigation
+  if (request.mode === "navigate") {
     event.respondWith(
-      caches.match('/').then((cached) => {
-        if (cached) return cached;
-        return fetch(request).catch(() => caches.match('/offline.html'));
-      })
+      fetch(request).catch(() => caches.match("/offline.html"))
     );
     return;
   }
 
-  // 5. Static assets → stale-while-revalidate
+  // Static assets
   event.respondWith(
     caches.open(CACHE_NAME).then((cache) =>
       cache.match(request).then((cached) => {
@@ -74,9 +87,10 @@ self.addEventListener('fetch', (event) => {
             if (response && response.status === 200) {
               cache.put(request, response.clone());
             }
+
             return response;
           })
-          .catch(() => cached); // offline fallback to whatever is cached
+          .catch(() => cached);
 
         return cached || networkFetch;
       })
