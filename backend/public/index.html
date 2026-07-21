@@ -219,9 +219,25 @@
 
     /* ── Table ── */
     .tbl-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: .82rem; }
-    th { background: var(--primary-light); color: var(--primary-dark); padding: 8px 10px; text-align: right; font-weight: 700; }
-    td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .72rem;
+      }
+th {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  padding: 6px 5px;
+  text-align: right;
+  font-weight: 700;
+  white-space: nowrap;
+}
+td {
+  padding: 6px 5px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  white-space: nowrap;
+}
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #f9fdf9; }
 
