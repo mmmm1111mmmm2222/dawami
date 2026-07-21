@@ -326,6 +326,7 @@ td {
       .print-footer { text-align: center; font-size: .75rem; color: #888; margin-top: 24px; border-top: 1px solid #ddd; padding-top: 10px; }
     }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
@@ -541,7 +542,9 @@ td {
           </div>
           <div style="display:flex;gap:8px;margin-top:8px">
             <button class="btn-primary" style="flex:1" onclick="renderReports()">عرض التقرير</button>
-            <button class="btn-secondary" onclick="exportPDF()">تصدير PDF</button>
+            <button class="btn-secondary" onclick="exportPDF()">تصدير PDF</button><button class="btn-secondary" onclick="sharePDF()">
+  مشاركة PDF
+            </button>
           </div>
         </div>
       </div>
@@ -2114,7 +2117,69 @@ const summaryRows =
     </div>
   `;
 }
+async function sharePDF() {
+  const reportArea = document.getElementById("report-area");
 
+  if (!reportArea || !reportArea.innerHTML.trim()) {
+    toast("اعرض التقرير أولًا", "error");
+    return;
+  }
+
+  const options = {
+    margin: 8,
+    filename: "تقرير-دوامي.pdf",
+    image: {
+      type: "jpeg",
+      quality: 0.98
+    },
+    html2canvas: {
+      scale: 2,
+      useCORS: true
+    },
+    jsPDF: {
+      unit: "mm",
+      format: "a4",
+      orientation: "portrait"
+    }
+  };
+
+  try {
+    const blob = await html2pdf()
+      .set(options)
+      .from(reportArea)
+      .outputPdf("blob");
+
+    const file = new File(
+      [blob],
+      "تقرير-دوامي.pdf",
+      { type: "application/pdf" }
+    );
+
+    if (
+      navigator.share &&
+      navigator.canShare &&
+      navigator.canShare({ files: [file] })
+    ) {
+      await navigator.share({
+        title: "تقرير دوامي",
+        text: "تقرير من تطبيق دوامي",
+        files: [file]
+      });
+    } else {
+      html2pdf()
+        .set(options)
+        .from(reportArea)
+        .save();
+
+      toast("جهازك لا يدعم مشاركة الملف، تم تنزيله بدلًا من ذلك");
+    }
+  } catch (error) {
+    if (error.name !== "AbortError") {
+      console.error("Share PDF error:", error);
+      toast("تعذرت مشاركة ملف PDF", "error");
+    }
+  }
+}
 function exportPDF() {
   const filtered = getReportFiltered();
   if (!filtered.length) { toast('لا توجد بيانات للتصدير', 'error'); return; }
