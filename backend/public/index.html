@@ -447,16 +447,36 @@
     </div>
   </div>
 
-  <!-- ── EXPENSES (coming soon) ── -->
-  <div id="tab-expenses" class="tab-panel">
-    <div class="section">
-      <div class="coming-soon">
-        <div class="cs-icon">💸</div>
-        <h3>المصاريف</h3>
-        <p>هذه الميزة قادمة قريباً — ستتمكن من تسجيل مصاريفك اليومية ومقارنتها بدخلك.</p>
-      </div>
+<!-- — EXPENSES — -->
+<div id="tab-expenses" class="tab-panel">
+  <div class="section" style="padding-top:14px">
+
+    <button class="fab" onclick="openExpenseModal(null)">
+      + إضافة مصروف
+    </button>
+
+    <div class="filter-bar" style="margin-bottom:12px">
+      <select id="exp-filter-category">
+        <option value="">كل التصنيفات</option>
+        <option value="طعام">طعام</option>
+        <option value="مواصلات">مواصلات</option>
+        <option value="سكن">سكن</option>
+        <option value="فواتير">فواتير</option>
+        <option value="تسوق">تسوق</option>
+        <option value="صحة">صحة</option>
+        <option value="أخرى">أخرى</option>
+      </select>
+
+      <select id="exp-filter-month">
+        <option value="">كل الأشهر</option>
+      </select>
     </div>
+
+    <div id="expense-summary"></div>
+    <div id="expense-list"></div>
+
   </div>
+</div>
 
   <!-- ── PAYMENTS ── -->
   <div id="tab-payments" class="tab-panel">
@@ -689,7 +709,95 @@
     </form>
   </div>
 </div>
+<!-- =========================
+     MODAL: EXPENSE
+========================= -->
+<div class="modal-overlay" id="modal-expense">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <h3 id="expense-modal-title">إضافة مصروف</h3>
+      <button
+        class="modal-close"
+        type="button"
+        onclick="closeModal('modal-expense')"
+      >
+        ×
+      </button>
+    </div>
 
+    <form id="expense-form">
+      <input type="hidden" id="expense-id" />
+
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>اسم المصروف *</label>
+          <input
+            type="text"
+            id="expense-title"
+            maxlength="120"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>المبلغ *</label>
+          <input
+            type="number"
+            id="expense-amount"
+            min="0.01"
+            step="any"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>التصنيف *</label>
+          <select id="expense-category" required>
+            <option value="طعام">طعام</option>
+            <option value="مواصلات">مواصلات</option>
+            <option value="سكن">سكن</option>
+            <option value="فواتير">فواتير</option>
+            <option value="تسوق">تسوق</option>
+            <option value="صحة">صحة</option>
+            <option value="أخرى">أخرى</option>
+          </select>
+        </div>
+
+        <div class="form-group full">
+          <label>التاريخ *</label>
+          <input
+            type="date"
+            id="expense-date"
+            required
+          />
+        </div>
+
+        <div class="form-group full">
+          <label>ملاحظة</label>
+          <textarea
+            id="expense-note"
+            maxlength="500"
+            placeholder="ملاحظة اختيارية..."
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" class="btn-primary">
+          حفظ
+        </button>
+
+        <button
+          type="button"
+          class="btn-secondary"
+          onclick="closeModal('modal-expense')"
+        >
+          إلغاء
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 <!-- ══════════════════════════ MODAL: DELETE CONFIRM ══════════════════════════ -->
 <div class="modal-overlay" id="modal-delete">
   <div class="modal-sheet" style="max-height:auto">
@@ -1390,7 +1498,362 @@ document.getElementById('pay-form').addEventListener('submit', async (e) => {
   toast(editingId ? 'تم تحديث الدفعة' : 'تمت إضافة الدفعة');
   editingId = null;
 });
+/* =========================
+   EXPENSES
+========================= */
 
+let expenses = [];
+let editingExpenseId = null;
+
+/* جلب المصاريف من الخادم */
+async function loadExpenses() {
+  try {
+    expenses = await api("/expenses");
+    renderExpenses();
+    buildExpenseMonthFilter();
+  } catch (error) {
+    console.error("Load expenses error:", error);
+    toast(error.message || "تعذر تحميل المصاريف");
+  }
+}
+
+/* فتح نافذة إضافة أو تعديل مصروف */
+function openExpenseModal(id) {
+  editingExpenseId = id || null;
+
+  const expense = id
+    ? expenses.find((item) => item._id === id)
+    : null;
+
+  document.getElementById("expense-modal-title").textContent =
+    expense ? "تعديل المصروف" : "إضافة مصروف";
+
+  document.getElementById("expense-id").value =
+    expense?._id || "";
+
+  document.getElementById("expense-title").value =
+    expense?.title || "";
+
+  document.getElementById("expense-amount").value =
+    expense?.amount ?? "";
+
+  document.getElementById("expense-category").value =
+    expense?.category || "أخرى";
+
+  document.getElementById("expense-date").value =
+    expense?.date
+      ? String(expense.date).slice(0, 10)
+      : todayStr();
+
+  document.getElementById("expense-note").value =
+    expense?.note || "";
+
+  openModal("modal-expense");
+}
+
+/* حفظ المصروف */
+document
+  .getElementById("expense-form")
+  .addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const title =
+      document.getElementById("expense-title").value.trim();
+
+    const amount = Number(
+      document.getElementById("expense-amount").value
+    );
+
+    const category =
+      document.getElementById("expense-category").value;
+
+    const date =
+      document.getElementById("expense-date").value;
+
+    const note =
+      document.getElementById("expense-note").value.trim();
+
+    if (!title) {
+      toast("اكتب اسم المصروف");
+      return;
+    }
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      toast("أدخل مبلغًا صحيحًا أكبر من صفر");
+      return;
+    }
+
+    if (!date) {
+      toast("اختر تاريخ المصروف");
+      return;
+    }
+
+    const body = {
+      title,
+      amount,
+      category,
+      date,
+      note
+    };
+
+    try {
+      if (editingExpenseId) {
+        await api(`/expenses/${editingExpenseId}`, {
+          method: "PUT",
+          body: JSON.stringify(body)
+        });
+      } else {
+        await api("/expenses", {
+          method: "POST",
+          body: JSON.stringify(body)
+        });
+      }
+
+      closeModal("modal-expense");
+
+      toast(
+        editingExpenseId
+          ? "تم تحديث المصروف"
+          : "تمت إضافة المصروف"
+      );
+
+      editingExpenseId = null;
+      await loadExpenses();
+      renderDashboard();
+    } catch (error) {
+      console.error("Save expense error:", error);
+      toast(error.message || "تعذر حفظ المصروف");
+    }
+  });
+
+/* حذف مصروف */
+async function deleteExpense(id) {
+  const expense = expenses.find((item) => item._id === id);
+
+  const confirmed = confirm(
+    `هل تريد حذف المصروف: ${expense?.title || ""}؟`
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await api(`/expenses/${id}`, {
+      method: "DELETE"
+    });
+
+    toast("تم حذف المصروف");
+    await loadExpenses();
+    renderDashboard();
+  } catch (error) {
+    console.error("Delete expense error:", error);
+    toast(error.message || "تعذر حذف المصروف");
+  }
+}
+
+/* إنشاء قائمة الأشهر */
+function buildExpenseMonthFilter() {
+  const select =
+    document.getElementById("exp-filter-month");
+
+  if (!select) return;
+
+  const selectedValue = select.value;
+
+  const months = [
+    ...new Set(
+      expenses
+        .filter((item) => item.date)
+        .map((item) =>
+          String(item.date).slice(0, 7)
+        )
+    )
+  ].sort().reverse();
+
+  select.innerHTML =
+    '<option value="">كل الأشهر</option>';
+
+  months.forEach((month) => {
+    const option = document.createElement("option");
+    option.value = month;
+
+    const [year, monthNumber] = month.split("-");
+
+    option.textContent = new Date(
+      Number(year),
+      Number(monthNumber) - 1,
+      1
+    ).toLocaleDateString("ar", {
+      year: "numeric",
+      month: "long"
+    });
+
+    select.appendChild(option);
+  });
+
+  if (months.includes(selectedValue)) {
+    select.value = selectedValue;
+  }
+}
+
+/* عرض قائمة المصاريف */
+function renderExpenses() {
+  const list =
+    document.getElementById("expense-list");
+
+  const summary =
+    document.getElementById("expense-summary");
+
+  if (!list || !summary) return;
+
+  const categoryFilter =
+    document.getElementById("exp-filter-category")?.value || "";
+
+  const monthFilter =
+    document.getElementById("exp-filter-month")?.value || "";
+
+  const filtered = expenses.filter((expense) => {
+    const categoryMatches =
+      !categoryFilter ||
+      expense.category === categoryFilter;
+
+    const monthMatches =
+      !monthFilter ||
+      String(expense.date || "").slice(0, 7) === monthFilter;
+
+    return categoryMatches && monthMatches;
+  });
+
+  const total = filtered.reduce(
+    (sum, expense) =>
+      sum + Number(expense.amount || 0),
+    0
+  );
+
+  summary.innerHTML = `
+    <div class="card" style="margin-bottom:12px">
+      <div style="font-size:.9em;color:var(--muted)">
+        مجموع المصاريف
+      </div>
+
+      <div style="font-size:1.5em;font-weight:bold;margin-top:6px">
+        TRY ${fmt(total)}
+      </div>
+
+      <div style="font-size:.85em;color:var(--muted);margin-top:5px">
+        عدد المصاريف: ${filtered.length}
+      </div>
+    </div>
+  `;
+
+  if (!filtered.length) {
+    list.innerHTML = `
+      <div class="empty-state">
+        <div style="font-size:48px">💸</div>
+        <h3>لا توجد مصاريف</h3>
+        <p>اضغط على زر إضافة مصروف لتسجيل أول مصروف.</p>
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML = filtered
+    .map(
+      (expense) => `
+        <div class="card" style="margin-bottom:12px">
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            gap:12px;
+            align-items:flex-start;
+          ">
+            <div>
+              <div style="font-weight:bold;font-size:1.05em">
+                ${escapeHtml(expense.title || "")}
+              </div>
+
+              <div style="
+                color:var(--muted);
+                font-size:.88em;
+                margin-top:5px;
+              ">
+                ${escapeHtml(expense.category || "أخرى")}
+                ·
+                ${formatDate(expense.date)}
+              </div>
+            </div>
+
+            <div style="
+              font-weight:bold;
+              font-size:1.15em;
+              color:#a52d25;
+              white-space:nowrap;
+            ">
+              TRY ${fmt(expense.amount || 0)}
+            </div>
+          </div>
+
+          ${
+            expense.note
+              ? `
+                <div style="
+                  margin-top:10px;
+                  color:var(--muted);
+                  font-size:.9em;
+                ">
+                  ${escapeHtml(expense.note)}
+                </div>
+              `
+              : ""
+          }
+
+          <div style="
+            display:flex;
+            gap:10px;
+            margin-top:14px;
+          ">
+            <button
+              class="btn-edit"
+              type="button"
+              onclick="openExpenseModal('${expense._id}')"
+            >
+              تعديل
+            </button>
+
+            <button
+              class="btn-danger"
+              type="button"
+              onclick="deleteExpense('${expense._id}')"
+            >
+              حذف
+            </button>
+          </div>
+        </div>
+      `
+    )
+    .join("");
+}
+
+/* حماية النصوص المعروضة */
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+/* تشغيل فلاتر المصاريف */
+document
+  .getElementById("exp-filter-category")
+  ?.addEventListener("change", renderExpenses);
+
+document
+  .getElementById("exp-filter-month")
+  ?.addEventListener("change", renderExpenses);
+
+/* تحميل المصاريف عند فتح التطبيق */
+loadExpenses();
 /* ═══════════════════════════════════════
    DASHBOARD
 ═══════════════════════════════════════ */
