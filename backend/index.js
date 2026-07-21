@@ -84,9 +84,20 @@ app.use("/account",  require("./routes/account"));
 /* —— Catch-all → SPA —— */
 
 app.get("/", (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "public", "index.html")
-  );
+  res.status(200).send(`
+    <!DOCTYPE html>
+    <html lang="ar" dir="rtl">
+      <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="refresh" content="0;url=/app">
+        <title>دوامي</title>
+      </head>
+      <body>
+        <script>window.location.replace("/app");</script>
+        جاري فتح تطبيق دوامي...
+      </body>
+    </html>
+  `);
 });
 
 app.get("/{*splat}", (req, res) => {
