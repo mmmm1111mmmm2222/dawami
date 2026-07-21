@@ -1997,14 +1997,34 @@ function renderReports() {
     byCur[c].received += w.amountReceived || 0;
     byCur[c].days++;
   });
+const expenseByCur = {};
 
-  const summaryRows = Object.entries(byCur).map(([c,v]) => `
-    <tr>
-      <td>${c}</td><td>${v.days}</td>
-      <td>${fmt(v.earned)}</td><td>${fmt(v.received)}</td>
-      <td>${fmt(Math.max(0,v.earned-v.received))}</td>
-    </tr>
-  `).join('');
+expenses.forEach(expense => {
+  const c = expense.currency || "TRY";
+
+  if (!expenseByCur[c]) {
+    expenseByCur[c] = 0;
+  }
+
+  expenseByCur[c] += Number(expense.amount || 0);
+});
+const summaryRows =
+  Object.entries(byCur).map(([c, v]) => {
+    const expenseTotal = expenseByCur[c] || 0;
+    const netProfit = v.earned - expenseTotal;
+
+    return `
+      <tr>
+        <td>${c}</td>
+        <td>${v.days}</td>
+        <td>${fmt(v.earned)}</td>
+        <td>${fmt(v.received)}</td>
+        <td>${fmt(Math.max(0, v.earned - v.received))}</td>
+        <td>${fmt(expenseTotal)}</td>
+        <td>${fmt(netProfit)}</td>
+      </tr>
+    `;
+  }).join('');
 
   const dayRows = filtered.map(w => `
     <tr>
@@ -2024,7 +2044,12 @@ function renderReports() {
       <div class="card-header"><span class="icon">💱</span><h2>ملخص حسب العملة</h2></div>
       <div class="card-body">
         <div class="tbl-wrap"><table>
-          <thead><tr><th>العملة</th><th>الأيام</th><th>المكتسب</th><th>المستلم</th><th>المتبقي</th></tr></thead>
+<thead><tr><th>العملة</th>
+<th>الأيام</th><th>المكتسب</th>
+<th>المستلم</th><th>المتبقي</th>
+<th>المصاريف</th>
+<th>صافي الربح</th></tr>
+</thead>
           <tbody>${summaryRows}</tbody>
         </table></div>
       </div>
