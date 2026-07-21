@@ -120,30 +120,46 @@ router.post("/forgot-password", async (req, res) => {
 
     // Send email
     try {
-      await resend.emails.send({
-        from: FROM_EMAIL,
-        to:   user.email,
-        subject: "إعادة تعيين كلمة المرور — داوامي",
-        html: `
-          <div dir="rtl" style="font-family:Arial,sans-serif;max-width:480px;margin:auto">
-            <h2 style="color:#1a6b4a">🗓️ داوامي</h2>
-            <p>مرحباً <strong>${user.name}</strong>،</p>
-            <p>تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بحسابك.</p>
-            <p>
-              <a href="${resetUrl}"
-                 style="display:inline-block;background:#1a6b4a;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold">
-                إعادة تعيين كلمة المرور
-              </a>
-            </p>
-            <p style="color:#888;font-size:.85rem">الرابط صالح لمدة ساعة واحدة فقط.<br>إن لم تطلب هذا، يمكنك تجاهل هذه الرسالة.</p>
-            <hr style="border:none;border-top:1px solid #eee;margin:20px 0"/>
-            <p style="color:#aaa;font-size:.75rem">داوامي — تطبيق تتبع أيام العمل</p>
-          </div>
-        `,
-      });
-    } catch (emailErr) {
-      console.error("Email send error:", emailErr.message);
-      // Still return success so the UI doesn't expose info
+  const { data, error } = await resend.emails.send({
+    from: FROM_EMAIL,
+    to: [user.email],
+    subject: "إعادة تعيين كلمة المرور – دوامي",
+    html: `
+      <div dir="rtl" style="font-family:Arial,sans-serif;max-width:480px;margin:auto">
+        <h2 style="color:#1a6b4a">📅 دوامي</h2>
+
+        <p>مرحباً <strong>${user.name}</strong></p>
+
+        <p>تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بحسابك.</p>
+
+        <p>
+          <a href="${resetUrl}"
+             style="display:inline-block;background:#1a6b4a;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold">
+            إعادة تعيين كلمة المرور
+          </a>
+        </p>
+
+        <p style="color:#888;font-size:.85rem">
+          الرابط صالح لمدة ساعة واحدة فقط.<br>
+          إن لم تطلب هذا، يمكنك تجاهل هذه الرسالة.
+        </p>
+
+        <hr style="border:none;border-top:1px solid #eee;margin:20px 0">
+
+        <p style="color:#aaa;font-size:.75rem">
+          دوامي – تطبيق تتبع أيام العمل
+        </p>
+      </div>
+    `
+  });
+
+  if (error) {
+    console.error("Resend error:", error);
+  } else {
+    console.log("Email sent successfully:", data);
+  }
+} catch (emailErr) {
+  console.error("Email send exception:", emailErr);
     }
 
     res.json({ message: SAFE_MSG });
