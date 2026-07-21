@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1a6b4a" />
+  <title>إعادة تعيين كلمة المرور — دوامي</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #1a6b4a 0%, #0f5137 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #174d38;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 430px;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 30px 24px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.18);
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 34px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #71877d;
+      margin-bottom: 28px;
+      line-height: 1.8;
+    }
+
+    label {
+      display: block;
+      margin: 16px 4px 8px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #d7e5de;
+      border-radius: 12px;
+      font-size: 17px;
+      outline: none;
+      direction: ltr;
+      text-align: left;
+    }
+
+    input:focus {
+      border-color: #1a6b4a;
+      box-shadow: 0 0 0 3px rgba(26, 107, 74, 0.1);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #1a6b4a;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      margin-top: 18px;
+      padding: 13px;
+      border-radius: 10px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .message.success {
+      display: block;
+      background: #e7f6ed;
+      color: #17643f;
+      border: 1px solid #b7dfc6;
+    }
+
+    .message.error {
+      display: block;
+      background: #fff0ef;
+      color: #a52d25;
+      border: 1px solid #f0c5c1;
+    }
+
+    .back {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      color: #1a6b4a;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <div class="logo">دوامي 📅</div>
+
+    <p class="subtitle">
+      أدخل كلمة مرور جديدة لحسابك.<br />
+      يجب أن تتكون من 8 أحرف على الأقل.
+    </p>
+
+    <form id="resetForm">
+      <label for="password">كلمة المرور الجديدة</label>
+      <input
+        id="password"
+        type="password"
+        minlength="8"
+        autocomplete="new-password"
+        required
+      />
+
+      <label for="confirmPassword">تأكيد كلمة المرور</label>
+      <input
+        id="confirmPassword"
+        type="password"
+        minlength="8"
+        autocomplete="new-password"
+        required
+      />
+
+      <button id="submitButton" type="submit">
+        حفظ كلمة المرور الجديدة
+      </button>
+    </form>
+
+    <div id="message" class="message"></div>
+
+    <a class="back" href="/">العودة إلى تسجيل الدخول</a>
+  </main>
+
+  <script>
+    const form = document.getElementById("resetForm");
+    const passwordInput = document.getElementById("password");
+    const confirmInput = document.getElementById("confirmPassword");
+    const submitButton = document.getElementById("submitButton");
+    const messageBox = document.getElementById("message");
+
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+
+    function showMessage(text, type) {
+      messageBox.textContent = text;
+      messageBox.className = `message ${type}`;
+    }
+
+    if (!token) {
+      form.style.display = "none";
+      showMessage(
+        "رابط إعادة تعيين كلمة المرور غير صالح أو لا يحتوي على رمز.",
+        "error"
+      );
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const password = passwordInput.value;
+      const confirmPassword = confirmInput.value;
+
+      if (password.length < 8) {
+        showMessage("كلمة المرور يجب أن تكون 8 أحرف على الأقل.", "error");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showMessage("كلمتا المرور غير متطابقتين.", "error");
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = "جارٍ الحفظ...";
+      messageBox.className = "message";
+
+      try {
+        const response = await fetch("/auth/reset-password", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            token,
+            password
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "تعذر تغيير كلمة المرور.");
+        }
+
+        form.style.display = "none";
+        showMessage(
+          data.message || "تم تغيير كلمة المرور بنجاح. يمكنك تسجيل الدخول الآن.",
+          "success"
+        );
+
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 3000);
+      } catch (error) {
+        showMessage(error.message || "حدث خطأ في الاتصال بالخادم.", "error");
+        submitButton.disabled = false;
+        submitButton.textContent = "حفظ كلمة المرور الجديدة";
+      }
+    });
+  </script>
+</body>
+</html>
