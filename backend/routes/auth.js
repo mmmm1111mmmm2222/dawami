@@ -101,8 +101,23 @@ router.post("/forgot-password", async (req, res) => {
     if (!email || typeof email !== "string")
       return res.status(400).json({ error: "البريد الإلكتروني مطلوب" });
 
-    const user = await User.findOne({ email: email.toLowerCase().trim() });
-    if (!user) return res.json({ message: SAFE_MSG }); // silent — no enumeration
+    const normalizedEmail = email.toLowerCase().trim();
+
+const user = await User.findOne({
+  email: normalizedEmail
+});
+
+console.log("Forgot password email:", normalizedEmail);
+console.log("User found:", Boolean(user));
+console.log(
+  "Resend key exists:",
+  Boolean(process.env.RESEND_API_KEY)
+);
+
+if (!user) {
+  console.log("Password reset stopped: user not found");
+  return res.json({ message: SAFE_MSG });
+}
 
     // Generate token
     const plainToken  = crypto.randomBytes(32).toString("hex");
