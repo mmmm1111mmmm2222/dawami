@@ -2159,7 +2159,7 @@ pdfContainer.innerHTML = `
 
   const options = {
     margin: 8,
-    filename: "تقرير-دوامي.pdf",
+filename: `تقرير-دوامي-${month}-${year}.pdf`,
     image: {
       type: "jpeg",
       quality: 0.98
@@ -2183,7 +2183,7 @@ pdfContainer.innerHTML = `
 
     const file = new File(
       [blob],
-      "تقرير-دوامي.pdf",
+`تقرير-دوامي-${month}-${year}.pdf`,
       { type: "application/pdf" }
     );
 
