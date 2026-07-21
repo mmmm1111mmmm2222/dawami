@@ -1508,7 +1508,7 @@ let editingExpenseId = null;
 /* جلب المصاريف من الخادم */
 async function loadExpenses() {
   try {
-    expenses = await api("/expenses");
+    expenses = await api("GET", "/expenses");
     renderExpenses();
     buildExpenseMonthFilter();
   } catch (error) {
@@ -1597,17 +1597,19 @@ document
     };
 
     try {
-      if (editingExpenseId) {
-        await api(`/expenses/${editingExpenseId}`, {
-          method: "PUT",
-          body: JSON.stringify(body)
-        });
-      } else {
-        await api("/expenses", {
-          method: "POST",
-          body: JSON.stringify(body)
-        });
-      }
+if (editingExpenseId) {
+  await api(
+    "PUT",
+    `/expenses/${editingExpenseId}`,
+    body
+  );
+} else {
+  await api(
+    "POST",
+    "/expenses",
+    body
+  );
+}
 
       closeModal("modal-expense");
 
@@ -1637,9 +1639,10 @@ async function deleteExpense(id) {
   if (!confirmed) return;
 
   try {
-    await api(`/expenses/${id}`, {
-      method: "DELETE"
-    });
+await api(
+  "DELETE",
+  `/expenses/${id}`
+);
 
     toast("تم حذف المصروف");
     await loadExpenses();
