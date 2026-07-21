@@ -21,7 +21,12 @@ const expenseSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
-
+currency: {
+  type: String,
+  enum: ["TRY", "USD", "EUR"],
+  default: "TRY",
+  required: true,
+},
     category: {
       type: String,
       required: true,

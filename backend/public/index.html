@@ -749,7 +749,14 @@
             required
           />
         </div>
-
+<div class="form-group">
+  <label>العملة *</label>
+  <select id="expense-currency" required>
+    <option value="TRY">الليرة التركية TRY</option>
+    <option value="USD">الدولار USD</option>
+    <option value="EUR">اليورو EUR</option>
+  </select>
+</div>
         <div class="form-group">
           <label>التصنيف *</label>
           <select id="expense-category" required>
@@ -1536,7 +1543,8 @@ function openExpenseModal(id) {
 
   document.getElementById("expense-amount").value =
     expense?.amount ?? "";
-
+document.getElementById("expense-currency").value =
+  expense?.currency || "TRY";
   document.getElementById("expense-category").value =
     expense?.category || "أخرى";
 
@@ -1563,7 +1571,8 @@ document
     const amount = Number(
       document.getElementById("expense-amount").value
     );
-
+const currency =
+  document.getElementById("expense-currency").value;
     const category =
       document.getElementById("expense-category").value;
 
@@ -1588,13 +1597,14 @@ document
       return;
     }
 
-    const body = {
-      title,
-      amount,
-      category,
-      date,
-      note
-    };
+const body = {
+  title,
+  amount,
+  currency,
+  category,
+  date,
+  note
+};
 
     try {
 if (editingExpenseId) {

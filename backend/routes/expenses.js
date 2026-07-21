@@ -22,7 +22,7 @@ router.get("/", authMW, async (req, res) => {
 // إضافة مصروف
 router.post("/", authMW, async (req, res) => {
   try {
-    const { title, amount, category, date, note } = req.body;
+const { title, amount, currency, category, date, note } = req.body;
 
     if (!title || !String(title).trim()) {
       return res.status(400).json({ error: "اسم المصروف مطلوب" });
@@ -38,6 +38,7 @@ router.post("/", authMW, async (req, res) => {
       userId: req.userId,
       title: String(title).trim(),
       amount: numericAmount,
+      currency: currency || "TRY",
       category: String(category || "أخرى").trim(),
       date: date ? new Date(date) : new Date(),
       note: String(note || "").trim(),
@@ -53,7 +54,7 @@ router.post("/", authMW, async (req, res) => {
 // تعديل مصروف
 router.put("/:id", authMW, async (req, res) => {
   try {
-    const { title, amount, category, date, note } = req.body;
+const { title, amount, currency, category, date, note } = req.body;
     
 const update = {};
     if (amount !== undefined) {
@@ -67,7 +68,9 @@ const update = {};
 
       update.amount = numericAmount;
     }
-
+if (currency !== undefined) {
+  update.currency = currency;
+}
     if (category !== undefined) {
       update.category = String(category || "أخرى").trim();
     }
