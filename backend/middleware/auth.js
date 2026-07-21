@@ -16,13 +16,21 @@ module.exports = async function authMiddleware(req, res, next) {
 
   // If the token carries a version (tv), verify it still matches the user record.
   // Tokens without tv (legacy) are allowed through for backward compatibility.
-  if (decoded.tv !== undefined) {
-    const user = await User.findById(decoded.userId).select("tokenVersion").lean();
-    if (!user || decoded.tv !== user.tokenVersion) {
-      return res.status(401).json({ error: "انتهت الجلسة، يرجى تسجيل الدخول مجدداً" });
-    }
-  }
+if (decoded.tv !== undefined) {
+  const user = await User.findById(decoded.userId)
+    .select("tokenVersion")
+    .lean();
 
-  req.userId = decoded.userId;
-  next();
+  const savedVersion = user?.tokenVersion ?? 0;
+  const tokenVersion = decoded.tv ?? 0;
+
+  if (!user || tokenVersion !== savedVersion) {
+    return res.status(401).json({
+      error: "انتهت الجلسة، يرجى تسجيل الدخول مجددًا"
+    });
+  }
+}
+
+req.userId = decoded.userId;
+next();
 };
