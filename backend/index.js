@@ -77,9 +77,18 @@ app.use("/employers",require("./routes/employers"));
 app.use("/payments", require("./routes/payments"));
 app.use("/account",  require("./routes/account"));
 
-/* ── Catch-all → SPA ── */
+/* —— Catch-all → SPA —— */
+
+app.get("/", (req, res) => {
+  res.status(200).sendFile(
+    path.join(__dirname, "public", "index.html")
+  );
+});
+
 app.get("/{*splat}", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(
+    path.join(__dirname, "public", "index.html")
+  );
 });
 
 const PORT = process.env.PORT || 3000;
