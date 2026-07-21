@@ -6,7 +6,7 @@
      • Navigation when offline → serve /offline.html
 ═══════════════════════════════════════════ */
 
-const CACHE_NAME = 'dawami-shell-v1';
+const CACHE_NAME = 'dawami-shell-v2';
 
 const SHELL_URLS = [
   '/',
