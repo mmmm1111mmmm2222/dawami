@@ -75,12 +75,13 @@ app.use("/auth/login",            authLimiter);
 app.use("/auth/register",         authLimiter);
 app.use("/auth/request-deletion", resetLimiter);
 
-app.use("/auth",     require("./routes/auth"));
-app.use("/workdays", require("./routes/workdays"));
-app.use("/employers",require("./routes/employers"));
-app.use("/payments", require("./routes/payments"));
-app.use("/account",  require("./routes/account"));
 
+app.use("/auth", require("./routes/auth"));
+app.use("/workdays", require("./routes/workdays"));
+app.use("/employers", require("./routes/employers"));
+app.use("/payments", require("./routes/payments"));
+app.use("/expenses", require("./routes/expenses"));
+app.use("/account", require("./routes/account"));
 /* —— Catch-all → SPA —— */
 
 app.get("/", (req, res) => {
