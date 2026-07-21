@@ -1790,18 +1790,20 @@ function renderExpenses() {
                 margin-top:5px;
               ">
                 ${escapeHtml(expense.category || "أخرى")}
-                ·
-                ${formatDate(expense.date)}
+${expense.date ? formatDate(String(expense.date).slice(0, 10)) : "-"}                ·
+                
               </div>
             </div>
+<div style="
+  font-weight:bold;
+  font-size:1.15em;
+  color:#a52d25;
+  white-space:nowrap;
+">
+  ${expense.currency || "TRY"}
+  ${fmt(expense.amount || 0)}
+</div>
 
-            <div style="
-              font-weight:bold;
-              font-size:1.15em;
-              color:#a52d25;
-              white-space:nowrap;
-            ">
-              TRY ${fmt(expense.amount || 0)}
             </div>
           </div>
 
