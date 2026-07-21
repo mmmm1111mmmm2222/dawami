@@ -2241,10 +2241,7 @@ function exportPDF() {
       <td>${esc(w.employer?.name||'—')}</td>
       <td>${fmt(w.regularHours||w.hours||0)}</td>
       <td>${fmt(w.overtimeHours||0)}</td>
-<td>
-  <span>${fmt(w.totalDue || w.wage || 0)}</span>
-  <span style="margin-right:4px;">${w.currency || "USD"}</span>
-</td>
+<td>${w.currency || "USD"} ${fmt(w.totalDue || w.wage || 0)}</td>
       <td>${fmt(w.amountReceived||0)}</td>
       <td>${statusLabel(w.paymentStatus||'unpaid')}</td>
       <td>${esc(w.note||'')}</td>
