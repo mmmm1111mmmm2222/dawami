@@ -1981,9 +1981,40 @@ function getReportFiltered() {
     return true;
   });
 }
+function getReportExpensesFiltered() {
+  const month =
+    parseInt(document.getElementById("rep-month")?.value) || 0;
 
+  const year =
+    document.getElementById("rep-year")?.value || "";
+
+  return expenses.filter(expense => {
+    const date = expense.date
+      ? String(expense.date).slice(0, 10)
+      : "";
+
+    if (
+      month &&
+      date &&
+      parseInt(date.slice(5, 7)) !== month
+    ) {
+      return false;
+    }
+
+    if (
+      year &&
+      date &&
+      date.slice(0, 4) !== year
+    ) {
+      return false;
+    }
+
+    return true;
+  });
+                               }
 function renderReports() {
   const filtered = getReportFiltered();
+  const filteredExpenses = getReportExpensesFiltered();
   const area = document.getElementById('report-area');
   if (!filtered.length) {
     area.innerHTML = `<div class="empty"><div class="empty-icon">📊</div><p>لا توجد أيام عمل في هذه الفترة.</p></div>`;
@@ -2001,7 +2032,7 @@ function renderReports() {
   });
 const expenseByCur = {};
 
-expenses.forEach(expense => {
+filteredExpenses.forEach(expense => {
   const c = expense.currency || "TRY";
 
   if (!expenseByCur[c]) {
