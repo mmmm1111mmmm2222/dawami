@@ -2119,7 +2119,39 @@ const summaryRows =
 }
 async function sharePDF() {
   const reportArea = document.getElementById("report-area");
+const month =
+  document.getElementById("rep-month")?.selectedOptions[0]?.text || "";
 
+const year =
+  document.getElementById("rep-year")?.value || "";
+
+const pdfContainer = document.createElement("div");
+
+pdfContainer.style.direction = "rtl";
+pdfContainer.style.fontFamily = "Arial, sans-serif";
+pdfContainer.style.padding = "20px";
+
+pdfContainer.innerHTML = `
+  <div style="text-align:center; margin-bottom:20px;">
+    <h1 style="margin:0; color:#176b4b;">تقرير دوامي</h1>
+    <p style="margin-top:8px;">
+      الفترة: ${month} ${year}
+    </p>
+  </div>
+
+  ${reportArea.innerHTML}
+
+  <div style="
+    margin-top:20px;
+    padding-top:10px;
+    border-top:1px solid #ccc;
+    text-align:center;
+    font-size:12px;
+    color:#666;
+  ">
+    تم إنشاء هذا التقرير بواسطة تطبيق دوامي
+  </div>
+`;
   if (!reportArea || !reportArea.innerHTML.trim()) {
     toast("اعرض التقرير أولًا", "error");
     return;
@@ -2146,7 +2178,7 @@ async function sharePDF() {
   try {
     const blob = await html2pdf()
       .set(options)
-      .from(reportArea)
+.from(pdfContainer)
       .outputPdf("blob");
 
     const file = new File(
@@ -2168,7 +2200,7 @@ async function sharePDF() {
     } else {
       html2pdf()
         .set(options)
-        .from(reportArea)
+.from(pdfContainer)
         .save();
 
       toast("جهازك لا يدعم مشاركة الملف، تم تنزيله بدلًا من ذلك");
