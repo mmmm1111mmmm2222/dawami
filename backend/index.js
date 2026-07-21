@@ -84,7 +84,9 @@ app.use("/account",  require("./routes/account"));
 /* —— Catch-all → SPA —— */
 
 app.get("/", (req, res) => {
-  res.status(200).send("Dawami server is running");
+  res.sendFile(
+    path.join(__dirname, "public", "index.html")
+  );
 });
 
 app.get("/{*splat}", (req, res) => {
