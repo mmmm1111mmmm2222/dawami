@@ -2265,7 +2265,55 @@ function exportPDF() {
     </table>
     <div class="print-footer">تم إنشاء هذا التقرير بواسطة تطبيق داوامي — ${today}</div>
   `;
-  window.print();
+const reportArea = document.getElementById("report-area");
+
+const pdfContainer = document.createElement("div");
+pdfContainer.style.direction = "rtl";
+pdfContainer.style.fontFamily = "Arial, sans-serif";
+pdfContainer.style.padding = "20px";
+
+pdfContainer.innerHTML = `
+  <div style="text-align:center; margin-bottom:20px;">
+    <h1 style="margin:0; color:#176b4b;">تقرير دوامي</h1>
+    <p style="margin-top:8px;">الفترة: ${periodLabel}</p>
+  </div>
+
+  ${reportArea.innerHTML}
+
+  <div style="
+    margin-top:20px;
+    padding-top:10px;
+    border-top:1px solid #ccc;
+    text-align:center;
+    font-size:12px;
+    color:#666;
+  ">
+    تم إنشاء هذا التقرير بواسطة تطبيق دوامي
+  </div>
+`;
+
+const options = {
+  margin: 8,
+  filename: `تقرير-دوامي-${periodLabel.trim().replace(/\s+/g, "-")}.pdf`,
+  image: {
+    type: "jpeg",
+    quality: 0.98
+  },
+  html2canvas: {
+    scale: 2,
+    useCORS: true
+  },
+  jsPDF: {
+    unit: "mm",
+    format: "a4",
+    orientation: "portrait"
+  }
+};
+
+html2pdf()
+  .set(options)
+  .from(pdfContainer)
+  .save();
 }
 
 /* ═══════════════════════════════════════
