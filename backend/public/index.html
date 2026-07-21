@@ -327,13 +327,13 @@
         <div class="auth-field"><label>البريد الإلكتروني</label><input type="email" id="login-email" placeholder="example@email.com" required /></div>
         <div class="auth-field"><label>كلمة المرور</label><input type="password" id="login-pw" placeholder="••••••••" required /></div>
         <button class="btn-auth" type="submit" id="login-btn">دخول</button>
-      <button
-        type="button"
-        onclick="showForgotPassword()"
-        style="margin-top:12px;background:transparent;color:#1a6b4a;border:none;font-weight:bold;"
-      >
-        نسيت كلمة المرور؟
-      </button></form>
+<button
+  type="button"
+  onclick="window.showForgotPassword()"
+  style="margin-top:12px;background:transparent;color:#1a6b4a;border:none;font-weight:bold;"
+>
+  نسيت كلمة المرور؟
+</button>/form>
       <div class="auth-switch">ليس لديك حساب؟ <a onclick="showScreen('register')">أنشئ حساباً</a></div>
     </div>
   </div>
@@ -1698,7 +1698,10 @@ initApp();
       });
                                      }
 
-                                     async function showForgotPassword() { const email = prompt("أدخل بريدك الإلكتروني لإرسال رابط إعادة تعيين كلمة المرور:");
+window.showForgotPassword = async function () {
+  const email = prompt(
+    "أدخل بريدك الإلكتروني لإرسال رابط إعادة تعيين كلمة المرور:"
+  );
 
   if (!email) return;
 
@@ -1723,16 +1726,22 @@ initApp();
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || "تعذر إرسال رابط الاستعادة.");
+      throw new Error(
+        data.error || "تعذر إرسال رابط الاستعادة"
+      );
     }
 
     alert(
       data.message ||
-      "إذا كان البريد مسجلاً، فسيصلك رابط إعادة تعيين كلمة المرور خلال دقائق."
+      "إذا كان البريد مسجلاً فسيصلك رابط إعادة تعيين كلمة المرور خلال دقائق."
     );
   } catch (error) {
-    alert(error.message || "حدث خطأ في الاتصال بالخادم.");
-
-}</script>
+    alert(
+      error.message ||
+      "حدث خطأ في الاتصال بالخادم."
+    );
+  }
+};
+</script>                                     
 </body>
 </html>
