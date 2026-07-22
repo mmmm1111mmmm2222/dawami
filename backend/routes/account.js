@@ -9,7 +9,7 @@ const User     = require("../models/User");
 const WorkDay  = require("../models/WorkDay");
 const Employer = require("../models/Employer");
 const Payment  = require("../models/Payment");
-
+const Expense = require("../models/Expense");
 router.use(authMW);
 
 const BACKUP_VERSION = "2";
@@ -20,25 +20,29 @@ const BACKUP_VERSION = "2";
 ───────────────────────────────────────── */
 router.get("/export/json", async (req, res) => {
   try {
-    const [user, employers, workdays, payments] = await Promise.all([
-      User.findById(req.userId).select("-password -resetPasswordToken -resetPasswordExpires -tokenVersion"),
-      Employer.find({ userId: req.userId }).lean(),
-      WorkDay.find({ userId: req.userId }).lean(),
-      Payment.find({ userId: req.userId }).lean(),
-    ]);
+const [user, employers, workdays, payments, expenses] = await Promise.all([
+  User.findById(req.userId).select(
+    "-password -resetPasswordToken -resetPasswordExpires -tokenVersion"
+  ),
+  Employer.find({ userId: req.userId }).lean(),
+  WorkDay.find({ userId: req.userId }).lean(),
+  Payment.find({ userId: req.userId }).lean(),
+  Expense.find({ userId: req.userId }).lean()
+]);
 
-    const backup = {
-      version:     BACKUP_VERSION,
-      exportedAt:  new Date().toISOString(),
-      app:         "dawami",
-      account: {
-        name:  user.name,
-        email: user.email,
-      },
-      employers,
-      workdays,
-      payments,
-    };
+const backup = {
+  version: BACKUP_VERSION,
+  exportedAt: new Date().toISOString(),
+  app: "dawami",
+  account: {
+    name: user.name,
+    email: user.email
+  },
+  employers,
+  workdays,
+  payments,
+  expenses
+};
 
     res.setHeader("Content-Type", "application/json; charset=utf-8");
     res.setHeader("Content-Disposition", `attachment; filename="dawami-backup-${_dateStr()}.json"`);
@@ -149,10 +153,17 @@ router.post("/import", async (req, res) => {
     // Validate structure
     if (!backup || backup.app !== "dawami")
       return res.status(400).json({ error: "ملف النسخ الاحتياطي غير صالح" });
-    if (!Array.isArray(backup.employers) || !Array.isArray(backup.workdays) || !Array.isArray(backup.payments))
+    if (!Array.isArray(backup.employers) || !Array.isArray(backup.workdays) || !Array.isArray(backup.payments ||
+!Array.isArray(backup.expenses)))
       return res.status(400).json({ error: "بنية الملف غير مكتملة" });
 
-    const results = { employers: 0, workdays: 0, payments: 0, skipped: 0 };
+const results = {
+  employers: 0,
+  workdays: 0,
+  payments: 0,
+  expenses: 0,
+  skipped: 0
+};
 
     // ── Import employers ──
     const empIdMap = {}; // old _id → new _id
@@ -235,9 +246,39 @@ router.post("/import", async (req, res) => {
       });
       results.payments++;
     }
+// — Import expenses —
+for (const e of backup.expenses) {
+  const existing = await Expense.findOne({
+    userId: req.userId,
+    title: String(e.title || "").trim(),
+    amount: Number(e.amount) || 0,
+    date: e.date
+  });
 
+  if (existing) {
+    results.skipped++;
+    continue;
+  }
+
+  await Expense.create({
+    userId: req.userId,
+    title: String(e.title || "").trim(),
+    amount: Number(e.amount) || 0,
+    currency: e.currency || "TRY",
+    category: String(e.category || "أخرى").trim(),
+    date: e.date || new Date(),
+    note: e.note || ""
+  });
+
+  results.expenses++;
+}
     res.json({
-      message: `تم الاستيراد: ${results.employers} جهة عمل، ${results.workdays} يوم عمل، ${results.payments} دفعة. تم تخطي ${results.skipped} سجل مكرر.`,
+message: `تم الاستيراد:
+${results.employers} جهة عمل
+${results.workdays} يوم عمل
+${results.payments} دفعة
+${results.expenses} مصروف
+تم تخطي ${results.skipped} سجل مكرر`,
       results,
     });
   } catch (err) {

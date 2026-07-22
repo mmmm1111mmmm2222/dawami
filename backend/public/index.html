@@ -989,7 +989,8 @@ function logout() {
 }
 function downloadBackup() {
   const backup = {
-    version: 1,
+  app: "dawami",
+  version: 1,
     createdAt: new Date().toISOString(),
     user: currentUser || null,
     workdays,
@@ -1034,7 +1035,7 @@ function downloadBackup() {
     ) {
       throw new Error("ملف النسخة الاحتياطية غير صالح");
     }
-
+await api('POST', '/account/import', backup);
     workdays = backup.workdays;
     employers = backup.employers;
     payments = backup.payments;
