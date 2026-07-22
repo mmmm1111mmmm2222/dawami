@@ -3077,37 +3077,30 @@ const canvas = await html2pdf()
   .toCanvas()
   .get("canvas");
 
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF("portrait", "mm", "a4");
 
-    const pageWidth = 210;
-    const pageHeight = 297;
-    const margin = 4;
 
-    const maxWidth = pageWidth - margin * 2;
-    const maxHeight = pageHeight - margin * 2;
+const worker = html2pdf()
+  .set({
+    margin: 4,
+    filename,
+    image: {
+      type: "jpeg",
+      quality: 0.98
+    },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff"
+    },
+    jsPDF: {
+      unit: "mm",
+      format: "a4",
+      orientation: "portrait"
+    }
+  })
+  .from(container);
 
-    const ratio = Math.min(
-      maxWidth / canvas.width,
-      maxHeight / canvas.height
-    );
-
-    const imageWidth = canvas.width * ratio;
-    const imageHeight = canvas.height * ratio;
-
-    const x = (pageWidth - imageWidth) / 2;
-    const y = (pageHeight - imageHeight) / 2;
-
-    pdf.addImage(
-      canvas.toDataURL("image/jpeg", 0.98),
-      "JPEG",
-      x,
-      y,
-      imageWidth,
-      imageHeight
-    );
-
-    pdf.save(filename);
+await worker.save();
     toast("PDF dosyası indirildi");
   } catch (error) {
     console.error(error);
