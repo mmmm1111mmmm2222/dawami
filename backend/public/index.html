@@ -3172,7 +3172,15 @@ areaClone.querySelectorAll(".monthly-plan-row").forEach((row) => {
 ${areaClone.innerHTML}
 </div>
   `;
-
+container.style.position = "fixed";
+container.style.left = "-10000px";
+container.style.top = "0";
+container.style.margin = "0";
+container.style.padding = "8px";
+container.style.height = "auto";
+container.style.minHeight = "0";
+container.style.maxHeight = "none";
+container.style.overflow = "visible";
   document.body.appendChild(container);
 
   try {
