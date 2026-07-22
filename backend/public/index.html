@@ -2889,24 +2889,83 @@ function updateMonthlyPlanTotal() {
     color:#222;
   `;
 
-  container.innerHTML = `
+const rows = Array.from(
+  area.querySelectorAll(".monthly-plan-row")
+);
+
+const totalText =
+  document.getElementById("monthly-plan-total")
+    ?.textContent || "0";
+
+const rowsPerPage = 10;
+const pages = [];
+
+for (let i = 0; i < rows.length; i += rowsPerPage) {
+  const pageRows = rows
+    .slice(i, i + rowsPerPage)
+    .map(row => row.outerHTML)
+    .join("");
+
+  const isLastPage =
+    i + rowsPerPage >= rows.length;
+
+  pages.push(`
     <div style="
-      text-align:center;
-      margin-bottom:14px;
-      padding-bottom:10px;
-      border-bottom:2px solid #1e704f;
+      width:100%;
+      box-sizing:border-box;
+      padding:4px;
+      page-break-after:${isLastPage ? "auto" : "always"};
+      break-after:${isLastPage ? "auto" : "page"};
     ">
-      <h2 style="margin:0 0 6px;">
-        Aylık Çalışma Çizelgesi
-      </h2>
+      <div style="
+        text-align:center;
+        margin-bottom:8px;
+        padding-bottom:6px;
+        border-bottom:2px solid #1e704f;
+      ">
+        <h2 style="
+          margin:0 0 3px;
+          font-size:17px;
+        ">
+          Aylık Çalışma Çizelgesi
+        </h2>
 
-      <div style="font-size:16px;font-weight:bold;">
-        ${monthName} ${year}
+        <div style="
+          font-size:13px;
+          font-weight:bold;
+        ">
+          ${monthName} ${year}
+        </div>
       </div>
-    </div>
 
-    ${area.innerHTML}
-  `;
+      <div style="
+        direction:ltr;
+        text-align:left;
+      ">
+        ${pageRows}
+      </div>
+
+      ${
+        isLastPage
+          ? `
+            <div style="
+              margin-top:8px;
+              padding-top:7px;
+              border-top:2px solid #1e704f;
+              font-size:15px;
+              font-weight:bold;
+              text-align:left;
+            ">
+              Aylık Toplam: ${totalText}
+            </div>
+          `
+          : ""
+      }
+    </div>
+  `);
+}
+
+container.innerHTML = pages.join("");
 
   return {
     container,
