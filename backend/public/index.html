@@ -677,13 +677,14 @@ td {
   <label>تأكيد كلمة المرور الجديدة</label>
 
   <div style="position:relative;">
-    <input
-      id="confirm-new-password"
-      type="password"
-      placeholder="أعد كتابة كلمة المرور الجديدة"
-      style="padding-left:48px;"
-    />
 
+<input
+  id="confirm-new-password"
+  type="password"
+  placeholder="أعد كتابة كلمة المرور الجديدة"
+  style="padding-left:48px;"
+  oninput="checkPasswordMatch()"
+/>
     <button
       type="button"
       onclick="togglePassword('confirm-new-password', this)"
@@ -702,8 +703,10 @@ td {
       👁️
     </button>
   </div>
+<div id="password-match" style="margin-top:6px; font-size:.8rem;">
+  مطابقة كلمة المرور: لم تُكتب بعد
 </div>
-
+        </div>
   <button
     class="btn-secondary"
     type="button"
@@ -1141,11 +1144,29 @@ function logout() {
     button.textContent = "👁️";
   }
 }
+function checkPasswordMatch() {
+  const newPassword = document.getElementById("new-password").value;
+  const confirmPassword = document.getElementById("confirm-new-password").value;
+  const box = document.getElementById("password-match");
+
+  if (!confirmPassword) {
+    box.textContent = "مطابقة كلمة المرور: لم تُكتب بعد";
+    box.style.color = "var(--muted)";
+    return;
+  }
+
+  if (newPassword === confirmPassword) {
+    box.textContent = "مطابقة كلمة المرور: متطابقتان";
+    box.style.color = "#1e8449";
+  } else {
+    box.textContent = "مطابقة كلمة المرور: غير متطابقتين";
+    box.style.color = "#c0392b";
+  }
+}
   async function changePassword() {
   const currentPassword = document
     .getElementById("current-password")
     .value.trim();
-
   const newPassword = document
     .getElementById("new-password")
     .value.trim();
