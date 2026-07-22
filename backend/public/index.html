@@ -3050,10 +3050,25 @@ areaClone.style.maxHeight = "none";
 areaClone.style.overflow = "visible";
 areaClone.style.position = "static";
 areaClone.style.transform = "none";
+areaClone.removeAttribute("style");
 
+areaClone.style.cssText = `
+  display:block;
+  width:100%;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  overflow:visible !important;
+  position:static !important;
+  transform:none !important;
+`;
 areaClone.querySelectorAll("*").forEach((el) => {
+  el.style.height = "auto";
+  el.style.minHeight = "0";
   el.style.maxHeight = "none";
   el.style.overflow = "visible";
+  el.style.position = "static";
+  el.style.transform = "none";
 });
 
 areaClone.querySelectorAll(".monthly-plan-row").forEach((row) => {
