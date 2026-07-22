@@ -1050,7 +1050,7 @@ function downloadBackup() {
     toast("تمت استعادة النسخة الاحتياطية بنجاح");
   } catch (error) {
     console.error(error);
-    toast("تعذر استعادة النسخة الاحتياطية", "error");
+toast("خطأ: " + error.message, "error");
   } finally {
     event.target.value = "";
   }
