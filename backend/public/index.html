@@ -1148,7 +1148,14 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   token = data.token; currentUser = data.user;
   localStorage.setItem('dawami_token', token);
   localStorage.setItem('dawami_user', JSON.stringify(currentUser));
+try {
   await initApp();
+} catch (error) {
+  console.error(error);
+  err.textContent = error.message || "حدث خطأ أثناء فتح التطبيق";
+  err.classList.add("show");
+  showScreen("app");
+}
 });
 
 document.getElementById('reg-form').addEventListener('submit', async (e) => {
