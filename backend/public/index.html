@@ -3044,6 +3044,17 @@ async function exportMonthlyPlanPDF() {
     direction:ltr;
   `;
 const areaClone = area.cloneNode(true);
+areaClone.style.height = "auto";
+areaClone.style.minHeight = "0";
+areaClone.style.maxHeight = "none";
+areaClone.style.overflow = "visible";
+areaClone.style.position = "static";
+areaClone.style.transform = "none";
+
+areaClone.querySelectorAll("*").forEach((el) => {
+  el.style.maxHeight = "none";
+  el.style.overflow = "visible";
+});
 
 areaClone.querySelectorAll(".monthly-plan-row").forEach((row) => {
   const dayText =
