@@ -643,13 +643,14 @@ td {
   <label>كلمة المرور الجديدة</label>
 
   <div style="position:relative;">
-    <input
-      id="new-password"
-      type="password"
-      placeholder="أدخل كلمة المرور الجديدة"
-      style="padding-left:48px;"
-    />
 
+<input
+  id="new-password"
+  type="password"
+  placeholder="أدخل كلمة المرور الجديدة"
+  style="padding-left:48px;"
+  oninput="checkPasswordStrength()"
+/>
     <button
       type="button"
       onclick="togglePassword('new-password', this)"
@@ -669,7 +670,9 @@ td {
     </button>
   </div>
 </div>
-
+<div id="password-strength" style="margin-top:6px; font-size:.8rem;">
+  قوة كلمة المرور: لم تُكتب بعد
+</div>
 <div class="form-group">
   <label>تأكيد كلمة المرور الجديدة</label>
 
@@ -1096,6 +1099,36 @@ function logout() {
   localStorage.removeItem('dawami_token');
   localStorage.removeItem('dawami_user');
   showScreen('login');
+}function checkPasswordStrength() {
+  const input = document.getElementById("new-password");
+  const box = document.getElementById("password-strength");
+  const password = input.value;
+
+  if (!password) {
+    box.textContent = "قوة كلمة المرور: لم تُكتب بعد";
+    box.style.color = "var(--muted)";
+    return;
+  }
+
+  let score = 0;
+
+  if (password.length >= 6) score++;
+  if (password.length >= 10) score++;
+  if (/[A-Z]/.test(password)) score++;
+  if (/[a-z]/.test(password)) score++;
+  if (/[0-9]/.test(password)) score++;
+  if (/[^A-Za-z0-9]/.test(password)) score++;
+
+  if (score <= 2) {
+    box.textContent = "قوة كلمة المرور: ضعيفة";
+    box.style.color = "#c0392b";
+  } else if (score <= 4) {
+    box.textContent = "قوة كلمة المرور: متوسطة";
+    box.style.color = "#d68910";
+  } else {
+    box.textContent = "قوة كلمة المرور: قوية";
+    box.style.color = "#1e8449";
+  }
 }
   function togglePassword(inputId, button) {
   const input = document.getElementById(inputId);
