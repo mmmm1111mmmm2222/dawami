@@ -2923,26 +2923,29 @@ async function exportMonthlyPlanPDF() {
   const filename =
     `Aylik-Calisma-Cizelgesi-${pdfData.monthName}-${pdfData.year}.pdf`;
 
-  const options = {
-margin: 2,
-    filename,
-    image: {
-      type: "jpeg",
-      quality: 0.98
-    },
-    html2canvas: {
-scale: 1.5,
-      useCORS: true
-    },
-    jsPDF: {
-      unit: "mm",
-      format: "a4",
-      orientation: "portrait"
-    },
-    pagebreak: {
-mode: ["css", "legacy"]
-    }
-  };
+const options = {
+  margin: 2,
+  filename,
+  image: {
+    type: "jpeg",
+    quality: 0.98
+  },
+  html2canvas: {
+    scale: 1.5,
+    useCORS: true,
+    windowWidth: 1200
+  },
+  jsPDF: {
+    unit: "mm",
+    format: "a4",
+    orientation: "portrait"
+  },
+  pagebreak: {
+    mode: ["css", "legacy"],
+    avoid: [".monthly-plan-row"]
+  }
+};
+
 
   try {
     await html2pdf()
@@ -2964,25 +2967,27 @@ async function shareMonthlyPlanPDF() {
   const filename =
     `Aylik-Calisma-Cizelgesi-${pdfData.monthName}-${pdfData.year}.pdf`;
 
-  const options = {
-margin: 2,
-    image: {
-      type: "jpeg",
-      quality: 0.98
-    },
-    html2canvas: {
-scale: 1.5,
-      useCORS: true
-    },
-    jsPDF: {
-      unit: "mm",
-      format: "a4",
-      orientation: "portrait"
-    },
-    pagebreak: {
-mode: ["css", "legacy"]
-    }
-  };
+const options = {
+  margin: 2,
+  image: {
+    type: "jpeg",
+    quality: 0.98
+  },
+  html2canvas: {
+    scale: 1.5,
+    useCORS: true,
+    windowWidth: 1200
+  },
+  jsPDF: {
+    unit: "mm",
+    format: "a4",
+    orientation: "portrait"
+  },
+  pagebreak: {
+    mode: ["css", "legacy"],
+    avoid: [".monthly-plan-row"]
+  }
+};
 
   try {
     const worker = html2pdf()
