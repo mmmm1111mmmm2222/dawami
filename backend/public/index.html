@@ -566,7 +566,79 @@ td {
       <div id="report-area"></div>
     </div>
   </div>
+<!-- — MONTHLY PLAN — -->
+<div id="tab-monthly-plan" class="tab-panel">
+  <div class="section" style="padding-top:14px; direction:ltr; text-align:left;">
 
+    <div class="card">
+      <div class="card-header">
+        <span class="icon">🗓️</span>
+        <h2>Aylık Çalışma Çizelgesi</h2>
+      </div>
+
+      <div class="card-body">
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Ay</label>
+            <select id="plan-month">
+              <option value="0">Ocak</option>
+              <option value="1">Şubat</option>
+              <option value="2">Mart</option>
+              <option value="3">Nisan</option>
+              <option value="4">Mayıs</option>
+              <option value="5">Haziran</option>
+              <option value="6">Temmuz</option>
+              <option value="7">Ağustos</option>
+              <option value="8">Eylül</option>
+              <option value="9">Ekim</option>
+              <option value="10">Kasım</option>
+              <option value="11">Aralık</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Yıl</label>
+            <select id="plan-year"></select>
+          </div>
+
+        </div>
+
+        <button
+          class="btn-primary"
+          type="button"
+          onclick="renderMonthlyPlan()"
+          style="width:100%; margin-top:10px;"
+        >
+          Çizelgeyi Göster
+        </button>
+      </div>
+    </div>
+
+    <div id="monthly-plan-area"></div>
+
+    <div style="display:flex; gap:8px; margin-top:12px;">
+      <button
+        class="btn-secondary"
+        type="button"
+        onclick="exportMonthlyPlanPDF()"
+        style="flex:1;"
+      >
+        PDF İndir
+      </button>
+
+      <button
+        class="btn-secondary"
+        type="button"
+        onclick="shareMonthlyPlanPDF()"
+        style="flex:1;"
+      >
+        PDF Paylaş
+      </button>
+    </div>
+
+  </div>
+</div>
   <!-- ── SETTINGS ── -->
   <div id="tab-settings" class="tab-panel">
     <div class="section">
@@ -729,6 +801,11 @@ td {
     <button class="nav-item"        data-tab="payments"  onclick="switchTab('payments')">  <span class="nav-icon">💰</span>الدفعات</button>
     <button class="nav-item"        data-tab="employers" onclick="switchTab('employers')"> <span class="nav-icon">🏢</span>جهات</button>
     <button class="nav-item"        data-tab="reports"   onclick="switchTab('reports')">   <span class="nav-icon">📊</span>التقارير</button>
+    <button class="nav-item"
+      data-tab="monthly-plan"
+      onclick="switchTab('monthly-plan')">
+      <span class="nav-icon">🗓️</span>المخطط
+    </button>
     <button class="nav-item"        data-tab="settings"  onclick="switchTab('settings')">  <span class="nav-icon">⚙️</span>الإعدادات</button>
   </nav>
 </div>
@@ -1283,7 +1360,16 @@ function showScreen(name) {
   if (s) s.classList.add('active');
 }
 
-const TAB_TITLES = { home:'لوحة التحكم', workdays:'أيام العمل', expenses:'المصاريف', payments:'الدفعات', employers:'جهات العمل', reports:'التقارير', settings:'الإعدادات' };
+const TAB_TITLES = {
+  home: 'لوحة التحكم',
+  workdays: 'أيام العمل',
+  expenses: 'المصاريف',
+  payments: 'الدفعات',
+  employers: 'جهات العمل',
+  reports: 'التقارير',
+  'monthly-plan': 'Aylık Çalışma Çizelgesi',
+  settings: 'الإعدادات'
+};
 
 function switchTab(tab) {
   activeTab = tab;
@@ -1299,8 +1385,8 @@ function switchTab(tab) {
   if (tab === 'payments')  renderPayments();
   if (tab === 'employers') renderEmployers();
   if (tab === 'reports')   renderReports();
-}
 
+if (tab === 'monthly-plan') renderMonthlyPlan();}
 /* ═══════════════════════════════════════
    INIT
 ═══════════════════════════════════════ */
@@ -2638,7 +2724,299 @@ html2pdf()
   .from(pdfContainer)
   .save();
 }
+function renderMonthlyPlan() {
+  const monthSelect = document.getElementById("plan-month");
+  const yearSelect = document.getElementById("plan-year");
+  const area = document.getElementById("monthly-plan-area");
 
+  if (!monthSelect || !yearSelect || !area) return;
+
+  if (!yearSelect.options.length) {
+    const currentYear = new Date().getFullYear();
+
+    for (let year = currentYear - 2; year <= currentYear + 3; year++) {
+      const option = document.createElement("option");
+      option.value = year;
+      option.textContent = year;
+      yearSelect.appendChild(option);
+    }
+
+    yearSelect.value = currentYear;
+    monthSelect.value = new Date().getMonth();
+  }
+
+  const month = Number(monthSelect.value);
+  const year = Number(yearSelect.value);
+
+  const monthNames = [
+    "Ocak", "Şubat", "Mart", "Nisan",
+    "Mayıs", "Haziran", "Temmuz", "Ağustos",
+    "Eylül", "Ekim", "Kasım", "Aralık"
+  ];
+
+  const dayNames = [
+    "Pazar", "Pazartesi", "Salı", "Çarşamba",
+    "Perşembe", "Cuma", "Cumartesi"
+  ];
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  let rows = "";
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(year, month, day);
+    const dayName = dayNames[date.getDay()];
+
+    rows += `
+      <div
+        class="monthly-plan-row"
+        data-day="${day}"
+        style="
+          display:grid;
+          grid-template-columns:90px 1fr 90px 90px;
+          gap:8px;
+          align-items:center;
+          border:1px solid var(--border);
+          border-radius:8px;
+          padding:8px;
+          margin-bottom:7px;
+          background:#fff;
+          direction:ltr;
+        "
+      >
+        <div style="font-weight:700;">
+          ${day} ${monthNames[month]}
+        </div>
+
+        <div>
+          ${dayName}
+        </div>
+
+        <select
+          class="plan-status"
+          onchange="updateMonthlyPlanTotal()"
+        >
+          <option value="work">Çalışma</option>
+          <option value="holiday">Tatil</option>
+        </select>
+
+        <input
+          type="number"
+          class="plan-amount"
+          min="0"
+          step="0.01"
+          placeholder="Tutar"
+          oninput="updateMonthlyPlanTotal()"
+        />
+      </div>
+    `;
+  }
+
+  area.innerHTML = `
+    <div class="card" style="margin-top:14px;">
+      <div class="card-header">
+        <span class="icon">📅</span>
+        <h2>${monthNames[month]} ${year}</h2>
+      </div>
+
+      <div class="card-body">
+        ${rows}
+
+        <div
+          style="
+            margin-top:14px;
+            padding:12px;
+            border-top:2px solid var(--border);
+            font-weight:700;
+            font-size:1rem;
+          "
+        >
+          Aylık Toplam:
+          <span id="monthly-plan-total">0</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  updateMonthlyPlanTotal();
+}
+
+function updateMonthlyPlanTotal() {
+  let total = 0;
+
+  document.querySelectorAll(".monthly-plan-row").forEach(row => {
+    const status = row.querySelector(".plan-status")?.value;
+    const amount = Number(row.querySelector(".plan-amount")?.value || 0);
+
+    if (status === "work") {
+      total += amount;
+    }
+  });
+
+  const totalBox = document.getElementById("monthly-plan-total");
+
+  if (totalBox) {
+    totalBox.textContent = total.toLocaleString("tr-TR", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    });
+  }
+}function getMonthlyPlanPDFContent() {
+  const area = document.getElementById("monthly-plan-area");
+  const monthSelect = document.getElementById("plan-month");
+  const yearSelect = document.getElementById("plan-year");
+
+  if (!area || !area.innerHTML.trim()) {
+    toast("اعرض المخطط أولاً", "error");
+    return null;
+  }
+
+  const monthName =
+    monthSelect.options[monthSelect.selectedIndex]?.textContent || "";
+
+  const year = yearSelect.value || "";
+
+  const container = document.createElement("div");
+
+  container.style.cssText = `
+    direction:ltr;
+    text-align:left;
+    font-family:Arial,sans-serif;
+    padding:12px;
+    background:#fff;
+    color:#222;
+  `;
+
+  container.innerHTML = `
+    <div style="
+      text-align:center;
+      margin-bottom:14px;
+      padding-bottom:10px;
+      border-bottom:2px solid #1e704f;
+    ">
+      <h2 style="margin:0 0 6px;">
+        Aylık Çalışma Çizelgesi
+      </h2>
+
+      <div style="font-size:16px;font-weight:bold;">
+        ${monthName} ${year}
+      </div>
+    </div>
+
+    ${area.innerHTML}
+  `;
+
+  return {
+    container,
+    monthName,
+    year
+  };
+}
+
+async function exportMonthlyPlanPDF() {
+  const pdfData = getMonthlyPlanPDFContent();
+
+  if (!pdfData) return;
+
+  const filename =
+    `Aylik-Calisma-Cizelgesi-${pdfData.monthName}-${pdfData.year}.pdf`;
+
+  const options = {
+    margin: 7,
+    filename,
+    image: {
+      type: "jpeg",
+      quality: 0.98
+    },
+    html2canvas: {
+      scale: 2,
+      useCORS: true
+    },
+    jsPDF: {
+      unit: "mm",
+      format: "a4",
+      orientation: "portrait"
+    },
+    pagebreak: {
+      mode: ["avoid-all", "css", "legacy"]
+    }
+  };
+
+  try {
+    await html2pdf()
+      .set(options)
+      .from(pdfData.container)
+      .save();
+
+    toast("PDF dosyası indirildi");
+  } catch (error) {
+    toast("PDF oluşturulamadı", "error");
+  }
+}
+
+async function shareMonthlyPlanPDF() {
+  const pdfData = getMonthlyPlanPDFContent();
+
+  if (!pdfData) return;
+
+  const filename =
+    `Aylik-Calisma-Cizelgesi-${pdfData.monthName}-${pdfData.year}.pdf`;
+
+  const options = {
+    margin: 7,
+    image: {
+      type: "jpeg",
+      quality: 0.98
+    },
+    html2canvas: {
+      scale: 2,
+      useCORS: true
+    },
+    jsPDF: {
+      unit: "mm",
+      format: "a4",
+      orientation: "portrait"
+    },
+    pagebreak: {
+      mode: ["avoid-all", "css", "legacy"]
+    }
+  };
+
+  try {
+    const worker = html2pdf()
+      .set(options)
+      .from(pdfData.container)
+      .toPdf();
+
+    const pdf = await worker.get("pdf");
+    const blob = pdf.output("blob");
+
+    const file = new File(
+      [blob],
+      filename,
+      { type: "application/pdf" }
+    );
+
+    if (
+      navigator.share &&
+      navigator.canShare &&
+      navigator.canShare({ files: [file] })
+    ) {
+      await navigator.share({
+        title: "Aylık Çalışma Çizelgesi",
+        text: `${pdfData.monthName} ${pdfData.year}`,
+        files: [file]
+      });
+    } else {
+      await exportMonthlyPlanPDF();
+      toast("مشاركة الملفات غير مدعومة، تم تنزيل PDF");
+    }
+  } catch (error) {
+    if (error.name !== "AbortError") {
+      toast("PDF paylaşılamadı", "error");
+    }
+  }
+    }
 /* ═══════════════════════════════════════
    DELETE CONFIRM
 ═══════════════════════════════════════ */
