@@ -2877,14 +2877,89 @@ style="width:100%; font-size:12px; padding:5px;"          onchange="updateMonthl
             font-size:1rem;
           "
         >
-          Aylık Toplam:
-          <span id="monthly-plan-total">0</span>
-        </div>
-      </div>
+Aylık Toplam:
+<span id="monthly-plan-total">0</span>
+</div>
+
+<div style="margin-top:14px;">
+  <label style="display:block;font-weight:700;margin-bottom:6px;">
+    Aylık Not:
+  </label>
+
+  <textarea
+    id="monthly-plan-note"
+    placeholder="Bu ay için işverene not yazın..."
+    style="
+      width:100%;
+      min-height:80px;
+      padding:10px;
+      border:1px solid var(--border);
+      border-radius:8px;
+      box-sizing:border-box;
+      resize:vertical;
+    "
+  ></textarea>
+</div>
+</div>
     </div>
   `;
 
   updateMonthlyPlanTotal();
+const storageKey = `monthly-plan-${year}-${month}`;
+
+function saveMonthlyPlan() {
+  const data = {
+    note: document.getElementById("monthly-plan-note")?.value || "",
+    days: []
+  };
+
+  document.querySelectorAll(".monthly-plan-row").forEach(row => {
+    data.days.push({
+      day: row.dataset.day,
+      status: row.querySelector(".plan-status")?.value || "work",
+      amount: row.querySelector(".plan-amount")?.value || ""
+    });
+  });
+
+  localStorage.setItem(storageKey, JSON.stringify(data));
+}
+
+function loadMonthlyPlan() {
+  const saved = localStorage.getItem(storageKey);
+  if (!saved) return;
+
+  const data = JSON.parse(saved);
+
+  document.querySelectorAll(".monthly-plan-row").forEach(row => {
+    const savedDay = data.days?.find(
+      item => String(item.day) === String(row.dataset.day)
+    );
+
+    if (savedDay) {
+      const status = row.querySelector(".plan-status");
+      const amount = row.querySelector(".plan-amount");
+
+      if (status) status.value = savedDay.status || "work";
+      if (amount) amount.value = savedDay.amount || "";
+    }
+  });
+
+  const noteBox = document.getElementById("monthly-plan-note");
+  if (noteBox) noteBox.value = data.note || "";
+
+  updateMonthlyPlanTotal();
+}
+
+document.querySelectorAll(".plan-status, .plan-amount").forEach(element => {
+  element.addEventListener("change", saveMonthlyPlan);
+  element.addEventListener("input", saveMonthlyPlan);
+});
+
+document
+  .getElementById("monthly-plan-note")
+  ?.addEventListener("input", saveMonthlyPlan);
+
+loadMonthlyPlan();  
 }
 
 function updateMonthlyPlanTotal() {
