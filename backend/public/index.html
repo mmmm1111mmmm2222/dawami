@@ -2084,7 +2084,7 @@ const summaryRows =
       <td>${esc(w.employer?.name||'—')}</td>
       <td>${fmt(w.regularHours||w.hours||0)}</td>
       <td>${fmt(w.overtimeHours||0)}</td>
-      <td>${fmt(w.totalDue||w.wage||0)} ${w.currency}</td>
+<td><span style="direction:ltr;unicode-bidi:isolate;display:inline-block;">${fmt(w.totalDue || w.wage || 0)}&nbsp;${w.currency || "USD"}</span></td>
       <td>${fmt(w.amountReceived||0)}</td>
       <td><span class="badge badge-${w.paymentStatus||'unpaid'}">${statusLabel(w.paymentStatus||'unpaid')}</span></td>
       <td>${esc(w.note||'')}</td>
