@@ -3275,19 +3275,76 @@ scale: 1,
 };
 
   try {
-    const worker = html2pdf()
-      .set(options)
-      .from(pdfData.container)
-      .toPdf();
+const container = pdfData.container;
 
-    const pdf = await worker.get("pdf");
-    const blob = pdf.output("blob");
+container.style.position = "fixed";
+container.style.left = "0";
+container.style.top = "0";
+container.style.width = "794px";
+container.style.zIndex = "-9999";
+container.style.pointerEvents = "none";
+container.style.margin = "0";
+container.style.padding = "8px";
+container.style.height = "auto";
+container.style.minHeight = "0";
+container.style.maxHeight = "none";
+container.style.overflow = "visible";
 
-    const file = new File(
-      [blob],
-      filename,
-      { type: "application/pdf" }
-    );
+document.body.appendChild(container);
+
+const canvas = await html2canvas(container, {
+  scale: 2,
+  useCORS: true,
+  backgroundColor: "#ffffff",
+  scrollX: 0,
+  scrollY: 0,
+  windowWidth: 794
+});
+
+const { jsPDF } = window.jspdf;
+
+const pdf = new jsPDF({
+  orientation: "portrait",
+  unit: "mm",
+  format: "a4"
+});
+
+const pageWidth = 210;
+const pageHeight = 297;
+const margin = 4;
+
+const maxWidth = pageWidth - margin * 2;
+const maxHeight = pageHeight - margin * 2;
+
+const ratio = Math.min(
+  maxWidth / canvas.width,
+  maxHeight / canvas.height
+);
+
+const imageWidth = canvas.width * ratio;
+const imageHeight = canvas.height * ratio;
+
+const x = (pageWidth - imageWidth) / 2;
+const y = 4;
+
+pdf.addImage(
+  canvas.toDataURL("image/jpeg", 0.98),
+  "JPEG",
+  x,
+  y,
+  imageWidth,
+  imageHeight
+);
+
+const blob = pdf.output("blob");
+
+const file = new File(
+  [blob],
+  filename,
+  { type: "application/pdf" }
+);
+
+container.remove();
 
     if (
       navigator.share &&
