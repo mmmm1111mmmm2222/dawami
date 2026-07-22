@@ -3059,7 +3059,26 @@ async function exportMonthlyPlanPDF() {
       </div>
     </div>
 
-    ${area.innerHTML}
+<style>
+  #pdf-plan,
+  #pdf-plan * {
+    color: #222 !important;
+    -webkit-text-fill-color: #222 !important;
+    opacity: 1 !important;
+  }
+
+  #pdf-plan input,
+  #pdf-plan select,
+  #pdf-plan option {
+    color: #222 !important;
+    -webkit-text-fill-color: #222 !important;
+    background: #fff !important;
+  }
+</style>
+
+<div id="pdf-plan">
+  ${area.innerHTML}
+</div>
   `;
 
   document.body.appendChild(container);
