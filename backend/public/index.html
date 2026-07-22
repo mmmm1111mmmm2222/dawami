@@ -2933,7 +2933,7 @@ function saveMonthlyPlan() {
 
   localStorage.setItem(storageKey, JSON.stringify(data));
 }
-function saveCurrentMonthlyPlan() {
+window.saveCurrentMonthlyPlan = function() {
   saveMonthlyPlan();
   updateMonthlyPlanTotal();
 
@@ -2963,7 +2963,7 @@ function saveCurrentMonthlyPlan() {
   });
 
   toast("Tablo kaydedildi");
-        }
+  };
 function loadMonthlyPlan() {
   const saved = localStorage.getItem(storageKey);
   if (!saved) return;
