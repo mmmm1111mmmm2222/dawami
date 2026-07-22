@@ -143,7 +143,13 @@
     .form-group { display: flex; flex-direction: column; gap: 5px; }
     .form-group.full { grid-column: 1 / -1; }
     label { font-size: .78rem; font-weight: 600; color: var(--muted); }
-    input[type=date], input[type=number], input[type=text], input[type=tel], textarea, select {
+input[type=date],
+input[type=number],
+input[type=text],
+input[type=tel],
+input[type=password],
+textarea,
+select {
       border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 11px;
       font-size: .9rem; font-family: inherit; color: var(--text); background: #fafafa;
       width: 100%; direction: rtl; transition: border-color .2s, box-shadow .2s;
