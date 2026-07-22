@@ -1168,7 +1168,17 @@ try {
   return;
 }
   btn.disabled = false; btn.textContent = 'دخول';
-  if (data.error) { err.textContent = data.error; err.classList.add('show'); return; }
+alert(
+  data.error
+    ? "خطأ: " + data.error
+    : "تم تسجيل الدخول بنجاح"
+);
+
+if (data.error) {
+  err.textContent = data.error;
+  err.classList.add("show");
+  return;
+}
   token = data.token; currentUser = data.user;
   localStorage.setItem('dawami_token', token);
   localStorage.setItem('dawami_user', JSON.stringify(currentUser));
