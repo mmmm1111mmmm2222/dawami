@@ -2347,7 +2347,14 @@ async function executeDelete() {
 /* ═══════════════════════════════════════
    UTILS
 ═══════════════════════════════════════ */
-function fmt(n) { const x = parseFloat(n)||0; return x%1===0 ? String(x) : x.toFixed(2); }
+function fmt(n) {
+  const x = parseFloat(n) || 0;
+
+  return x.toLocaleString("en-US", {
+    minimumFractionDigits: x % 1 === 0 ? 0 : 2,
+    maximumFractionDigits: 2
+  });
+}
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function todayStr() { return new Date().toISOString().slice(0,10); }
 function formatDate(d) {
