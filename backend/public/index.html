@@ -3197,12 +3197,28 @@ areaClone.querySelectorAll(".monthly-plan-row").forEach((row) => {
   const dayName =
     row.children[1]?.textContent?.trim() || "";
 
-  const select = row.querySelector("select");
-  const statusText =
-    select?.options[select.selectedIndex]?.textContent || "";
 
-  const input = row.querySelector("input");
-  const amountText = input?.value || "0";
+const originalRow = document.querySelector(
+  `.monthly-plan-row[data-day="${row.dataset.day}"]`
+);
+
+const originalSelect =
+  originalRow?.querySelector(".plan-status");
+
+const originalInput =
+  originalRow?.querySelector(".plan-amount");
+
+const isHoliday =
+  originalSelect?.value === "holiday";
+
+const statusText =
+  isHoliday ? "Tatil" : "Çalışma";
+
+const statusColor =
+  isHoliday ? "#d32f2f" : "#222";
+
+const amountText =
+  originalInput?.value || "";
 
   row.innerHTML = `
     <div style="
@@ -3219,17 +3235,17 @@ areaClone.querySelectorAll(".monthly-plan-row").forEach((row) => {
       color:#222;
       font-size:12px;
       opacity:1;
-      -webkit-text-fill-color:#222;
+-webkit-text-fill-color:#222;
     ">
       ${dayName}
     </div>
 
     <div style="
-      color:#222;
+      color:${statusColor};
       font-size:12px;
       text-align:center;
       opacity:1;
-      -webkit-text-fill-color:#222;
+      -webkit-text-fill-color:${statusColor};
     ">
       ${statusText}
     </div>
