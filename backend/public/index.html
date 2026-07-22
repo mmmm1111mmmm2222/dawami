@@ -3173,7 +3173,10 @@ ${areaClone.innerHTML}
 </div>
   `;
 container.style.position = "fixed";
-container.style.left = "-10000px";
+container.style.left = "0";
+container.style.width = "794px";
+container.style.zIndex = "-9999";
+container.style.pointerEvents = "none";  
 container.style.top = "0";
 container.style.margin = "0";
 container.style.padding = "8px";
