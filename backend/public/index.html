@@ -608,32 +608,98 @@ td {
 </div>    <div style="margin-bottom:16px;">
   <div class="sec-title">تغيير كلمة المرور</div>
 
-  <div class="form-group">
-    <label>كلمة المرور الحالية</label>
+<div class="form-group">
+  <label>كلمة المرور الحالية</label>
+
+  <div style="position:relative;">
     <input
       id="current-password"
       type="password"
       placeholder="أدخل كلمة المرور الحالية"
+      style="padding-left:48px;"
     />
-  </div>
 
-  <div class="form-group">
-    <label>كلمة المرور الجديدة</label>
+    <button
+      type="button"
+      onclick="togglePassword('current-password', this)"
+      style="
+        position:absolute;
+        left:6px;
+        top:50%;
+        transform:translateY(-50%);
+        border:none;
+        background:transparent;
+        font-size:1.2rem;
+        cursor:pointer;
+        padding:6px;
+      "
+    >
+      👁️
+    </button>
+  </div>
+</div>
+
+<div class="form-group">
+  <label>كلمة المرور الجديدة</label>
+
+  <div style="position:relative;">
     <input
       id="new-password"
       type="password"
       placeholder="أدخل كلمة المرور الجديدة"
+      style="padding-left:48px;"
     />
-  </div>
 
-  <div class="form-group">
-    <label>تأكيد كلمة المرور الجديدة</label>
+    <button
+      type="button"
+      onclick="togglePassword('new-password', this)"
+      style="
+        position:absolute;
+        left:6px;
+        top:50%;
+        transform:translateY(-50%);
+        border:none;
+        background:transparent;
+        font-size:1.2rem;
+        cursor:pointer;
+        padding:6px;
+      "
+    >
+      👁️
+    </button>
+  </div>
+</div>
+
+<div class="form-group">
+  <label>تأكيد كلمة المرور الجديدة</label>
+
+  <div style="position:relative;">
     <input
       id="confirm-new-password"
       type="password"
       placeholder="أعد كتابة كلمة المرور الجديدة"
+      style="padding-left:48px;"
     />
+
+    <button
+      type="button"
+      onclick="togglePassword('confirm-new-password', this)"
+      style="
+        position:absolute;
+        left:6px;
+        top:50%;
+        transform:translateY(-50%);
+        border:none;
+        background:transparent;
+        font-size:1.2rem;
+        cursor:pointer;
+        padding:6px;
+      "
+    >
+      👁️
+    </button>
   </div>
+</div>
 
   <button
     class="btn-secondary"
@@ -1030,6 +1096,17 @@ function logout() {
   localStorage.removeItem('dawami_token');
   localStorage.removeItem('dawami_user');
   showScreen('login');
+}
+  function togglePassword(inputId, button) {
+  const input = document.getElementById(inputId);
+
+  if (input.type === "password") {
+    input.type = "text";
+    button.textContent = "🙈";
+  } else {
+    input.type = "password";
+    button.textContent = "👁️";
+  }
 }
   async function changePassword() {
   const currentPassword = document
