@@ -3176,13 +3176,15 @@ const tempWorker = html2pdf()
   .toPdf();
 
 const tempPdf = await tempWorker.get("pdf");
-const JsPDFClass = tempPdf.constructor;
+const pdf = tempPdf;
 
-const pdf = new JsPDFClass({
-  orientation: "portrait",
-  unit: "mm",
-  format: "a4"
-});
+while (pdf.getNumberOfPages() > 1) {
+  pdf.deletePage(pdf.getNumberOfPages());
+}
+
+pdf.setPage(1);
+pdf.setFillColor(255, 255, 255);
+pdf.rect(0, 0, 210, 297, "F");
 
 const pageWidth = 210;
 const pageHeight = 297;
