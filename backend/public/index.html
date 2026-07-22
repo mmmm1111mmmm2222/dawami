@@ -3189,43 +3189,22 @@ container.style.overflow = "visible";
   document.body.appendChild(container);
 
   try {
-const canvas = await html2pdf()
-  .set({
-    html2canvas: {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: "#ffffff"
-    }
-  })
-  .from(container)
-  .toCanvas()
-  .get("canvas");
+const canvas = await html2canvas(container, {
+  scale: 2,
+  useCORS: true,
+  backgroundColor: "#ffffff",
+  scrollX: 0,
+  scrollY: 0,
+  windowWidth: 794
+});
 
+const { jsPDF } = window.jspdf;
 
-
-const tempWorker = html2pdf()
-  .set({
-    jsPDF: {
-      unit: "mm",
-      format: "a4",
-      orientation: "portrait"
-    }
-  })
-  .from(container)
-  .toPdf();
-
-const tempPdf = await tempWorker.get("pdf");
-const pdf = tempPdf;
-
-const totalPages = pdf.internal.getNumberOfPages();
-
-for (let page = totalPages; page >= 2; page--) {
-  pdf.deletePage(page);
-}
-
-pdf.setPage(1);
-pdf.setFillColor(255, 255, 255);
-pdf.rect(0, 0, 210, 297, "F");
+const pdf = new jsPDF({
+  orientation: "portrait",
+  unit: "mm",
+  format: "a4"
+});
 
 const pageWidth = 210;
 const pageHeight = 297;
@@ -3255,6 +3234,10 @@ pdf.addImage(
 );
 
 pdf.save(filename);
+
+
+
+
     toast("PDF dosyası indirildi");
   } catch (error) {
     console.error(error);
