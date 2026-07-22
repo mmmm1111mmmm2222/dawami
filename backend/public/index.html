@@ -395,7 +395,7 @@ td {
 </div>
 
 <!-- ══════════════════════════ APP ══════════════════════════ -->
-<div id="screen-app" class="screen active">
+<div id="screen-app" class="screen ">
 
   <header>
     <div class="header-inner">
@@ -1077,6 +1077,9 @@ td {
 
 <!-- ══════════════════════════ SCRIPTS ══════════════════════════ -->
 <script>
+  window.onerror = function(message, source, line) {
+    alert("خطأ: " + message + " — السطر: " + line);
+  };
 /* ═══════════════════════════════════════
    STATE
 ═══════════════════════════════════════ */
