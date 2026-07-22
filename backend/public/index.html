@@ -3061,7 +3061,22 @@ areaClone.querySelectorAll("input").forEach((input) => {
     "color:#222;font-size:14px;padding:6px 10px;";
   input.replaceWith(span);
 });
+areaClone.querySelectorAll(".monthly-plan-row").forEach((row) => {
+  const parts = row.querySelectorAll(":scope > div");
 
+  if (parts[0]) {
+    parts[0].style.color = "#222";
+    parts[0].style.webkitTextFillColor = "#222";
+    parts[0].style.fontWeight = "700";
+    parts[0].style.opacity = "1";
+  }
+
+  if (parts[1]) {
+    parts[1].style.color = "#222";
+    parts[1].style.webkitTextFillColor = "#222";
+    parts[1].style.opacity = "1";
+  }
+});
 areaClone.querySelectorAll("*").forEach((element) => {
   element.style.color = "#222";
   element.style.webkitTextFillColor = "#222";
