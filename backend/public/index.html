@@ -1077,9 +1077,11 @@ td {
 
 <!-- ══════════════════════════ SCRIPTS ══════════════════════════ -->
 <script>
-  window.onerror = function(message, source, line) {
-    alert("خطأ: " + message + " — السطر: " + line);
-  };
+window.addEventListener("error", function(e) {
+  alert("خطأ JavaScript: " + e.message + " — السطر: " + e.lineno);
+});
+</script><script>
+
 /* ═══════════════════════════════════════
    STATE
 ═══════════════════════════════════════ */
