@@ -3016,46 +3016,100 @@ container.innerHTML = pages.join("");
 }
 
 async function exportMonthlyPlanPDF() {
-  const pdfData = getMonthlyPlanPDFContent();
+  const area = document.getElementById("monthly-plan-area");
+  const monthSelect = document.getElementById("plan-month");
+  const yearSelect = document.getElementById("plan-year");
 
-  if (!pdfData) return;
+  if (!area || !area.innerHTML.trim()) {
+    toast("اعرض المخطط أولاً", "error");
+    return;
+  }
+
+  const monthName =
+    monthSelect.options[monthSelect.selectedIndex]?.textContent || "";
+  const year = yearSelect.value || "";
 
   const filename =
-    `Aylik-Calisma-Cizelgesi-${pdfData.monthName}-${pdfData.year}.pdf`;
+    `Aylik-Calisma-Cizelgesi-${monthName}-${year}.pdf`;
 
-const options = {
-  margin: 2,
-  filename,
-  image: {
-    type: "jpeg",
-    quality: 0.98
-  },
-  html2canvas: {
-scale: 1,    
-    useCORS: true,
+  const container = document.createElement("div");
 
-  },
-jsPDF: {
-    unit: "mm",
-    format: "a4",
-    orientation: "portrait"
+  container.style.cssText = `
+    width:1000px;
+    background:#fff;
+    color:#222;
+    padding:10px;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+    direction:ltr;
+  `;
 
-},
-};
+  container.innerHTML = `
+    <div style="
+      text-align:center;
+      margin-bottom:8px;
+      padding-bottom:6px;
+      border-bottom:2px solid #1e704f;
+    ">
+      <h2 style="margin:0 0 3px;font-size:17px;">
+        Aylık Çalışma Çizelgesi
+      </h2>
+      <div style="font-size:13px;font-weight:bold;">
+        ${monthName} ${year}
+      </div>
+    </div>
 
+    ${area.innerHTML}
+  `;
+
+  document.body.appendChild(container);
 
   try {
-    await html2pdf()
-      .set(options)
-      .from(pdfData.container)
-      .save();
+    const canvas = await html2canvas(container, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff"
+    });
 
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("portrait", "mm", "a4");
+
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 4;
+
+    const maxWidth = pageWidth - margin * 2;
+    const maxHeight = pageHeight - margin * 2;
+
+    const ratio = Math.min(
+      maxWidth / canvas.width,
+      maxHeight / canvas.height
+    );
+
+    const imageWidth = canvas.width * ratio;
+    const imageHeight = canvas.height * ratio;
+
+    const x = (pageWidth - imageWidth) / 2;
+    const y = (pageHeight - imageHeight) / 2;
+
+    pdf.addImage(
+      canvas.toDataURL("image/jpeg", 0.98),
+      "JPEG",
+      x,
+      y,
+      imageWidth,
+      imageHeight
+    );
+
+    pdf.save(filename);
     toast("PDF dosyası indirildi");
   } catch (error) {
+    console.error(error);
     toast("PDF oluşturulamadı", "error");
+  } finally {
+    container.remove();
   }
 }
-
 async function shareMonthlyPlanPDF() {
   const pdfData = getMonthlyPlanPDFContent();
 
