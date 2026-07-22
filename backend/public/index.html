@@ -395,7 +395,7 @@ td {
 </div>
 
 <!-- ══════════════════════════ APP ══════════════════════════ -->
-<div id="screen-app" class="screen">
+<div id="screen-app" class="screen active">
 
   <header>
     <div class="header-inner">
@@ -1168,11 +1168,7 @@ try {
   return;
 }
   btn.disabled = false; btn.textContent = 'دخول';
-alert(
-  data.error
-    ? "خطأ: " + data.error
-    : "تم تسجيل الدخول بنجاح"
-);
+
 
 if (data.error) {
   err.textContent = data.error;
