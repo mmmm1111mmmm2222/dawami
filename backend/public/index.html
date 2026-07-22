@@ -3105,6 +3105,7 @@ async function exportMonthlyPlanPDF() {
     toast("PDF dosyası indirildi");
   } catch (error) {
     console.error(error);
+    alert("PDF Hatası: " + error.message);
     toast("PDF oluşturulamadı", "error");
   } finally {
     container.remove();
