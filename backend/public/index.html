@@ -3065,11 +3065,17 @@ async function exportMonthlyPlanPDF() {
   document.body.appendChild(container);
 
   try {
-    const canvas = await html2canvas(container, {
+const canvas = await html2pdf()
+  .set({
+    html2canvas: {
       scale: 2,
       useCORS: true,
       backgroundColor: "#ffffff"
-    });
+    }
+  })
+  .from(container)
+  .toCanvas()
+  .get("canvas");
 
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF("portrait", "mm", "a4");
