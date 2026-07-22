@@ -3043,7 +3043,30 @@ async function exportMonthlyPlanPDF() {
     font-family:Arial,sans-serif;
     direction:ltr;
   `;
+const areaClone = area.cloneNode(true);
 
+areaClone.querySelectorAll("select").forEach((select) => {
+  const span = document.createElement("span");
+  span.textContent =
+    select.options[select.selectedIndex]?.textContent || "";
+  span.style.cssText =
+    "color:#222;font-size:14px;padding:6px 10px;";
+  select.replaceWith(span);
+});
+
+areaClone.querySelectorAll("input").forEach((input) => {
+  const span = document.createElement("span");
+  span.textContent = input.value || "0";
+  span.style.cssText =
+    "color:#222;font-size:14px;padding:6px 10px;";
+  input.replaceWith(span);
+});
+
+areaClone.querySelectorAll("*").forEach((element) => {
+  element.style.color = "#222";
+  element.style.webkitTextFillColor = "#222";
+  element.style.opacity = "1";
+});
   container.innerHTML = `
     <div style="
       text-align:center;
@@ -3077,7 +3100,7 @@ async function exportMonthlyPlanPDF() {
 </style>
 
 <div id="pdf-plan">
-  ${area.innerHTML}
+${areaClone.innerHTML}
 </div>
   `;
 
