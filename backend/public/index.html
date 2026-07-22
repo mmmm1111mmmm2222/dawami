@@ -571,7 +571,35 @@ td {
             <div class="sec-title">معلومات الحساب</div>
             <div style="font-size:.9rem;padding:10px 0" id="settings-user-info"></div>
           </div>
-          <button class="btn-danger" onclick="logout()" style="width:100%">تسجيل الخروج</button>
+<div style="margin-bottom:16px;">
+  <div class="sec-title">النسخ الاحتياطي</div>
+
+  <button
+    class="btn-secondary"
+    type="button"
+    onclick="downloadBackup()"
+    style="width:100%; margin-bottom:10px;"
+  >
+    تنزيل نسخة احتياطية
+  </button>
+
+  <button
+    class="btn-secondary"
+    type="button"
+    onclick="document.getElementById('backup-file').click()"
+    style="width:100%;"
+  >
+    استعادة نسخة احتياطية
+  </button>
+
+  <input
+    id="backup-file"
+    type="file"
+    accept=".json,application/json"
+    onchange="restoreBackup(event)"
+    style="display:none;"
+  />
+</div>          <button class="btn-danger" onclick="logout()" style="width:100%">تسجيل الخروج</button>
         </div>
       </div>
     </div>
@@ -959,7 +987,74 @@ function logout() {
   localStorage.removeItem('dawami_user');
   showScreen('login');
 }
+function downloadBackup() {
+  const backup = {
+    version: 1,
+    createdAt: new Date().toISOString(),
+    user: currentUser || null,
+    workdays,
+    employers,
+    payments,
+    expenses
+  };
 
+  const json = JSON.stringify(backup, null, 2);
+  const blob = new Blob([json], {
+    type: "application/json"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = `نسخة-احتياطية-دوامي-${todayStr()}.json`;
+
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  URL.revokeObjectURL(url);
+  toast("تم تنزيل النسخة الاحتياطية");
+  }
+  
+  async function restoreBackup(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  try {
+    const text = await file.text();
+    const backup = JSON.parse(text);
+
+    if (
+      !backup ||
+      !Array.isArray(backup.workdays) ||
+      !Array.isArray(backup.employers) ||
+      !Array.isArray(backup.payments) ||
+      !Array.isArray(backup.expenses)
+    ) {
+      throw new Error("ملف النسخة الاحتياطية غير صالح");
+    }
+
+    workdays = backup.workdays;
+    employers = backup.employers;
+    payments = backup.payments;
+    expenses = backup.expenses;
+
+    renderHome();
+    renderWorkdays();
+    renderEmployers();
+    renderPayments();
+    renderExpenses();
+    renderReports();
+
+    toast("تمت استعادة النسخة الاحتياطية بنجاح");
+  } catch (error) {
+    console.error(error);
+    toast("تعذر استعادة النسخة الاحتياطية", "error");
+  } finally {
+    event.target.value = "";
+  }
+    }
 /* ═══════════════════════════════════════
    SCREEN / TAB NAVIGATION
 ═══════════════════════════════════════ */
