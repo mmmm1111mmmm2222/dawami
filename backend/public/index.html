@@ -621,6 +621,16 @@ td {
 
     <div style="display:flex; gap:8px; margin-top:12px;">
       <button
+        class="btn-primary"
+        type="button"
+        onclick="saveCurrentMonthlyPlan()"
+        style="flex:1;"
+      >
+        Tabloyu Kaydet
+      </button>
+
+
+      <button
         class="btn-secondary"
         type="button"
         onclick="exportMonthlyPlanPDF()"
@@ -2923,7 +2933,37 @@ function saveMonthlyPlan() {
 
   localStorage.setItem(storageKey, JSON.stringify(data));
 }
+function saveCurrentMonthlyPlan() {
+  saveMonthlyPlan();
+  updateMonthlyPlanTotal();
 
+  document.querySelectorAll(".monthly-plan-row").forEach(row => {
+    const status = row.querySelector(".plan-status");
+    const amount = row.querySelector(".plan-amount");
+
+    if (status?.value === "holiday") {
+      status.style.color = "#d32f2f";
+      status.style.fontWeight = "700";
+      row.style.borderColor = "#d32f2f";
+    } else {
+      status.style.color = "";
+      status.style.fontWeight = "";
+      row.style.borderColor = "";
+    }
+
+    if (amount) {
+      amount.setAttribute("value", amount.value || "");
+    }
+
+    if (status) {
+      status.querySelectorAll("option").forEach(option => {
+        option.selected = option.value === status.value;
+      });
+    }
+  });
+
+  toast("Tablo kaydedildi");
+        }
 function loadMonthlyPlan() {
   const saved = localStorage.getItem(storageKey);
   if (!saved) return;
@@ -3092,7 +3132,9 @@ container.innerHTML = pages.join("");
   };
 }
 
-async function exportMonthlyPlanPDF() {
+async function exportMonthlyPlanPDF()
+{
+  saveCurrentMonthlyPlan(); 
   const area = document.getElementById("monthly-plan-area");
   const monthSelect = document.getElementById("plan-month");
   const yearSelect = document.getElementById("plan-year");
@@ -3323,6 +3365,7 @@ pdf.save(filename);
   }
 }
 async function shareMonthlyPlanPDF() {
+  saveCurrentMonthlyPlan();
   const pdfData = getMonthlyPlanPDFContent();
 
   if (!pdfData) return;
