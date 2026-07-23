@@ -2778,7 +2778,7 @@ html2pdf()
   .from(pdfContainer)
   .save();
 }
-function renderMonthlyPlan() {
+async function renderMonthlyPlan()
   const monthSelect = document.getElementById("plan-month");
   const yearSelect = document.getElementById("plan-year");
   const area = document.getElementById("monthly-plan-area");
@@ -2917,24 +2917,57 @@ Aylık Toplam:
   updateMonthlyPlanTotal();
 const storageKey = `monthly-plan-${year}-${month}`;
 
-function saveMonthlyPlan() {
+async function saveMonthlyPlan() {
+  const year = Number(
+    document.getElementById("plan-year")?.value
+  );
+
+  const month = Number(
+    document.getElementById("plan-month")?.value
+  );
+
   const data = {
-    note: document.getElementById("monthly-plan-note")?.value || "",
+    year,
+    month,
+    note:
+      document.getElementById("monthly-plan-note")?.value || "",
     days: []
   };
 
-  document.querySelectorAll(".monthly-plan-row").forEach(row => {
-    data.days.push({
-      day: row.dataset.day,
-      status: row.querySelector(".plan-status")?.value || "work",
-      amount: row.querySelector(".plan-amount")?.value || ""
+  document
+    .querySelectorAll(".monthly-plan-row")
+    .forEach(row => {
+      data.days.push({
+        day: Number(row.dataset.day),
+        status:
+          row.querySelector(".plan-status")?.value || "work",
+        amount:
+          Number(
+            row.querySelector(".plan-amount")?.value
+          ) || 0
+      });
     });
-  });
 
-  localStorage.setItem(storageKey, JSON.stringify(data));
+  localStorage.setItem(
+    storageKey,
+    JSON.stringify(data)
+  );
+
+  try {
+    await api(
+      "POST",
+      "/monthly-plans",
+      data
+    );
+
+    toast("تم حفظ الجدول");
+  } catch (error) {
+    console.error(error);
+    toast("تم الحفظ محليًا فقط", "error");
+  }
 }
-window.saveCurrentMonthlyPlan = function() {
-  saveMonthlyPlan();
+window.saveCurrentMonthlyPlan = async function() {
+  await saveMonthlyPlan();
   updateMonthlyPlanTotal();
 
   document.querySelectorAll(".monthly-plan-row").forEach(row => {
@@ -2964,31 +2997,73 @@ window.saveCurrentMonthlyPlan = function() {
 
   toast("Tablo kaydedildi");
   };
-function loadMonthlyPlan() {
-  const saved = localStorage.getItem(storageKey);
-  if (!saved) return;
+async function loadMonthlyPlan() {
+  const year = Number(
+    document.getElementById("plan-year")?.value
+  );
 
-  const data = JSON.parse(saved);
+  const month = Number(
+    document.getElementById("plan-month")?.value
+  );
 
-  document.querySelectorAll(".monthly-plan-row").forEach(row => {
-    const savedDay = data.days?.find(
-      item => String(item.day) === String(row.dataset.day)
+  let data = null;
+
+  try {
+    data = await api(
+      "GET",
+      `/monthly-plans?year=${year}&month=${month}`
     );
+  } catch (error) {
+    console.error(error);
+  }
 
-    if (savedDay) {
-      const status = row.querySelector(".plan-status");
-      const amount = row.querySelector(".plan-amount");
+  if (!data) {
+    const saved = localStorage.getItem(storageKey);
 
-      if (status) status.value = savedDay.status || "work";
-      if (amount) amount.value = savedDay.amount || "";
+    if (saved) {
+      data = JSON.parse(saved);
     }
-  });
+  }
 
-  const noteBox = document.getElementById("monthly-plan-note");
-  if (noteBox) noteBox.value = data.note || "";
+  if (!data) return;
+
+  document
+    .querySelectorAll(".monthly-plan-row")
+    .forEach(row => {
+      const savedDay = data.days?.find(
+        item =>
+          String(item.day) ===
+          String(row.dataset.day)
+      );
+
+      if (savedDay) {
+        const status =
+          row.querySelector(".plan-status");
+
+        const amount =
+          row.querySelector(".plan-amount");
+
+        if (status) {
+          status.value =
+            savedDay.status || "work";
+        }
+
+        if (amount) {
+          amount.value =
+            savedDay.amount || "";
+        }
+      }
+    });
+
+  const noteBox =
+    document.getElementById("monthly-plan-note");
+
+  if (noteBox) {
+    noteBox.value = data.note || "";
+  }
 
   updateMonthlyPlanTotal();
-}
+      }
 
 document.querySelectorAll(".plan-status, .plan-amount").forEach(element => {
   element.addEventListener("change", saveMonthlyPlan);
@@ -2999,7 +3074,7 @@ document
   .getElementById("monthly-plan-note")
   ?.addEventListener("input", saveMonthlyPlan);
 
-loadMonthlyPlan();  
+await loadMonthlyPlan();
 }
 
 function updateMonthlyPlanTotal() {

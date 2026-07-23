@@ -78,6 +78,10 @@ app.use("/auth/request-deletion", resetLimiter);
 
 app.use("/auth", require("./routes/auth"));
 app.use("/workdays", require("./routes/workdays"));
+app.use(
+  "/monthly-plans",
+  require("./routes/monthlyPlans")
+);
 app.use("/employers", require("./routes/employers"));
 app.use("/payments", require("./routes/payments"));
 app.use("/expenses", require("./routes/expenses"));
