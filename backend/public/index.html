@@ -628,7 +628,14 @@ td {
       >
         Tabloyu Kaydet
       </button>
-
+<button
+  class="btn-secondary"
+  type="button"
+  onclick="deleteCurrentMonthlyPlan()"
+  style="flex:1; background:#d32f2f; color:white;"
+>
+  Tabloyu Sil
+</button>
 
       <button
         class="btn-secondary"
@@ -2998,6 +3005,66 @@ window.saveCurrentMonthlyPlan = async function() {
 
   toast("Tablo kaydedildi");
   };
+window.deleteCurrentMonthlyPlan = async function() {
+  const year = Number(
+    document.getElementById("plan-year")?.value
+  );
+
+  const month = Number(
+    document.getElementById("plan-month")?.value
+  );
+
+  const confirmed = confirm(
+    "Bu aya ait tabloyu silmek istediğinize emin misiniz?"
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await api(
+      "DELETE",
+      `/monthly-plans?year=${year}&month=${month}`
+    );
+
+    localStorage.removeItem(storageKey);
+
+    document
+      .querySelectorAll(".monthly-plan-row")
+      .forEach(row => {
+        const status =
+          row.querySelector(".plan-status");
+
+        const amount =
+          row.querySelector(".plan-amount");
+
+        if (status) {
+          status.value = "work";
+          status.style.color = "";
+          status.style.fontWeight = "";
+        }
+
+        if (amount) {
+          amount.value = "";
+        }
+
+        row.style.borderColor = "";
+      });
+
+    const noteBox =
+      document.getElementById("monthly-plan-note");
+
+    if (noteBox) {
+      noteBox.value = "";
+    }
+
+    updateMonthlyPlanTotal();
+
+    toast("Tablo silindi");
+  } catch (error) {
+    console.error(error);
+    toast("Tablo silinemedi", "error");
+  }
+};  
 async function loadMonthlyPlan() {
   const year = Number(
     document.getElementById("plan-year")?.value
