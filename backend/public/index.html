@@ -642,7 +642,7 @@ td {
       <button
         class="btn-secondary"
         type="button"
-       onclick="exportMonthlyPlanPDF()" 
+onclick="shareMonthlyPlanPDF()"       
         style="flex:1;"
       >
         PDF Paylaş
@@ -3391,7 +3391,6 @@ async function shareMonthlyPlanPDF() {
     `Aylik-Calisma-Cizelgesi-${pdfData.monthName}-${pdfData.year}.pdf`;
 
   const container = pdfData.container;
-
   document.body.appendChild(container);
 
   try {
@@ -3469,6 +3468,7 @@ async function shareMonthlyPlanPDF() {
   } finally {
     container.remove();
   }
+        }
   }
 /* ═══════════════════════════════════════
    DELETE CONFIRM
