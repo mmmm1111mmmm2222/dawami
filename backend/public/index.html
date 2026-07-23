@@ -2963,7 +2963,7 @@ async function saveMonthlyPlan() {
     toast("تم حفظ الجدول");
   } catch (error) {
     console.error(error);
-alert("خطأ الحفظ السحابي: " + error.message);    
+
     toast("تم الحفظ محليًا فقط", "error");
   }
 }
