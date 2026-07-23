@@ -3198,9 +3198,10 @@ areaClone.querySelectorAll(".monthly-plan-row").forEach((row) => {
     row.children[1]?.textContent?.trim() || "";
 
 
-const originalRow = document.querySelector(
-  `.monthly-plan-row[data-day="${row.dataset.day}"]`
-);
+const originalRow =
+  area.querySelector(
+    `.monthly-plan-row[data-day="${row.dataset.day}"]`
+  );  
 
 const originalSelect =
   originalRow?.querySelector(".plan-status");
