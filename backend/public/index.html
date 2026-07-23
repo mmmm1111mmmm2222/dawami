@@ -3050,7 +3050,76 @@ function updateMonthlyPlanTotal() {
 
 const rows = Array.from(
   area.querySelectorAll(".monthly-plan-row")
-);
+).map(originalRow => {
+  const row = originalRow.cloneNode(true);
+
+  const dayText =
+    originalRow.children[0]?.textContent?.trim() || "";
+
+  const dayName =
+    originalRow.children[1]?.textContent?.trim() || "";
+
+  const originalSelect =
+    originalRow.querySelector(".plan-status");
+
+  const originalInput =
+    originalRow.querySelector(".plan-amount");
+
+  const isHoliday =
+    originalSelect?.value === "holiday";
+
+  const statusText =
+    isHoliday ? "Tatil" : "Çalışma";
+
+  const statusColor =
+    isHoliday ? "#d32f2f" : "#222";
+
+  const amountText =
+    originalInput?.value || "";
+
+  row.innerHTML = `
+    <div style="
+      color:#222;
+      font-weight:700;
+      font-size:12px;
+    ">
+      ${dayText}
+    </div>
+
+    <div style="
+      color:#222;
+      font-size:12px;
+    ">
+      ${dayName}
+    </div>
+
+    <div style="
+      color:${statusColor};
+      font-size:12px;
+      font-weight:${isHoliday ? "700" : "400"};
+      text-align:center;
+    ">
+      ${statusText}
+    </div>
+
+    <div style="
+      color:#222;
+      font-size:12px;
+      text-align:center;
+    ">
+      ${amountText}
+    </div>
+  `;
+
+  row.style.display = "grid";
+  row.style.gridTemplateColumns = "90px 1fr 80px 65px";
+  row.style.gap = "6px";
+  row.style.alignItems = "center";
+  row.style.direction = "ltr";
+  row.style.background = "#fff";
+
+  return row;
+});
 
 const totalText =
   document.getElementById("monthly-plan-total")
