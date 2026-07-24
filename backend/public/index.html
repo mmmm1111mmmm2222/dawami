@@ -3059,7 +3059,11 @@ window.deleteCurrentMonthlyPlan = async function() {
 
     updateMonthlyPlanTotal();
 
-    toast("Tablo silindi");
+const monthName =
+  document.getElementById("plan-month")
+    ?.selectedOptions?.[0]?.text || month;
+
+toast(`${monthName} ${year} tablosu silindi`);
   } catch (error) {
     console.error(error);
     toast("Tablo silinemedi", "error");
