@@ -2970,6 +2970,14 @@ async function saveMonthlyPlan() {
     );
 
     toast("تم حفظ الجدول");
+const deleteButton =
+  document.getElementById("delete-monthly-plan-btn");
+
+if (deleteButton) {
+  deleteButton.disabled = false;
+  deleteButton.style.opacity = "1";
+  deleteButton.style.cursor = "pointer";
+}    
   } catch (error) {
     console.error(error);
 
