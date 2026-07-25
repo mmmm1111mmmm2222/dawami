@@ -1140,16 +1140,21 @@ async function api(method, path, body) {
     data = {};
   }
 
-  if (res.status === 401) {
-    alert(
-      "خطأ تسجيل الدخول في الرابط:\n" +
-      path +
-      "\n\n" +
-      (data.error || "رمز الدخول مرفوض")
-    );
+if (res.status === 401) {
+  const hadSession =
+    Boolean(token) ||
+    Boolean(localStorage.getItem("dawami_token"));
 
-    return null;
+  if (hadSession) {
+    logout();
+    toast(
+      "انتهت جلسة الدخول، سجّل الدخول من جديد",
+      "error"
+    );
   }
+
+  return null;
+}
 
   return data;
 }
