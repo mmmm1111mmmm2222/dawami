@@ -620,15 +620,17 @@ td {
     <div id="monthly-plan-area"></div>
 
     <div style="display:flex; gap:8px; margin-top:12px;">
-      <button
-        class="btn-primary"
-        type="button"
-        onclick="saveCurrentMonthlyPlan()"
-        style="flex:1;"
-      >
-        Tabloyu Kaydet
-      </button>
 <button
+  class="btn-primary"
+  type="button"
+  onclick="saveCurrentMonthlyPlan()"
+  style="flex:1;"
+>
+  Tabloyu Kaydet
+</button>
+
+<button
+  id="delete-monthly-plan-btn"
   class="btn-secondary"
   type="button"
   onclick="deleteCurrentMonthlyPlan()"
@@ -3097,7 +3099,24 @@ async function loadMonthlyPlan() {
     }
   }
 
-  if (!data) return;
+const deleteButton =
+  document.getElementById("delete-monthly-plan-btn");
+
+if (!data) {
+  if (deleteButton) {
+    deleteButton.disabled = true;
+    deleteButton.style.opacity = "0.5";
+    deleteButton.style.cursor = "not-allowed";
+  }
+
+  return;
+}
+
+if (deleteButton) {
+  deleteButton.disabled = false;
+  deleteButton.style.opacity = "1";
+  deleteButton.style.cursor = "pointer";
+}
 
   document
     .querySelectorAll(".monthly-plan-row")
