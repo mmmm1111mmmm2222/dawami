@@ -1130,7 +1130,9 @@ async function api(method, path, body) {
   if (body) {
     opts.body = JSON.stringify(body);
   }
-
+if (method === "GET") {
+  opts.cache = "no-store";
+}
   const res = await fetch(path, opts);
 
   let data;
