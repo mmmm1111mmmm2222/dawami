@@ -1480,9 +1480,9 @@ async function loadAll() {
     api('GET', '/employers'),
     api('GET', '/payments'),
   ]);
-  workdays  = wd  || [];
-  employers = emp || [];
-  payments  = pay || [];
+workdays = Array.isArray(wd) ? wd : [];
+employers = Array.isArray(emp) ? emp : [];
+payments = Array.isArray(pay) ? pay : [];
 }
 
 async function loadWorkdays()  { const d = await api('GET','/workdays');  workdays  = d || []; }
@@ -1634,7 +1634,7 @@ function getFilteredWorkdays() {
   const month  = document.getElementById('wd-filter-month')?.value || '';
   const year   = document.getElementById('wd-filter-year')?.value || '';
   const status = document.getElementById('wd-filter-status')?.value || '';
-  return workdays.filter(w => {
+return (Array.isArray(workdays) ? workdays : []).filter(w => {
     if (emp    && (w.employer?._id || w.employer) !== emp) return false;
     if (month  && w.date && parseInt(w.date.slice(5,7)) !== parseInt(month)) return false;
     if (year   && w.date && w.date.slice(0,4) !== year) return false;
@@ -2013,10 +2013,15 @@ let editingExpenseId = null;
 /* جلب المصاريف من الخادم */
 async function loadExpenses() {
   try {
-expenses = await api(
+const expenseData = await api(
   "GET",
-`/expenses?refresh=${Date.now()}`
+  `/expenses?refresh=${Date.now()}`
 );
+
+expenses = Array.isArray(expenseData)
+  ? expenseData
+  : [];
+
     renderExpenses();
     buildExpenseMonthFilter();
   } catch (error) {
@@ -2225,7 +2230,8 @@ function renderExpenses() {
   const monthFilter =
     document.getElementById("exp-filter-month")?.value || "";
 
-  const filtered = expenses.filter((expense) => {
+const filtered =
+(Array.isArray(expenses) ? expenses : []).filter((expense) => {
     const categoryMatches =
       !categoryFilter ||
       expense.category === categoryFilter;

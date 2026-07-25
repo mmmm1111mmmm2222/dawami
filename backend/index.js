@@ -82,6 +82,10 @@ app.use(
   "/monthly-plans",
   require("./routes/monthlyPlans")
 );
+app.use(
+  "/companies",
+  require("./routes/companies")
+);
 app.use("/employers", require("./routes/employers"));
 app.use("/payments", require("./routes/payments"));
 app.use("/expenses", require("./routes/expenses"));

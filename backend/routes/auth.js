@@ -69,13 +69,18 @@ router.post("/login", async (req, res) => {
     if (!email || !password)
       return res.status(400).json({ error: "البريد الإلكتروني وكلمة المرور مطلوبان" });
 
-    const user = await User.findOne({ email: String(email).toLowerCase().trim() });
-    if (!user) {
+      const user = await User.findOne({
+        email: String(email).toLowerCase().trim()
+      });
+
+
+if (!user) {    
       // Don't reveal whether the email exists
       return res.status(401).json({ error: "البريد الإلكتروني أو كلمة المرور غير صحيحة" });
     }
 
     const match = await bcrypt.compare(String(password), user.password);
+
     if (!match)
       return res.status(401).json({ error: "البريد الإلكتروني أو كلمة المرور غير صحيحة" });
 
