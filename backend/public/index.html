@@ -2013,7 +2013,10 @@ let editingExpenseId = null;
 /* جلب المصاريف من الخادم */
 async function loadExpenses() {
   try {
-    expenses = await api("GET", "/expenses");
+expenses = await api(
+  "GET",
+`/expenses?refresh=${Date.now()}`
+);
     renderExpenses();
     buildExpenseMonthFilter();
   } catch (error) {
