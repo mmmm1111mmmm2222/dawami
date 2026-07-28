@@ -45,15 +45,22 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
 
   // API routes must always go directly to the server
-  if (
-    url.pathname.startsWith("/auth") ||
-    url.pathname.startsWith("/workdays") ||
-    url.pathname.startsWith("/employers") ||
-    url.pathname.startsWith("/payments") ||
-    url.pathname.startsWith("/account")
-  ) {
-    return;
-  }
+if (
+  url.pathname.startsWith("/auth") ||
+  url.pathname.startsWith("/workdays") ||
+  url.pathname.startsWith("/employers") ||
+  url.pathname.startsWith("/payments") ||
+  url.pathname.startsWith("/expenses") ||
+  url.pathname.startsWith("/account") ||
+  url.pathname.startsWith("/companies") ||
+  url.pathname.startsWith("/employees") ||
+  url.pathname.startsWith("/employee-days") ||
+  url.pathname.startsWith("/employee-payments") ||
+  url.pathname.startsWith("/monthly-plans")
+) {
+  return;
+}
+
 
   // Password reset page must never use the cached home page
   if (url.pathname === "/reset.html") {

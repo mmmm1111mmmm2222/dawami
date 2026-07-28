@@ -540,7 +540,123 @@ td {
       <div id="emp-list"></div>
     </div>
   </div>
+<!-- ── COMPANY & EMPLOYEES ── -->
+<div id="tab-company" class="tab-panel">
+  <div class="section" style="padding-top:14px">
 
+    <div class="card">
+      <div class="card-header">
+        <span class="icon">🏢</span>
+        <h2>إدارة الشركة</h2>
+      </div>
+
+      <div class="card-body">
+        <button
+          class="btn-primary"
+          style="width:100%"
+          onclick="openCompanyModal()"
+        >
+          إضافة أو تعديل بيانات الشركة
+        </button>
+      </div>
+    </div>
+<div id="company-info" style="margin-top:14px"></div>
+    <div class="card" style="margin-top:14px">
+      <div class="card-header">
+        <span class="icon">👥</span>
+        <h2>الموظفون</h2>
+      </div>
+
+      <div class="card-body">
+        <button
+          class="btn-primary"
+          style="width:100%"
+          onclick="openEmployeeModal(null)"
+        >
+          إضافة موظف جديد
+        </button>
+
+        <div id="company-employees-list" style="margin-top:14px"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- EMPLOYEE DETAILS -->
+<div id="tab-employee-details" class="tab-panel">
+  <div class="section" style="padding-top:14px">
+
+    <button
+      class="btn-secondary"
+      onclick="switchTab('company')"
+      style="margin-bottom:14px"
+    >
+      ← العودة إلى الموظفين
+    </button>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="icon">👤</span>
+        <h2 id="employee-details-name">ملف الموظف</h2>
+      </div>
+
+      <div class="card-body">
+        <div id="employee-details-content">
+          جاري تحميل بيانات الموظف...
+        </div>
+      </div>
+    </div>
+<div class="card" style="margin-top:14px">
+  <div class="card-header">
+    <span class="icon">📅</span>
+    <h2>المخطط الشهري للموظف</h2>
+  </div>
+
+  <div class="card-body">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>الشهر</label>
+        <select id="employee-plan-month"></select>
+      </div>
+
+      <div class="form-group">
+        <label>السنة</label>
+        <select id="employee-plan-year"></select>
+      </div>
+    </div>
+
+    <div
+      id="employee-monthly-calendar"
+      style="margin-top:14px"
+    >
+      اختر الشهر والسنة
+    </div>
+<div class="card" style="margin-top:14px">
+  <div class="card-header">
+    <span class="icon">💵</span>
+    <h2>دفعات الموظف</h2>
+  </div>
+
+  <div class="card-body">
+    <button
+      type="button"
+      class="btn-primary"
+      style="width:100%"
+      onclick="openEmployeePaymentModal()"
+    >
+      إضافة دفعة جديدة
+    </button>
+
+    <div
+      id="employee-payments-list"
+      style="margin-top:14px"
+    ></div>
+  </div>
+</div>    
+  </div>
+</div>
+  </div>
+</div>  
   <!-- ── REPORTS ── -->
   <div id="tab-reports" class="tab-panel">
     <div class="section" style="padding-top:14px">
@@ -575,32 +691,32 @@ td {
     <div class="card">
       <div class="card-header">
         <span class="icon">🗓️</span>
-        <h2>Aylık Çalışma Çizelgesi</h2>
+مخطط العمل الشهري
       </div>
 
       <div class="card-body">
         <div class="form-grid">
 
           <div class="form-group">
-            <label>Ay</label>
+          <label>الشهر</label>  
             <select id="plan-month">
-              <option value="0">Ocak</option>
-              <option value="1">Şubat</option>
-              <option value="2">Mart</option>
-              <option value="3">Nisan</option>
-              <option value="4">Mayıs</option>
-              <option value="5">Haziran</option>
-              <option value="6">Temmuz</option>
-              <option value="7">Ağustos</option>
-              <option value="8">Eylül</option>
-              <option value="9">Ekim</option>
-              <option value="10">Kasım</option>
-              <option value="11">Aralık</option>
+<option value="0">يناير</option>
+<option value="1">فبراير</option>
+<option value="2">مارس</option>
+<option value="3">أبريل</option>
+<option value="4">مايو</option>
+<option value="5">يونيو</option>
+<option value="6">يوليو</option>
+<option value="7">أغسطس</option>
+<option value="8">سبتمبر</option>
+<option value="9">أكتوبر</option>
+<option value="10">نوفمبر</option>
+<option value="11">ديسمبر</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label>Yıl</label>
+          <label>السنة</label>  
             <select id="plan-year"></select>
           </div>
 
@@ -612,7 +728,7 @@ td {
           onclick="renderMonthlyPlan()"
           style="width:100%; margin-top:10px;"
         >
-          Çizelgeyi Göster
+      عرض المخطط    
         </button>
       </div>
     </div>
@@ -626,7 +742,7 @@ td {
   onclick="saveCurrentMonthlyPlan()"
   style="flex:1;"
 >
-  Tabloyu Kaydet
+حفظ الجدول  
 </button>
 
 <button
@@ -636,7 +752,7 @@ td {
   onclick="deleteCurrentMonthlyPlan()"
   style="flex:1; background:#d32f2f; color:white;"
 >
-  Tabloyu Sil
+حذف الجدول
 </button>
 
       <button
@@ -645,7 +761,7 @@ td {
         onclick="exportMonthlyPlanPDF()"
         style="flex:1;"
       >
-        PDF İndir
+        تنزيل PDF
       </button>
 
       <button
@@ -654,7 +770,7 @@ td {
 onclick="shareMonthlyPlanPDF()"       
         style="flex:1;"
       >
-        PDF Paylaş
+       مشاركة PDF 
       </button>
     </div>
 
@@ -818,10 +934,11 @@ onclick="shareMonthlyPlanPDF()"
   <nav class="bottom-nav">
     <button class="nav-item active" data-tab="home"      onclick="switchTab('home')">      <span class="nav-icon">🏠</span>الرئيسية</button>
     <button class="nav-item"        data-tab="workdays"  onclick="switchTab('workdays')">  <span class="nav-icon">📅</span>العمل</button>
-    <button class="nav-item"        data-tab="expenses"  onclick="switchTab('expenses')">  <span class="nav-icon">💸</span>المصاريف</button>
-    <button class="nav-item"        data-tab="payments"  onclick="switchTab('payments')">  <span class="nav-icon">💰</span>الدفعات</button>
+<button id="expenses-nav-item" class="nav-item"        data-tab="expenses"  onclick="switchTab('expenses')">  <span class="nav-icon">💸</span>المصاريف</button>
+<button id="payments-nav-item" class="nav-item" data-tab="payments"  onclick="switchTab('payments')">  <span class="nav-icon">💰</span>الدفعات</button>
     <button class="nav-item"        data-tab="employers" onclick="switchTab('employers')"> <span class="nav-icon">🏢</span>جهات</button>
-    <button class="nav-item"        data-tab="reports"   onclick="switchTab('reports')">   <span class="nav-icon">📊</span>التقارير</button>
+<button id="company-nav-item" class="nav-item" data-tab="company" onclick="switchTab('company')"><span class="nav-icon">🏢</span>الشركة والموظفون</button>
+<button id="reports-nav-item" class="nav-item" data-tab="reports"   onclick="switchTab('reports')">   <span class="nav-icon">📊</span>التقارير</button>
     <button class="nav-item"
       data-tab="monthly-plan"
       onclick="switchTab('monthly-plan')">
@@ -938,7 +1055,293 @@ onclick="shareMonthlyPlanPDF()"
     </form>
   </div>
 </div>
+<!-- ── MODAL: COMPANY ── -->
+<div class="modal-overlay" id="modal-company">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <h3>بيانات الشركة</h3>
+      <button
+        class="modal-close"
+        onclick="closeModal('modal-company')"
+      >
+        ×
+      </button>
+    </div>
 
+    <form id="company-form">
+      <div class="form-grid">
+
+        <div class="form-group full">
+          <label>اسم الشركة *</label>
+          <input
+            type="text"
+            id="company-name"
+            required
+            placeholder="مثال: شركة النجاح"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>رقم الهاتف</label>
+          <input
+            type="tel"
+            id="company-phone"
+            placeholder="+90 XXX XXX XXXX"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>البريد الإلكتروني</label>
+          <input
+            type="email"
+            id="company-email"
+            placeholder="company@email.com"
+          />
+        </div>
+
+        <div class="form-group full">
+          <label>العنوان</label>
+          <input
+            type="text"
+            id="company-address"
+            placeholder="العنوان الكامل"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>العملة الافتراضية</label>
+          <select id="company-currency">
+            <option value="TRY">🇹🇷 TRY</option>
+            <option value="USD">🇺🇸 USD</option>
+            <option value="EUR">🇪🇺 EUR</option>
+            <option value="SAR">🇸🇦 SAR</option>
+            <option value="SYP">🇸🇾 SYP</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>حالة الشركة</label>
+          <select id="company-active">
+            <option value="true">نشطة</option>
+            <option value="false">متوقفة</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" class="btn-primary">
+          حفظ
+        </button>
+
+        <button
+          type="button"
+          class="btn-secondary"
+          onclick="closeModal('modal-company')"
+        >
+          إلغاء
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- ===== MODAL: EMPLOYEE ===== -->
+<div class="modal-overlay" id="modal-employee">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <h3 id="employee-modal-title">إضافة موظف جديد</h3>
+
+      <button
+        type="button"
+        class="modal-close"
+        onclick="closeModal('modal-employee')"
+      >
+        ×
+      </button>
+    </div>
+
+    <form id="employee-form">
+      <div class="form-grid">
+
+        <div class="form-group full">
+          <label>اسم الموظف *</label>
+          <input
+            type="text"
+            id="employee-name"
+            required
+            placeholder="اسم الموظف الكامل"
+          />
+        </div>
+
+        <div class="form-group full">
+          <label>البريد الإلكتروني *</label>
+          <input
+            type="email"
+            id="employee-email"
+            required
+            placeholder="employee@email.com"
+          />
+        </div>
+
+        <div class="form-group full">
+          <label>كلمة المرور *</label>
+          <input
+            type="password"
+            id="employee-password"
+            minlength="6"
+            required
+            placeholder="6 أحرف على الأقل"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>نوع الموظف</label>
+          <select id="employee-role">
+            <option value="employee">موظف</option>
+            <option value="accountant">محاسب</option>
+            <option value="manager">مدير</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>حالة الحساب</label>
+          <select id="employee-active">
+            <option value="true">نشط</option>
+            <option value="false">متوقف</option>
+          </select>
+        </div>
+
+        <div class="form-group full">
+          <label>الصلاحيات</label>
+
+          <label>
+            <input
+              type="checkbox"
+              id="employee-manage-workdays"
+            />
+            إدارة أيام العمل
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              id="employee-manage-expenses"
+            />
+            إدارة المصاريف
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              id="employee-manage-payments"
+            />
+            إدارة الدفعات
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              id="employee-view-reports"
+            />
+            مشاهدة التقارير
+          </label>
+        </div>
+
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" class="btn-primary">
+          حفظ الموظف
+        </button>
+
+        <button
+          type="button"
+          class="btn-secondary"
+          onclick="closeModal('modal-employee')"
+        >
+          إلغاء
+        </button>
+      </div>
+    </form>
+  </div>
+</div>  
+<div
+  class="modal-overlay"
+  id="modal-employee-payment"
+>
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <h3>إضافة دفعة للموظف</h3>
+
+      <button
+        type="button"
+        class="modal-close"
+        onclick="closeModal('modal-employee-payment')"
+      >
+        ×
+      </button>
+    </div>
+
+    <form id="employee-payment-form">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>المبلغ *</label>
+          <input
+            type="number"
+            id="employee-payment-amount"
+            min="0.01"
+            step="0.01"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>العملة</label>
+          <input
+            type="text"
+            id="employee-payment-currency"
+            value="USD"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>التاريخ *</label>
+          <input
+            type="date"
+            id="employee-payment-date"
+            required
+          />
+        </div>
+
+        <div class="form-group full">
+          <label>ملاحظة</label>
+          <textarea
+            id="employee-payment-note"
+            rows="3"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button
+          type="submit"
+          class="btn-primary"
+        >
+          حفظ الدفعة
+        </button>
+
+        <button
+          type="button"
+          class="btn-secondary"
+          onclick="closeModal('modal-employee-payment')"
+        >
+          إلغاء
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 <!-- ══════════════════════════ MODAL: PAYMENT ══════════════════════════ -->
 <div class="modal-overlay" id="modal-payment">
   <div class="modal-sheet">
@@ -1436,8 +1839,9 @@ const TAB_TITLES = {
   expenses: 'المصاريف',
   payments: 'الدفعات',
   employers: 'جهات العمل',
+  company: 'الشركة والموظفون',
   reports: 'التقارير',
-  'monthly-plan': 'Aylık Çalışma Çizelgesi',
+'monthly-plan': 'مخطط العمل الشهري',
   settings: 'الإعدادات'
 };
 
@@ -1451,6 +1855,10 @@ function switchTab(tab) {
   document.getElementById('header-subtitle').textContent = TAB_TITLES[tab] || '';
 
   if (tab === 'home')      renderDashboard();
+if (tab === "company") {
+  renderCompanyInfo();
+  renderCompanyEmployees();
+  }
   if (tab === 'workdays')  renderWorkdays();
   if (tab === 'payments')  renderPayments();
   if (tab === 'employers') renderEmployers();
@@ -1464,6 +1872,53 @@ async function initApp() {
   if (!token) { showScreen('login'); return; }
   showScreen('app');
   document.getElementById('header-name').textContent = currentUser?.name || '';
+const companyNavItem =
+  document.getElementById("company-nav-item");
+
+const canManageCompany =
+  currentUser?.role === "owner" ||
+  currentUser?.role === "manager" ||
+  currentUser?.permissions?.manageEmployees === true;
+
+if (companyNavItem) {
+  companyNavItem.style.display =
+    canManageCompany ? "" : "none";
+}  
+const expensesNavItem =
+  document.getElementById("expenses-nav-item");
+
+const paymentsNavItem =
+  document.getElementById("payments-nav-item");
+
+const reportsNavItem =
+  document.getElementById("reports-nav-item");
+
+if (expensesNavItem) {
+  expensesNavItem.style.display =
+    currentUser?.role === "owner" ||
+    currentUser?.role === "manager" ||
+    currentUser?.permissions?.manageExpenses === true
+      ? ""
+      : "none";
+}
+
+if (paymentsNavItem) {
+  paymentsNavItem.style.display =
+    currentUser?.role === "owner" ||
+    currentUser?.role === "manager" ||
+    currentUser?.permissions?.managePayments === true
+      ? ""
+      : "none";
+}
+
+if (reportsNavItem) {
+  reportsNavItem.style.display =
+    currentUser?.role === "owner" ||
+    currentUser?.role === "manager" ||
+    currentUser?.permissions?.viewReports === true
+      ? ""
+      : "none";
+    }  
   document.getElementById('settings-user-info').innerHTML = `
     <b>${esc(currentUser?.name||'')}</b><br>
     <span style="color:var(--muted)">${esc(currentUser?.email||'')}</span>
@@ -1585,7 +2040,485 @@ function renderEmployers() {
     </div>
   `).join('');
 }
+async function openCompanyModal() {
+  try {
+    const company = await api("GET", "/companies/me");
 
+    document.getElementById("company-name").value =
+      company?.name || "";
+
+    document.getElementById("company-phone").value =
+      company?.phone || "";
+
+    document.getElementById("company-email").value =
+      company?.email || "";
+
+    document.getElementById("company-address").value =
+      company?.address || "";
+
+    document.getElementById("company-currency").value =
+      company?.currency || "TRY";
+
+    document.getElementById("company-active").value =
+      String(company?.isActive ?? true);
+
+    openModal("modal-company");
+  } catch (error) {
+    alert(error.message || "تعذر جلب بيانات الشركة");
+  }
+          }
+async function renderCompanyInfo() {
+  const box = document.getElementById("company-info");
+  if (!box) return;
+
+  try {
+    const company = await api("GET", "/companies/me");
+
+    if (!company) {
+      box.innerHTML = "";
+      return;
+    }
+
+    box.innerHTML = `
+      <div class="card">
+        <div class="card-header">
+          <span class="icon">🏢</span>
+          <h2>${esc(company.name || "")}</h2>
+        </div>
+
+        <div class="card-body">
+          ${company.phone ? `<div>📞 ${esc(company.phone)}</div>` : ""}
+          ${company.email ? `<div>✉️ ${esc(company.email)}</div>` : ""}
+          ${company.address ? `<div>📍 ${esc(company.address)}</div>` : ""}
+          <div>💱 ${esc(company.currency || "TRY")}</div>
+          <div>${company.isActive ? "✅ نشطة" : "⛔ متوقفة"}</div>
+        </div>
+      </div>
+    `;
+  } catch (error) {
+    box.innerHTML = "";
+  }
+}
+async function renderCompanyEmployees() {
+  const box = document.getElementById(
+    "company-employees-list"
+  );
+
+  if (!box) return;
+
+  try {
+    const employees = await api(
+      "GET",
+`/employees?refresh=${Date.now()}`
+    );
+
+    if (
+      !Array.isArray(employees) ||
+      employees.length === 0
+    ) {
+      box.innerHTML =
+        '<div class="empty-state">لا يوجد موظفون بعد</div>';
+      return;
+    }
+
+    box.innerHTML = employees
+      .map(
+        (employee) => `
+<div class="item-card" onclick="openEmployeeDetails('${employee._id}')">
+            <div class="item-title">
+              👤 ${esc(employee.name || "")}
+            </div>
+
+            <div class="item-note">
+              📧 ${esc(employee.email || "")}
+            </div>
+
+            <div class="item-note">
+              نوع الموظف:
+              ${esc(employee.role || "employee")}
+            </div>
+
+            <div class="item-note">
+              الحالة:
+              ${
+                employee.isActive
+                  ? "نشط ✅"
+                  : "متوقف ⛔"
+              }
+            </div>
+          </div>
+        `
+      )
+      .join("");
+  } catch (error) {
+    box.innerHTML =
+      '<div class="empty-state">تعذر جلب الموظفين</div>';
+  }
+}
+function openEmployeeModal() {
+  const form = document.getElementById("employee-form");
+
+  if (form) {
+    form.reset();
+  }
+
+  openModal("modal-employee");
+} 
+document
+  .getElementById("employee-form")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const body = {
+      name: document
+        .getElementById("employee-name")
+        .value.trim(),
+
+      email: document
+        .getElementById("employee-email")
+        .value.trim(),
+
+      password: document
+        .getElementById("employee-password")
+        .value,
+
+      role: document
+        .getElementById("employee-role")
+        .value,
+
+      isActive:
+        document.getElementById("employee-active").value ===
+        "true",
+
+      permissions: {
+        manageWorkdays:
+          document.getElementById(
+            "employee-manage-workdays"
+          ).checked,
+
+        manageExpenses:
+          document.getElementById(
+            "employee-manage-expenses"
+          ).checked,
+
+        managePayments:
+          document.getElementById(
+            "employee-manage-payments"
+          ).checked,
+
+        viewReports:
+          document.getElementById(
+            "employee-view-reports"
+          ).checked
+      }
+    };
+
+    try {
+      const res = await api("POST", "/employees", body);
+
+      if (!res || res.error) {
+        toast(
+          res?.error || "تعذر حفظ الموظف",
+          "error"
+        );
+        return;
+      }
+
+      closeModal("modal-employee");
+      toast("تمت إضافة الموظف بنجاح");
+
+await renderCompanyEmployees();
+    } catch (error) {
+      toast(
+        error.message || "حدث خطأ أثناء حفظ الموظف",
+        "error"
+      );
+    }
+  });  
+async function openEmployeeDetails(id) {
+const employeeList = await api("GET", `/employees?refresh=${Date.now()}`);
+const employee = (Array.isArray(employeeList) ? employeeList : []).find(
+  (item) => item._id === id
+);
+
+  if (!employee) {
+    toast("تعذر العثور على الموظف", "error");
+    return;
+  }
+window.currentEmployeeId = employee._id;
+  document.getElementById(
+    "employee-details-name"
+  ).textContent = employee.name || "ملف الموظف";
+
+  document.getElementById(
+    "employee-details-content"
+  ).innerHTML = `
+    <div class="item-note">
+      📧 ${esc(employee.email || "")}
+    </div>
+
+    <div class="item-note">
+      نوع الموظف:
+      ${esc(employee.role || "employee")}
+    </div>
+
+    <div class="item-note">
+      الحالة:
+      ${employee.isActive ? "✅ نشط" : "⛔ متوقف"}
+    </div>
+  `;
+
+  switchTab("employee-details");
+const monthSelect = document.getElementById("employee-plan-month");
+const yearSelect = document.getElementById("employee-plan-year");
+const calendarBox = document.getElementById("employee-monthly-calendar");
+
+const now = new Date();
+const monthNames = [
+  "يناير", "فبراير", "مارس", "أبريل",
+  "مايو", "يونيو", "يوليو", "أغسطس",
+  "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+];
+
+monthSelect.innerHTML = monthNames
+  .map((name, index) =>
+    `<option value="${index}">${name}</option>`
+  )
+  .join("");
+
+yearSelect.innerHTML = "";
+for (let year = now.getFullYear() - 2; year <= now.getFullYear() + 2; year++) {
+  yearSelect.innerHTML += `<option value="${year}">${year}</option>`;
+}
+
+monthSelect.value = now.getMonth();
+yearSelect.value = now.getFullYear();
+
+async function renderEmployeeCalendar() {
+  const month = Number(monthSelect.value);
+  const year = Number(yearSelect.value);
+  const daysCount = new Date(year, month + 1, 0).getDate();
+const savedDays = await api(
+  "GET",
+  `/employee-days?employeeId=${employee._id}&year=${year}&month=${month}`
+);
+
+const savedDaysMap = new Map(
+  (Array.isArray(savedDays) ? savedDays : []).map((item) => [
+    Number(item.day),
+    item.status,
+  ])
+);
+const savedStatusStyles = {
+  work: {
+    state: 1,
+    text: "عمل ✅",
+    background: "#d9f2df",
+    color: "#176b35",
+  },
+  leave: {
+    state: 2,
+    text: "إجازة 🟡",
+    background: "#fff3cd",
+    color: "#856404",
+  },
+  absence: {
+    state: 3,
+    text: "غياب ❌",
+    background: "#f8d7da",
+    color: "#842029",
+  },
+};  
+  calendarBox.innerHTML = `
+    <div style="
+      display:grid;
+      grid-template-columns:repeat(7,1fr);
+      gap:6px;
+    ">
+${Array.from({ length: daysCount }, (_, index) => {
+  const day = index + 1;
+  const savedStatus = savedDaysMap.get(day) || "";
+  const savedStyle = savedStatusStyles[savedStatus];
+
+  return `
+    <button
+      type="button"
+      class="btn-secondary"
+      data-state="${savedStyle?.state || 0}"
+      style="
+        padding:10px 4px;
+        background:${savedStyle?.background || ""};
+        color:${savedStyle?.color || ""};
+      "
+      onclick="selectEmployeeDay('${employee._id}', ${year}, ${month}, ${day}, this)"
+    >
+      ${day}
+      ${
+        savedStyle
+          ? `<br><small>${savedStyle.text}</small>`
+          : ""
+      }
+    </button>
+  `;
+}).join("")}
+    </div>
+  `;
+}
+
+monthSelect.onchange = renderEmployeeCalendar;
+yearSelect.onchange = renderEmployeeCalendar;
+
+renderEmployeeCalendar();
+await loadEmployeePayments(employee._id);  
+    }
+function openEmployeePaymentModal() {
+  const dateInput = document.getElementById(
+    "employee-payment-date"
+  );
+
+  document.getElementById(
+    "employee-payment-form"
+  ).reset();
+
+  document.getElementById(
+    "employee-payment-currency"
+  ).value = "USD";
+
+  dateInput.value = new Date()
+    .toISOString()
+    .split("T")[0];
+
+  openModal("modal-employee-payment");
+}  
+async function loadEmployeePayments(employeeId) {
+  const payments = await api(
+    "GET",
+    `/employee-payments?employeeId=${employeeId}`
+  );
+
+  const list = document.getElementById(
+    "employee-payments-list"
+  );
+
+  if (!Array.isArray(payments) || payments.length === 0) {
+    list.innerHTML = `
+      <div class="item-note">
+        لا توجد دفعات مسجلة
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML = payments
+    .map(
+      (payment) => `
+        <div class="item-note">
+          <strong>
+            ${payment.amount} ${esc(payment.currency || "")}
+          </strong>
+          <br>
+          ${new Date(payment.date).toLocaleDateString("ar-EG")}
+          ${
+            payment.note
+              ? `<br>${esc(payment.note)}`
+              : ""
+          }
+          <br>
+          <button
+            type="button"
+            class="btn-danger"
+onclick="askDelete('employeePayment', '${payment._id}', 'هذه الدفعة')"            
+          >
+            حذف الدفعة
+          </button>
+        </div>
+      `
+    )
+    .join("");
+}  
+
+document
+  .getElementById("employee-payment-form")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+if (!window.currentEmployeeId) {
+      toast("تعذر تحديد الموظف", "error");
+      return;
+    }
+
+    const body = {
+      employeeId: window.currentEmployeeId,
+      amount: Number(
+        document.getElementById(
+          "employee-payment-amount"
+        ).value
+      ),
+      currency: document
+        .getElementById("employee-payment-currency")
+        .value.trim(),
+      date: document.getElementById(
+        "employee-payment-date"
+      ).value,
+      note: document
+        .getElementById("employee-payment-note")
+        .value.trim(),
+    };
+
+    const res = await api(
+      "POST",
+      "/employee-payments",
+      body
+    );
+
+    if (!res || res.error) {
+      toast(
+        res?.error || "تعذر حفظ الدفعة",
+        "error"
+      );
+      return;
+    }
+
+    closeModal("modal-employee-payment");
+await loadEmployeePayments(window.currentEmployeeId);
+    toast("تم حفظ الدفعة بنجاح");
+  });  
+async function selectEmployeeDay(employeeId, year, month, day, button) {
+  const states = [
+    { text: "", background: "", color: "" },
+    { text: "عمل ✅", background: "#d9f2df", color: "#176b35" },
+    { text: "إجازة 🟡", background: "#fff3cd", color: "#856404" },
+    { text: "غياب ❌", background: "#f8d7da", color: "#842029" }
+  ];
+
+  const currentState = Number(button.dataset.state || 0);
+  const nextState = (currentState + 1) % states.length;
+  const selectedState = states[nextState];
+
+  button.dataset.state = nextState;
+  button.innerHTML = `
+    ${day}
+    ${selectedState.text
+      ? `<br><small>${selectedState.text}</small>`
+      : ""}
+  `;
+
+  button.style.background = selectedState.background;
+  button.style.color = selectedState.color;
+const statusValues = ["", "work", "leave", "absence"];
+
+const res = await api("POST", "/employee-days", {
+  employeeId,
+  year,
+  month,
+  day,
+  status: statusValues[nextState],
+});
+
+if (!res || res.error) {
+  toast(res?.error || "تعذر حفظ حالة اليوم", "error");
+}  
+ } 
 function openEmployerModal(id) {
   editingId = id || null;
   const emp = id ? employers.find(e => e._id === id) : null;
@@ -1625,7 +2558,41 @@ document.getElementById('emp-form').addEventListener('submit', async (e) => {
   toast(editingId ? 'تم تحديث جهة العمل' : 'تمت إضافة جهة العمل');
   editingId = null;
 });
+document.getElementById("company-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
+  const body = {
+    name: document.getElementById("company-name").value.trim(),
+    phone: document.getElementById("company-phone").value.trim(),
+    email: document.getElementById("company-email").value.trim(),
+    address: document.getElementById("company-address").value.trim(),
+    currency: document.getElementById("company-currency").value,
+    isActive: document.getElementById("company-active").value === "true"
+  };
+
+  try {
+    const currentCompany = await api("GET", "/companies/me");
+
+    const res = currentCompany
+      ? await api("PUT", "/companies", body)
+      : await api("POST", "/companies", body);
+
+    if (!res || res.error) {
+      toast(res?.error || "تعذر حفظ بيانات الشركة", "error");
+      return;
+    }
+
+    closeModal("modal-company");
+    toast(
+      currentCompany
+        ? "تم تحديث بيانات الشركة"
+        : "تم إنشاء الشركة بنجاح"
+    );
+await renderCompanyInfo();    
+  } catch (error) {
+    toast(error.message || "حدث خطأ أثناء حفظ الشركة", "error");
+  }
+});
 /* ═══════════════════════════════════════
    WORKDAYS
 ═══════════════════════════════════════ */
@@ -2148,11 +3115,8 @@ if (editingExpenseId) {
 async function deleteExpense(id) {
   const expense = expenses.find((item) => item._id === id);
 
-  const confirmed = confirm(
-    `هل تريد حذف المصروف: ${expense?.title || ""}؟`
-  );
-
-  if (!confirmed) return;
+askDelete('expense', id, expense?.title || 'هذا المصروف');
+return;
 
   try {
 await api(
@@ -2827,16 +3791,16 @@ async function renderMonthlyPlan() {
   const month = Number(monthSelect.value);
   const year = Number(yearSelect.value);
 
-  const monthNames = [
-    "Ocak", "Şubat", "Mart", "Nisan",
-    "Mayıs", "Haziran", "Temmuz", "Ağustos",
-    "Eylül", "Ekim", "Kasım", "Aralık"
-  ];
+const monthNames = [
+  "يناير", "فبراير", "مارس", "أبريل",
+  "مايو", "يونيو", "يوليو", "أغسطس",
+  "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+];
 
-  const dayNames = [
-    "Pazar", "Pazartesi", "Salı", "Çarşamba",
-    "Perşembe", "Cuma", "Cumartesi"
-  ];
+const dayNames = [
+  "الأحد", "الاثنين", "الثلاثاء", "الأربعاء",
+  "الخميس", "الجمعة", "السبت"
+];
 
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
@@ -2876,8 +3840,8 @@ gap:8px;
           class="plan-status"
 style="width:100%; font-size:12px; padding:5px;"          onchange="updateMonthlyPlanTotal()"
         >
-          <option value="work">Çalışma</option>
-          <option value="holiday">Tatil</option>
+<option value="work">عمل</option>
+<option value="holiday">إجازة</option>
         </select>
 
         <input
@@ -2886,7 +3850,7 @@ style="width:100%; font-size:12px; padding:5px;"          onchange="updateMonthl
           style="width:100%; font-size:12px; padding:5px;"
           min="0"
           step="0.01"
-          placeholder="Tutar"
+         placeholder="المبلغ" 
           oninput="updateMonthlyPlanTotal()"
         />
       </div>
@@ -2912,18 +3876,18 @@ style="width:100%; font-size:12px; padding:5px;"          onchange="updateMonthl
             font-size:1rem;
           "
         >
-Aylık Toplam:
+المجموع الشهري:
 <span id="monthly-plan-total">0</span>
 </div>
 
 <div style="margin-top:14px;">
   <label style="display:block;font-weight:700;margin-bottom:6px;">
-    Aylık Not:
+ملاحظة الشهر:
   </label>
 
   <textarea
     id="monthly-plan-note"
-    placeholder="Bu ay için işverene not yazın..."
+placeholder="اكتب ملاحظة لصاحب العمل عن هذا الشهر..."
     style="
       width:100%;
       min-height:80px;
@@ -3029,9 +3993,9 @@ window.saveCurrentMonthlyPlan = async function() {
     }
   });
 
-  toast("Tablo kaydedildi");
+toast("تم حفظ الجدول");
   };
-window.deleteCurrentMonthlyPlan = async function() {
+window.deleteCurrentMonthlyPlan = async function(skipConfirm = false) {
   const year = Number(
     document.getElementById("plan-year")?.value
   );
@@ -3040,11 +4004,14 @@ window.deleteCurrentMonthlyPlan = async function() {
     document.getElementById("plan-month")?.value
   );
 
-  const confirmed = confirm(
-    "Bu aya ait tabloyu silmek istediğinize emin misiniz?"
+if (!skipConfirm) {
+  askDelete(
+    'monthlyPlan',
+    `${year}-${month}`,
+    'جدول هذا الشهر'
   );
-
-  if (!confirmed) return;
+  return;
+}
 
   try {
     await api(
@@ -3089,10 +4056,10 @@ const monthName =
   document.getElementById("plan-month")
     ?.selectedOptions?.[0]?.text || month;
 
-toast(`${monthName} ${year} tablosu silindi`);
+toast(`تم حذف جدول ${monthName} ${year}`);
   } catch (error) {
     console.error(error);
-    toast("Tablo silinemedi", "error");
+toast("تعذر حذف الجدول", "error");
   }
 };  
 async function loadMonthlyPlan() {
@@ -3206,12 +4173,12 @@ function updateMonthlyPlanTotal() {
 
   const totalBox = document.getElementById("monthly-plan-total");
 
-  if (totalBox) {
-    totalBox.textContent = total.toLocaleString("tr-TR", {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2
-    });
-  }
+if (totalBox) {
+  totalBox.textContent = total.toLocaleString("ar-EG", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  });
+}
 }function getMonthlyPlanPDFContent() {
   const area = document.getElementById("monthly-plan-area");
   const monthSelect = document.getElementById("plan-month");
@@ -3259,7 +4226,7 @@ const rows = Array.from(
     originalSelect?.value === "holiday";
 
   const statusText =
-    isHoliday ? "Tatil" : "Çalışma";
+isHoliday ? "إجازة" : "عمل";
 
   const statusColor =
     isHoliday ? "#d32f2f" : "#222";
@@ -3340,12 +4307,12 @@ for (let i = 0; i < rows.length; i += rowsPerPage) {
         padding-bottom:6px;
         border-bottom:2px solid #1e704f;
       ">
-        <h2 style="
-          margin:0 0 3px;
-          font-size:17px;
-        ">
-          Aylık Çalışma Çizelgesi
-        </h2>
+<h2 style="
+  margin:0 0 3px;
+  font-size:17px;
+">
+  مخطط العمل الشهري
+</h2>
 
         <div style="
           font-size:13px;
@@ -3373,7 +4340,7 @@ for (let i = 0; i < rows.length; i += rowsPerPage) {
               font-weight:bold;
               text-align:left;
             ">
-              Aylık Toplam: ${totalText}
+المجموع الشهري: ${totalText}
             </div>
           `
           : ""
@@ -3472,7 +4439,7 @@ const isHoliday =
   originalSelect?.value === "holiday";
 
 const statusText =
-  isHoliday ? "Tatil" : "Çalışma";
+isHoliday ? "إجازة" : "عمل";
 
 const statusColor =
   isHoliday ? "#d32f2f" : "#222";
@@ -3539,8 +4506,7 @@ const amountText =
       border-bottom:2px solid #1e704f;
     ">
       <h2 style="margin:0 0 3px;font-size:17px;">
-        Aylık Çalışma Çizelgesi
-      </h2>
+مخطط العمل الشهري      </h2>
       <div style="font-size:13px;font-weight:bold;">
         ${monthName} ${year}
       </div>
@@ -3711,7 +4677,7 @@ async function shareMonthlyPlanPDF() {
       navigator.canShare({ files: [file] })
     ) {
       await navigator.share({
-        title: "Aylık Çalışma Çizelgesi",
+title: "مخطط العمل الشهري",
         text: `${pdfData.monthName} ${pdfData.year}`,
         files: [file]
       });
@@ -3732,20 +4698,36 @@ async function shareMonthlyPlanPDF() {
    DELETE CONFIRM
 ═══════════════════════════════════════ */
 function askDelete(type, id, label) {
-  deleteTarget = { type, id };
-  document.getElementById('delete-msg').textContent = `هل أنت متأكد من حذف "${label}"؟ لا يمكن التراجع.`;
+deleteTarget = { type, id };  
+document.getElementById('delete-msg').textContent =
+  `هل أنت متأكد من حذف ${label}؟ لا يمكن التراجع.`;
   openModal('modal-delete');
 }
 
 async function executeDelete() {
   if (!deleteTarget) return;
   const { type, id } = deleteTarget;
-  const paths = { workday:'/workdays/', employer:'/employers/', payment:'/payments/' };
+const paths = {
+  workday: '/workdays/',
+  employer: '/employers/',
+  payment: '/payments/',
+  expense: '/expenses/',
+  monthlyPlan: '/monthly-plans/',
+  employeePayment: '/employee-payments/'
+};
+if (type === 'monthlyPlan') {
+  closeModal('modal-delete');
+  deleteTarget = null;
+  await window.deleteCurrentMonthlyPlan(true);
+  return;
+                                                       }  
   const res = await api('DELETE', paths[type] + id);
   if (!res) return;
   if (type === 'workday')  await loadWorkdays();
   if (type === 'employer') await loadEmployers();
   if (type === 'payment')  await Promise.all([loadPayments(), loadWorkdays()]);
+if (type === 'expense') await loadExpenses();  
+ if (type === 'employeePayment') await loadEmployeePayments(window.currentEmployeeId); 
   closeModal('modal-delete');
   renderWorkdays();
   renderEmployers();

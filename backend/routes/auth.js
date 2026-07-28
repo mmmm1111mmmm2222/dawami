@@ -87,7 +87,16 @@ if (!user) {
     const token = issueToken(user);
     res.json({
       token,
-      user: { id: user._id, name: user.name, email: user.email, darkMode: user.darkMode },
+user: {
+  id: user._id,
+  name: user.name,
+  email: user.email,
+  darkMode: user.darkMode,
+  role: user.role,
+  companyId: user.companyId,
+  isActive: user.isActive,
+  permissions: user.permissions
+},
     });
   } catch (err) {
     console.error("Login error:", err.message);

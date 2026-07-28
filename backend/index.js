@@ -86,6 +86,19 @@ app.use(
   "/companies",
   require("./routes/companies")
 );
+app.use(
+  "/employees",
+  require("./routes/employees")
+);
+app.use(
+  "/employee-days",
+  require("./routes/employeeDays")
+);
+
+app.use(
+  "/employee-payments",
+  require("./routes/employeePayments")
+);
 app.use("/employers", require("./routes/employers"));
 app.use("/payments", require("./routes/payments"));
 app.use("/expenses", require("./routes/expenses"));
