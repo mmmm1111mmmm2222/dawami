@@ -2438,6 +2438,25 @@ window.currentEmployeeId = employee._id;
       الحالة:
       ${employee.isActive ? "✅ نشط" : "⛔ متوقف"}
     </div>
+    <div class="item-note">
+      الصلاحيات:
+      ${
+        [
+          employee.permissions?.manageEmployees &&
+            "إدارة الموظفين",
+          employee.permissions?.manageWorkdays &&
+            "إدارة أيام العمل",
+          employee.permissions?.manageExpenses &&
+            "إدارة المصاريف",
+          employee.permissions?.managePayments &&
+            "إدارة الدفعات",
+          employee.permissions?.viewReports &&
+            "مشاهدة التقارير"
+        ]
+          .filter(Boolean)
+          .join("، ") || "لا توجد صلاحيات إضافية"
+      }
+    </div>
 <button
   class="btn-edit"
   type="button"
