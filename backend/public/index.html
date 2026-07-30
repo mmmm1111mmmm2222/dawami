@@ -1233,7 +1233,13 @@ onclick="shareMonthlyPlanPDF()"
 
         <div class="form-group full">
           <label>الصلاحيات</label>
-
+<label>
+  <input
+    type="checkbox"
+    id="employee-manage-employees"
+  />
+  إدارة الموظفين
+</label>
           <label>
             <input
               type="checkbox"
@@ -2280,11 +2286,15 @@ async function openEmployeeModal(id = null) {
       document.getElementById("employee-active").value =
         employee.isActive === false ? "false" : "true";
 
-      document.getElementById(
-        "employee-manage-workdays"
-      ).checked =
-        employee.permissions?.manageWorkdays === true;
+document.getElementById(
+  "employee-manage-employees"
+).checked =
+  employee.permissions?.manageEmployees === true;
 
+document.getElementById(
+  "employee-manage-workdays"
+).checked =
+  employee.permissions?.manageWorkdays === true;
       document.getElementById(
         "employee-manage-expenses"
       ).checked =
@@ -2337,6 +2347,10 @@ document
         "true",
 
       permissions: {
+  manageEmployees:
+  document.getElementById(
+    "employee-manage-employees"
+  ).checked,      
         manageWorkdays:
           document.getElementById(
             "employee-manage-workdays"
