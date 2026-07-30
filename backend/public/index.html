@@ -1979,7 +1979,10 @@ async function loadActivityLogs() {
   list.innerHTML = "جاري تحميل سجل النشاط...";
 
   try {
-    const logs = await api("GET", "/activity-logs");
+const logs = await api(
+  "GET",
+  `/activity-logs?refresh=${Date.now()}`
+);
 
 
     if (!Array.isArray(logs) || logs.length === 0) {
