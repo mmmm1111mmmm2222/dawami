@@ -4,6 +4,7 @@ const router = express.Router();
 
 const EmployeePayment = require("../models/EmployeePayment");
 const User = require("../models/User");
+const ActivityLog = require("../models/ActivityLog");
 const auth = require("../middleware/auth");
 
 router.use(auth);
@@ -143,7 +144,15 @@ router.post("/", async (req, res) => {
       date: new Date(date),
       note: String(note || "").trim(),
     });
-
+await ActivityLog.create({
+  userId: req.userId,
+  companyId: currentUser.companyId,
+  action: "إضافة دفعة موظف",
+  details: `تمت إضافة دفعة بقيمة ${payment.amount} ${payment.currency}`,
+  entityType: "employeePayment",
+  entityId: String(payment._id)
+});
+    console.log("Activity log created successfully");
     res.status(201).json(payment);
   } catch (error) {
     console.error(
@@ -190,7 +199,14 @@ router.delete("/:id", async (req, res) => {
         error: "تعذر العثور على الدفعة",
       });
     }
-
+await ActivityLog.create({
+  userId: req.userId,
+  companyId: currentUser.companyId,
+  action: "حذف دفعة موظف",
+  details: `تم حذف دفعة بقيمة ${deletedPayment.amount} ${deletedPayment.currency}`,
+  entityType: "employeePayment",
+  entityId: String(deletedPayment._id)
+});
     res.json({
       success: true,
     });

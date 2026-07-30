@@ -99,6 +99,10 @@ app.use(
   "/employee-payments",
   require("./routes/employeePayments")
 );
+app.use(
+  "/activity-logs",
+  require("./routes/activityLogs")
+);
 app.use("/employers", require("./routes/employers"));
 app.use("/payments", require("./routes/payments"));
 app.use("/expenses", require("./routes/expenses"));

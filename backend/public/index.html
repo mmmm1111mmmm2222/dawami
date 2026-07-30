@@ -924,7 +924,27 @@ onclick="shareMonthlyPlanPDF()"
   >
     تغيير كلمة المرور
   </button>
-</div>      <button class="btn-danger" onclick="logout()" style="width:100%">تسجيل الخروج</button>
+
+<div style="margin-top:18px;">
+  <div style="font-weight:700; margin-bottom:10px;">
+    سجل النشاط
+  </div>
+
+  <button
+    class="btn-secondary"
+    type="button"
+    onclick="loadActivityLogs()"
+    style="width:100%;"
+  >
+    عرض سجل النشاط
+  </button>
+
+  <div
+    id="activity-logs-list"
+    style="margin-top:12px;"
+  ></div>
+</div>   
+  </div>      <button class="btn-danger" onclick="logout()" style="width:100%">تسجيل الخروج</button>
         </div>
       </div>
     </div>
@@ -1536,6 +1556,7 @@ async function api(method, path, body) {
 if (method === "GET") {
   opts.cache = "no-store";
 }
+console.log("API request:", method, path);  
   const res = await fetch(path, opts);
 
   let data;
@@ -1943,7 +1964,63 @@ payments = Array.isArray(pay) ? pay : [];
 async function loadWorkdays()  { const d = await api('GET','/workdays');  workdays  = d || []; }
 async function loadEmployers() { const d = await api('GET','/employers'); employers = d || []; }
 async function loadPayments()  { const d = await api('GET','/payments');  payments  = d || []; }
+async function loadActivityLogs() {
 
+  const list = document.getElementById("activity-logs-list");
+
+  if (!list) return;
+
+  list.innerHTML = "جاري تحميل سجل النشاط...";
+
+  try {
+    const logs = await api("GET", "/activity-logs");
+
+
+    if (!Array.isArray(logs) || logs.length === 0) {
+      list.innerHTML = `
+        <div style="padding:12px; text-align:center;">
+          لا توجد أنشطة مسجلة حتى الآن
+        </div>
+      `;
+      return;
+    }
+
+list.innerHTML = logs
+  .map((log) => {
+    const date = new Date(log.createdAt).toLocaleString("ar");
+
+    return `
+      <div style="
+        padding:12px;
+        margin-bottom:8px;
+        border:1px solid var(--border);
+        border-radius:8px;
+      ">
+        <div style="font-weight:700;">
+          ${log.action || "نشاط"}
+        </div>
+
+        ${
+          log.details
+            ? `<div style="margin-top:4px;">${log.details}</div>`
+            : ""
+        }
+
+        <div style="margin-top:6px; font-size:12px; opacity:.7;">
+          ${date}
+        </div>
+      </div>
+    `;
+  })
+  .join("");
+} catch (error) {
+  list.innerHTML = `
+    <div style="padding:12px; color:#c0392b;">
+      تعذر تحميل سجل النشاط
+    </div>
+  `;
+}
+}
 /* ═══════════════════════════════════════
    POPULATE YEAR DROPDOWNS & EMPLOYER FILTERS
 ═══════════════════════════════════════ */
@@ -2155,15 +2232,84 @@ async function renderCompanyEmployees() {
       '<div class="empty-state">تعذر جلب الموظفين</div>';
   }
 }
-function openEmployeeModal() {
+let editingEmployeeId = null;
+
+async function openEmployeeModal(id = null) {
   const form = document.getElementById("employee-form");
+  const passwordInput = document.getElementById("employee-password");
+
+  editingEmployeeId = id;
 
   if (form) {
     form.reset();
   }
 
+  if (passwordInput) {
+    passwordInput.required = !id;
+    passwordInput.value = "";
+    passwordInput.placeholder = id
+      ? "اتركها فارغة لعدم تغيير كلمة المرور"
+      : "كلمة المرور";
+  }
+
+  if (id) {
+    try {
+      const employeeList = await api(
+        "GET",
+        `/employees?refresh=${Date.now()}`
+      );
+
+      const employee = (
+        Array.isArray(employeeList) ? employeeList : []
+      ).find((item) => item._id === id);
+
+      if (!employee) {
+        toast("تعذر العثور على الموظف", "error");
+        return;
+      }
+
+      document.getElementById("employee-name").value =
+        employee.name || "";
+
+      document.getElementById("employee-email").value =
+        employee.email || "";
+
+      document.getElementById("employee-role").value =
+        employee.role || "employee";
+
+      document.getElementById("employee-active").value =
+        employee.isActive === false ? "false" : "true";
+
+      document.getElementById(
+        "employee-manage-workdays"
+      ).checked =
+        employee.permissions?.manageWorkdays === true;
+
+      document.getElementById(
+        "employee-manage-expenses"
+      ).checked =
+        employee.permissions?.manageExpenses === true;
+
+      document.getElementById(
+        "employee-manage-payments"
+      ).checked =
+        employee.permissions?.managePayments === true;
+
+      document.getElementById(
+        "employee-view-reports"
+      ).checked =
+        employee.permissions?.viewReports === true;
+    } catch (error) {
+      toast(
+        error.message || "تعذر تحميل بيانات الموظف",
+        "error"
+      );
+      return;
+    }
+  }
+
   openModal("modal-employee");
-} 
+}
 document
   .getElementById("employee-form")
   .addEventListener("submit", async (e) => {
@@ -2214,7 +2360,13 @@ document
     };
 
     try {
-      const res = await api("POST", "/employees", body);
+const method = editingEmployeeId ? "PUT" : "POST";
+
+const url = editingEmployeeId
+  ? `/employees/${editingEmployeeId}`
+  : "/employees";
+
+const res = await api(method, url, body);
 
       if (!res || res.error) {
         toast(
@@ -2225,7 +2377,13 @@ document
       }
 
       closeModal("modal-employee");
-      toast("تمت إضافة الموظف بنجاح");
+  toast(
+  editingEmployeeId
+    ? "تم تعديل الموظف بنجاح"
+    : "تمت إضافة الموظف بنجاح"
+);
+
+editingEmployeeId = null;    
 
 await renderCompanyEmployees();
     } catch (error) {
@@ -2266,6 +2424,22 @@ window.currentEmployeeId = employee._id;
       الحالة:
       ${employee.isActive ? "✅ نشط" : "⛔ متوقف"}
     </div>
+<button
+  class="btn-edit"
+  type="button"
+  onclick="openEmployeeModal('${employee._id}')"
+  style="width:100%; margin-top:14px;"
+>
+  تعديل الموظف
+</button>    
+<button
+  class="btn-danger"
+  type="button"
+  onclick="askDelete('employee', '${employee._id}', '${esc(employee.name || "الموظف")}')"
+  style="width:100%; margin-top:14px;"
+>
+  حذف الموظف
+</button>    
   `;
 
   switchTab("employee-details");
@@ -4713,7 +4887,8 @@ const paths = {
   payment: '/payments/',
   expense: '/expenses/',
   monthlyPlan: '/monthly-plans/',
-  employeePayment: '/employee-payments/'
+employeePayment: '/employee-payments/',
+employee: '/employees/'
 };
 if (type === 'monthlyPlan') {
   closeModal('modal-delete');
@@ -4723,6 +4898,10 @@ if (type === 'monthlyPlan') {
                                                        }  
   const res = await api('DELETE', paths[type] + id);
   if (!res) return;
+  if (type === 'employee') {
+    await renderCompanyEmployees();
+    switchTab('company');
+  }
   if (type === 'workday')  await loadWorkdays();
   if (type === 'employer') await loadEmployers();
   if (type === 'payment')  await Promise.all([loadPayments(), loadWorkdays()]);
