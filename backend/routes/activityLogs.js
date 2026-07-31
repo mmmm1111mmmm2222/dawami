@@ -23,10 +23,37 @@ if (!currentUser || !currentUser.companyId) {
 const logs = await ActivityLog.find({
   companyId: currentUser.companyId
 })
-      .sort({ createdAt: -1 })
-      .limit(100);
+  .sort({ createdAt: -1 })
+  .limit(100)
+  .lean();
+
+const userIds = [
+  ...new Set(
+    logs
+      .map((log) => String(log.userId || ""))
+      .filter(Boolean)
+  )
+];
+
+const users = await User.find({
+  _id: { $in: userIds }
+})
+  .select("name email")
+  .lean();
+
+const usersMap = new Map(
+  users.map((user) => [String(user._id), user])
+);
+
+const logsWithUsers = logs.map((log) => ({
+  ...log,
+  userId:
+    usersMap.get(String(log.userId)) || null,
+}));
+
 console.log("Activity logs count:", logs.length);
-    res.json(logs);
+
+res.json(logsWithUsers);
   } catch (error) {
     res.status(500).json({
       error: "تعذر جلب سجل النشاط"

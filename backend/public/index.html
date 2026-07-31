@@ -2008,7 +2008,10 @@ list.innerHTML = logs
         <div style="font-weight:700;">
           ${log.action || "نشاط"}
         </div>
-
+<div style="margin-top:4px; font-size:13px; opacity:.8;">
+  نفّذ العملية:
+  ${log.userId?.name || log.userId?.email || "مستخدم غير معروف"}
+</div>
         ${
           log.details
             ? `<div style="margin-top:4px;">${log.details}</div>`
