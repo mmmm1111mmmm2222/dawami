@@ -938,7 +938,20 @@ onclick="shareMonthlyPlanPDF()"
   >
     عرض سجل النشاط
   </button>
-
+<div style="margin-top:12px;">
+  <select
+    id="activity-action-filter"
+    onchange="loadActivityLogs()"
+    style="width:100%;"
+  >
+    <option value="">كل العمليات</option>
+    <option value="إضافة موظف">إضافة موظف</option>
+    <option value="تعديل موظف">تعديل موظف</option>
+    <option value="حذف موظف">حذف موظف</option>
+    <option value="إضافة دفعة موظف">إضافة دفعة موظف</option>
+    <option value="حذف دفعة موظف">حذف دفعة موظف</option>
+  </select>
+</div>
   <div
     id="activity-logs-list"
     style="margin-top:12px;"
@@ -1983,9 +1996,14 @@ const logs = await api(
   "GET",
   `/activity-logs?refresh=${Date.now()}`
 );
+const selectedAction =
+  document.getElementById("activity-action-filter")?.value || "";
 
+const filteredLogs = selectedAction
+  ? logs.filter((log) => log.action === selectedAction)
+  : logs;
 
-    if (!Array.isArray(logs) || logs.length === 0) {
+if (!Array.isArray(filteredLogs) || filteredLogs.length === 0) {
       list.innerHTML = `
         <div style="padding:12px; text-align:center;">
           لا توجد أنشطة مسجلة حتى الآن
@@ -1994,7 +2012,7 @@ const logs = await api(
       return;
     }
 
-list.innerHTML = logs
+list.innerHTML = filteredLogs
   .map((log) => {
     const date = new Date(log.createdAt).toLocaleString("ar");
 
