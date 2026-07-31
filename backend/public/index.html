@@ -952,6 +952,15 @@ onclick="shareMonthlyPlanPDF()"
     <option value="حذف دفعة موظف">حذف دفعة موظف</option>
   </select>
 </div>
+ <div style="margin-top:12px;">
+  <select
+    id="activity-user-filter"
+    onchange="loadActivityLogs()"
+    style="width:100%;"
+  >
+    <option value="">كل المستخدمين</option>
+  </select>
+ </div> 
   <div
     id="activity-logs-list"
     style="margin-top:12px;"
@@ -1996,12 +2005,50 @@ const logs = await api(
   "GET",
   `/activity-logs?refresh=${Date.now()}`
 );
+const userFilter =
+  document.getElementById("activity-user-filter");
+
+if (userFilter) {
+  const currentValue = userFilter.value;
+
+  const usersMap = new Map();
+
+logs.forEach((log) => {
+  const user = log.userId;
+
+  if (user && typeof user === "object" && user._id) {
+    usersMap.set(
+      String(user._id),
+      user.name || user.email || "مستخدم غير معروف"
+    );
+  }
+});
+
+  userFilter.innerHTML =
+    `<option value="">كل المستخدمين</option>` +
+    [...usersMap.entries()]
+      .map(
+        ([id, name]) =>
+          `<option value="${id}">${name}</option>`
+      )
+      .join("");
+
+  userFilter.value = currentValue;
+}    
 const selectedAction =
   document.getElementById("activity-action-filter")?.value || "";
+const selectedUser =
+  document.getElementById("activity-user-filter")?.value || "";
+const filteredLogs = logs.filter((log) => {
+  const matchesAction =
+    !selectedAction || log.action === selectedAction;
 
-const filteredLogs = selectedAction
-  ? logs.filter((log) => log.action === selectedAction)
-  : logs;
+  const matchesUser =
+    !selectedUser ||
+    String(log.userId?._id || "") === selectedUser;
+
+  return matchesAction && matchesUser;
+});
 
 if (!Array.isArray(filteredLogs) || filteredLogs.length === 0) {
       list.innerHTML = `
