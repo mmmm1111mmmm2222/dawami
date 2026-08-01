@@ -113,8 +113,11 @@ router.post("/", async (req, res) => {
           req.body.permissions?.manageExpenses === true,
         managePayments:
           req.body.permissions?.managePayments === true,
-        viewReports:
-          req.body.permissions?.viewReports === true,
+viewReports:
+  req.body.permissions?.viewReports === true,
+
+viewActivityLogs:
+  req.body.permissions?.viewActivityLogs === true,
       },
     });
 await ActivityLog.create({
@@ -231,6 +234,8 @@ router.put("/:id", async (req, res) => {
         req.body.permissions?.managePayments === true,
       viewReports:
         req.body.permissions?.viewReports === true,
+viewActivityLogs:
+  req.body.permissions?.viewActivityLogs === true,      
     };
 
     if (password) {

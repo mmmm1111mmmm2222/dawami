@@ -7,6 +7,7 @@ const User     = require("../models/User");
 const WorkDay  = require("../models/WorkDay");
 const Employer = require("../models/Employer");
 const Payment  = require("../models/Payment");
+const ActivityLog = require("../models/ActivityLog");
 const authMW   = require("../middleware/auth");
 
 const router = express.Router();
@@ -85,6 +86,16 @@ if (!user) {
       return res.status(401).json({ error: "البريد الإلكتروني أو كلمة المرور غير صحيحة" });
 
     const token = issueToken(user);
+ if (user.companyId) {
+  await ActivityLog.create({
+    userId: user._id,
+    companyId: user.companyId,
+    action: "تسجيل دخول",
+    details: `تم تسجيل دخول المستخدم ${user.name}`,
+    entityType: "user",
+    entityId: String(user._id)
+  });
+ }   
     res.json({
       token,
 user: {

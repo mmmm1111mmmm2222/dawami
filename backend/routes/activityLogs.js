@@ -19,7 +19,15 @@ if (!currentUser || !currentUser.companyId) {
     error: "لا توجد شركة مرتبطة بالحساب"
   });
 }
+const canViewActivityLogs =
+  currentUser.role === "owner" ||
+  currentUser.permissions?.viewActivityLogs === true;
 
+if (!canViewActivityLogs) {
+  return res.status(403).json({
+    error: "ليس لديك صلاحية مشاهدة سجل النشاط"
+  });
+}
 const logs = await ActivityLog.find({
   companyId: currentUser.companyId
 })
@@ -99,5 +107,78 @@ companyId: currentUser.companyId,
     });
   }
 });
+// حذف سجل النشاط بالكامل - للمالك فقط
+router.delete("/", async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.userId);
 
+    if (!currentUser || !currentUser.companyId) {
+      return res.status(400).json({
+        error: "لا توجد شركة مرتبطة بالحساب"
+      });
+    }
+
+    if (currentUser.role !== "owner") {
+      return res.status(403).json({
+        error: "هذه العملية متاحة لصاحب الشركة فقط"
+      });
+    }
+
+    const result = await ActivityLog.deleteMany({
+      companyId: currentUser.companyId
+    });
+
+    res.json({
+      message: "تم حذف سجل النشاط بالكامل",
+      deletedCount: result.deletedCount || 0
+    });
+  } catch (error) {
+    console.error("Delete activity logs error:", error);
+
+    res.status(500).json({
+      error: "تعذر حذف سجل النشاط"
+    });
+  }
+});
+
+
+// حذف سجل نشاط واحد - للمالك فقط
+router.delete("/:id", async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.userId);
+
+    if (!currentUser || !currentUser.companyId) {
+      return res.status(400).json({
+        error: "لا توجد شركة مرتبطة بالحساب"
+      });
+    }
+
+    if (currentUser.role !== "owner") {
+      return res.status(403).json({
+        error: "هذه العملية متاحة لصاحب الشركة فقط"
+      });
+    }
+
+    const deletedLog = await ActivityLog.findOneAndDelete({
+      _id: req.params.id,
+      companyId: currentUser.companyId
+    });
+
+    if (!deletedLog) {
+      return res.status(404).json({
+        error: "سجل النشاط غير موجود"
+      });
+    }
+
+    res.json({
+      message: "تم حذف سجل النشاط"
+    });
+  } catch (error) {
+    console.error("Delete activity log error:", error);
+
+    res.status(500).json({
+      error: "تعذر حذف سجل النشاط"
+    });
+  }
+});
 module.exports = router;

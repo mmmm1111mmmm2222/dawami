@@ -10,48 +10,120 @@ const WorkDay  = require("../models/WorkDay");
 const Employer = require("../models/Employer");
 const Payment  = require("../models/Payment");
 const Expense = require("../models/Expense");
+const Company = require("../models/Company");
+const EmployeeDay = require("../models/EmployeeDay");
+const EmployeePayment = require("../models/EmployeePayment");
+const MonthlyPlan = require("../models/MonthlyPlan");
+const ActivityLog = require("../models/ActivityLog");
 router.use(authMW);
 
 const BACKUP_VERSION = "2";
 
-/* ─────────────────────────────────────────
-   GET /account/export/json
-   Full data export as JSON backup
-───────────────────────────────────────── */
 router.get("/export/json", async (req, res) => {
   try {
-const [user, employers, workdays, payments, expenses] = await Promise.all([
-  User.findById(req.userId).select(
-    "-password -resetPasswordToken -resetPasswordExpires -tokenVersion"
-  ),
-  Employer.find({ userId: req.userId }).lean(),
-  WorkDay.find({ userId: req.userId }).lean(),
-  Payment.find({ userId: req.userId }).lean(),
-  Expense.find({ userId: req.userId }).lean()
-]);
+    const user = await User.findById(req.userId)
+      .select(
+        "-password -resetPasswordToken -resetPasswordExpires -tokenVersion"
+      )
+      .lean();
 
-const backup = {
-  version: BACKUP_VERSION,
-  exportedAt: new Date().toISOString(),
-  app: "dawami",
-  account: {
-    name: user.name,
-    email: user.email
-  },
-  employers,
-  workdays,
-  payments,
-  expenses
-};
+    if (!user) {
+      return res.status(404).json({
+        error: "المستخدم غير موجود"
+      });
+    }
 
-    res.setHeader("Content-Type", "application/json; charset=utf-8");
-    res.setHeader("Content-Disposition", `attachment; filename="dawami-backup-${_dateStr()}.json"`);
+    const companyId = user.companyId || null;
+
+    const [
+      employers,
+      workdays,
+      payments,
+      expenses,
+      company,
+      employees,
+      employeeDays,
+      employeePayments,
+      monthlyPlans,
+      activityLogs
+    ] = await Promise.all([
+      Employer.find({ userId: req.userId }).lean(),
+      WorkDay.find({ userId: req.userId }).lean(),
+      Payment.find({ userId: req.userId }).lean(),
+      Expense.find({ userId: req.userId }).lean(),
+
+      companyId
+        ? Company.findById(companyId).lean()
+        : null,
+
+      companyId
+        ? User.find({ companyId })
+            .select(
+              "-password -resetPasswordToken -resetPasswordExpires -tokenVersion"
+            )
+            .lean()
+        : [],
+
+      companyId
+        ? EmployeeDay.find({ companyId }).lean()
+        : [],
+
+      companyId
+        ? EmployeePayment.find({ companyId }).lean()
+        : [],
+
+      companyId
+        ? MonthlyPlan.find({ companyId }).lean()
+        : [],
+
+      companyId
+        ? ActivityLog.find({ companyId }).lean()
+        : []
+    ]);
+
+    const backup = {
+      version: BACKUP_VERSION,
+      exportedAt: new Date().toISOString(),
+      app: "dawami",
+
+      account: {
+        name: user.name,
+        email: user.email
+      },
+
+      company,
+      employees,
+      employeeDays,
+      employeePayments,
+      monthlyPlans,
+      activityLogs,
+
+      employers,
+      workdays,
+      payments,
+      expenses
+    };
+
+    res.setHeader(
+      "Content-Type",
+      "application/json; charset=utf-8"
+    );
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="dawami-backup-${_dateStr()}.json"`
+    );
+
     res.json(backup);
   } catch (err) {
-    console.error("Export JSON error:", err.message);
-    res.status(500).json({ error: "خطأ في التصدير" });
+    console.error("Export JSON error:", err);
+
+    res.status(500).json({
+      error: "خطأ في تصدير النسخة الاحتياطية"
+    });
   }
 });
+
 
 /* ─────────────────────────────────────────
    GET /account/export/csv/workdays

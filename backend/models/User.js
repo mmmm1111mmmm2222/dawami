@@ -68,6 +68,10 @@ const userSchema = new mongoose.Schema(
         type: Boolean,
         default: true,
       },
+    viewActivityLogs: {
+  type: Boolean,
+  default: false,
+},  
     },
 
     /* استعادة كلمة المرور */
